@@ -20,35 +20,15 @@ class prism():
         self.sides = sides
 
 def vertices(sides, radius, center_bottom):
-    vertices = []
-    angle = np.radians(360/sides)
-
-    for i in range(sides):
-        sin = np.sin(angle*i)
-        cos = np.cos(angle*i)
-        x_coord = cos*radius
-        y_coord = sin*radius
-        new_vertex = np.array([x_coord, y_coord, 0])+center_bottom
-        vertices.append(new_vertex)
-    
-    return vertices
-
-def vertices_vectorized(sides, radius, center_bottom):
-    angle = np.radians(360/sides)
-    incremental_count_matrix = np.zeros((2,sides))+np.arange(sides)
-    vertices = incremental_count_matrix*angle
+    vertices = (np.zeros((2,sides))+np.arange(sides))*np.radians(360/sides)
     vertices[0,:] = np.cos(vertices[0,:])
     vertices[1,:] = np.sin(vertices[1,:])
-    zero_line = np.zeros((1,np.shape(vertices)[1]))
-    vertices = np.concatenate((vertices,zero_line),axis=0)*radius
-
-    reshaped_center_bottom = np.reshape(center_bottom, (1,np.shape(center_bottom)[0])).T
-    vertices = vertices+reshaped_center_bottom
+    vertices = np.concatenate((vertices,np.zeros((1,np.shape(vertices)[1]))),axis=0)*radius + np.reshape(center_bottom, (1,np.shape(center_bottom)[0])).T
     
     return vertices
 
-
 F = prism(1,2,3,4,5,6,20)
-print(vertices_vectorized(F.sides, F.r_bottom, F.center_bottom))
+upper_vertices = vertices(F.sides, F.r_bottom, F.center_bottom)
+bottom_vertices = vertices(F.sides, F.r_top, F.center_top)
 
 
