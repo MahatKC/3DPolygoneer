@@ -1,5 +1,6 @@
 import tkinter as tk
-from tkinter import ttk 
+from tkinter import Frame, ttk
+from tkinter.constants import N, S, W 
 
 
 class ToggledFrame(tk.Frame):
@@ -37,28 +38,53 @@ if __name__ == "__main__":
     root.geometry(str(int(width*0.2))+"x"+str(height))
 
     t = ToggledFrame(root, text='Informações do objeto', relief="raised", borderwidth=1)
-    t.pack(fill="x", expand=100, pady=2, padx=2, anchor="n")
+    t.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
 
+    labelCg = ttk.Label(t.sub_frame, text='Centro geométrico')
+    txtCg = ttk.Entry(t.sub_frame, name="txtCentroGeometrico")
+    labelRaioBase = ttk.Label(t.sub_frame, text='Raio da base')
+    txtRaioBase = ttk.Entry(t.sub_frame, name="txtRaioBase")
+    labelRaioTopo = ttk.Label(t.sub_frame, text='Raio do topo')
+    txtRaioTopo = ttk.Entry(t.sub_frame, name="txtRaioTopo")
+    labelNumLados = ttk.Label(t.sub_frame, text='Número de lados')
+    txtNumLados = ttk.Entry(t.sub_frame, name="txtNumLados")
+    labelAltura = ttk.Label(t.sub_frame, text='Altura')
+    txtAltura = ttk.Entry(t.sub_frame, name="txtAltura")
 
-    labelCg = ttk.Label(t.sub_frame, text='Centro geométrico').pack(side="top", fill="x", expand=1)
-    txtCg = ttk.Entry(t.sub_frame, name="txtCentroGeometrico").pack(fill="x", expand=1)
-    ttk.Label(t.sub_frame, text='Raio da base').pack(side="top", fill="x", expand=1)
-    ttk.Entry(t.sub_frame, name="txtRaioBase").pack(side="top", fill="x", expand=1)
-    ttk.Label(t.sub_frame, text='Raio do topo').pack(side="top", fill="x", expand=1)
-    ttk.Entry(t.sub_frame, name="txtRaioTopo").pack(side="top", fill="x", expand=1)
-    
+    labelCg.grid(row=1, column=1, padx=1, pady=5)
+    txtCg.grid(row=1, column=2, padx=1, pady=5)
+    labelRaioBase.grid(row=2, column=1, padx=1, pady=5)
+    txtRaioBase.grid(row=2, column=2, padx=1, pady=5)
+    labelRaioTopo.grid(row=3, column=1, padx=1, pady=5)
+    txtRaioTopo.grid(row=3, column=2, padx=1, pady=5)
+    labelNumLados.grid(row=4, column=1, padx=1, pady=5)
+    txtNumLados.grid(row=4, column=2, padx=1, pady=5)
+    labelAltura.grid(row=5, column=1, padx=1, pady=5)
+    txtAltura.grid(row=5, column=2, padx=1, pady=5)
 
-
-    t2 = ToggledFrame(root, text='Resize', relief="raised", borderwidth=1)
+    t2 = ToggledFrame(root, text='Projeção', relief="raised", borderwidth=1)
     t2.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
 
-    for i in range(10):
-        ttk.Label(t2.sub_frame, text='Test' + str(i)).pack()
+    labelTipoProjecao = ttk.Label(t2.sub_frame, text="Tipo de projeção")
+    rbAxonometrica = ttk.Radiobutton(t2.sub_frame, text="Axonométrica", value=1)
+    rbPerspectiva = ttk.Radiobutton(t2.sub_frame, text="Perspectiva", value=2)
+    labelVRP = ttk.Label(t2.sub_frame, text="VRP", width=4)
+    labelVRPx = ttk.Label(t2.sub_frame, text="X")
+    txtVRPx = ttk.Entry(t2.sub_frame, name="txtVRPx")
+    labelVRPy = ttk.Label(t2.sub_frame, text="Y")
+    txtVRPy= ttk.Entry(t2.sub_frame, name="txtVRPy")
+    labelVRPz = ttk.Label(t2.sub_frame, text="Z")
+    txtVRPz = ttk.Entry(t2.sub_frame, name="txtVRPz")
 
-    t3 = ToggledFrame(root, text='Fooo', relief="raised", borderwidth=1)
-    t3.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
-
-    for i in range(10):
-        ttk.Label(t3.sub_frame, text='Bar' + str(i)).pack()
+    labelTipoProjecao.grid(row=1, column=1, padx=1, pady=2)
+    rbAxonometrica.grid(row=2, column=1, padx=5, pady=2)
+    rbPerspectiva.grid(row=2, column=2, padx=5, pady=2)
+    labelVRP.grid(row=3, column=1, padx=1, pady=1, ipadx=3, sticky=W, columnspan=1)
+    labelVRPx.grid(row=3, column=2, padx=1, pady=1, ipadx=3, sticky=W, columnspan=1)
+    txtVRPx.grid(row=3, column=3, padx=1, pady=1, ipadx=3, sticky=W, columnspan=1)
+    labelVRPy.grid(row=4, column=1, padx=1, pady=1)
+    txtVRPy.grid(row=4, column=2, padx=1, pady=1)
+    labelVRPz.grid(row=5, column=1, padx=1, pady=1)
+    txtVRPz.grid(row=5, column=2, padx=1, pady=1)
 
     root.mainloop()
