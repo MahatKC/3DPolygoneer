@@ -1,5 +1,4 @@
 import numpy as np
-from prism import prism, vertices
 
 def translation(M, dx, dy, dz):
     """Translates all vertices from M according to the coordinates dx, dy and dz.
@@ -58,6 +57,40 @@ def rotY(M, alpha):
     T[2,0] = -sin
     return np.dot(T,M)
 
+def rotXAlongAxis(M, alpha):
+    """Rotates polygon M around the polygon's own X axis by alpha degrees.
+    This translates the polygon, rotates it and then translates it back.
+    M needs to be a Numpy Array with shape (4,N) with N>=1"""
+    T = np.eye(4)
+    alpha_radians = np.radians(alpha)
+    sin = np.sin(alpha_radians)
+    cos = np.cos(alpha_radians)
+    avg = np.average(M, axis=1)
+    T[1,1] = cos
+    T[2,2] = cos
+    T[1,2] = -sin
+    T[2,1] = sin
+    T[1,3] = (avg[1]*(1-cos))+(avg[2]*sin)
+    T[2,3] = (avg[2]*(1-cos))-(avg[1]*sin)
+    return np.dot(T,M) 
+
+def rotZAlongAxis(M, alpha):
+    """Rotates polygon M around the polygon's own Z axis by alpha degrees.
+    This translates the polygon, rotates it and then translates it back.
+    M needs to be a Numpy Array with shape (4,N) with N>=1"""
+    T = np.eye(4)
+    alpha_radians = np.radians(alpha)
+    sin = np.sin(alpha_radians)
+    cos = np.cos(alpha_radians)
+    avg = np.average(M, axis=1)
+    T[0,0] = cos
+    T[1,1] = cos
+    T[0,1] = -sin
+    T[1,0] = sin
+    T[0,3] = (avg[0]*(1-cos))+(avg[1]*sin)
+    T[1,3] = (avg[1]*(1-cos))-(avg[0]*sin)
+    return np.dot(T,M) 
+
 def rotYAlongAxis(M, alpha):
     """Rotates polygon M around the polygon's own Y axis by alpha degrees.
     This translates the polygon, rotates it and then translates it back.
@@ -66,14 +99,12 @@ def rotYAlongAxis(M, alpha):
     alpha_radians = np.radians(alpha)
     sin = np.sin(alpha_radians)
     cos = np.cos(alpha_radians)
+    avg = np.average(M, axis=1)
     T[0,0] = cos
-    T[1,1] = cos
-    T[0,1] = -sin
-    T[1,0] = sin
+    T[2,2] = cos
+    T[0,2] = sin
+    T[2,0] = -sin
+    T[0,3] = (avg[0]*(1-cos))-(avg[2]*sin)
+    T[2,3] = (avg[2]*(1-cos))+(avg[0]*sin)
     return np.dot(T,M) 
 
-F = prism(1,2,3,4,5,6,20)
-upper_vertices = vertices(F.sides, F.r_bottom, F.center_bottom)
-print(upper_vertices)
-print("-"*20)
-print(translation(upper_vertices,-7,0,-3))
