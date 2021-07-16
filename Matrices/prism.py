@@ -10,7 +10,8 @@ def vertices(sides, radius, center):
     return np.concatenate((np.concatenate((vertices,np.zeros((1,sides))),axis=0)*radius + center,np.ones((1,sides))),axis=0)
 
 def create_prism(x,y,z,h,r_bottom,r_top,sides):
-    """Returns a NumPy array for a 3D-prism with homogeneous coordinates.
+    """Uses the coordinates of the center of the bottom circle.
+    Returns a NumPy array for a 3D-prism with homogeneous coordinates.
     The first "sides" vertices define the polygon at the bottom of it,
     while the next "sides" vertices define the polygon on top of it.
     The last vertix is actually the geometric center of the object, stored for ease of use."""
