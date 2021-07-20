@@ -1,3 +1,4 @@
+#from typing_extensions import IntVar
 from tkscrolledframe import ScrolledFrame
 import tkinter as tk
 from tkinter import Canvas, Frame, Scrollbar, ttk
@@ -16,7 +17,7 @@ class VerticalScrolledFrame:
     """
     def __init__(self, master, **kwargs):
         width = kwargs.pop('width', None)
-        height = kwargs.pop('height', None)
+        height = (kwargs.pop('height', None))
         bg = kwargs.pop('bg', kwargs.pop('background', None))
         self.outer = tk.Frame(master, **kwargs)
 
@@ -71,6 +72,7 @@ class VerticalScrolledFrame:
 
     def __str__(self):
         return str(self.outer)
+
 class ToggledFrame(tk.Frame):
 
     def __init__(self, parent, text="", *args, **options):
@@ -102,12 +104,24 @@ class ToggledFrame(tk.Frame):
             self.sub_frame.forget()
             self.toggle_button.configure(text='+')
 
+def lerRadioButton(_, __, ___):
+        if(rbProjecao.get() == 1):
+            txtPx['state'] = tk.DISABLED
+            txtPy['state'] = tk.DISABLED
+            txtPz['state'] = tk.DISABLED
+        else:
+            txtPx['state'] = tk.WRITABLE
+            txtPy['state'] = tk.WRITABLE
+            txtPz['state'] = tk.WRITABLE
 
 if __name__ == "__main__":
+
     root = tk.Tk()
     width = root.winfo_screenwidth()
     height = root.winfo_screenheight()
     root.geometry(str(int(width*0.2))+"x"+str(height))
+    rbProjecao = tk.IntVar()
+    rbProjecao.set(0)
 
     t = ToggledFrame(root, text='Informações do objeto', relief="raised", borderwidth=1)
     t.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
@@ -138,8 +152,8 @@ if __name__ == "__main__":
     t2.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
 
     labelTipoProjecao = ttk.Label(t2.sub_frame, text="Tipo de projeção", font="-weight bold -size 9")
-    rbAxonometrica = ttk.Radiobutton(t2.sub_frame, text="Axonométrica", value=1)
-    rbPerspectiva = ttk.Radiobutton(t2.sub_frame, text="Perspectiva", value=2)
+    rbAxonometrica = ttk.Radiobutton(t2.sub_frame, text="Axonométrica", variable= rbProjecao, value=1)
+    rbPerspectiva = ttk.Radiobutton(t2.sub_frame, text="Perspectiva", variable= rbProjecao, value=0)
 
     labelVRP = ttk.Label(t2.sub_frame, text="VRP", font="-weight bold -size 9")
     labelVRPx = ttk.Label(t2.sub_frame, text="X")
@@ -248,5 +262,7 @@ if __name__ == "__main__":
     txtLimPlanoProjyMin.grid(row=27, column=2, padx=1, pady=1)
     labelLimPlanoProjyMax.grid(row=28, column=1, padx=1, pady=1)
     txtLimPlanoProjyMax.grid(row=28, column=2, padx=1, pady=1)
-    
+
+    rbProjecao.trace('w', lerRadioButton)
+
     root.mainloop()
