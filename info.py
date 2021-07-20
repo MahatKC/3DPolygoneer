@@ -1,3 +1,4 @@
+#from typing_extensions import IntVar
 from tkscrolledframe import ScrolledFrame
 import tkinter as tk
 from tkinter import Canvas, Frame, Scrollbar, ttk
@@ -16,7 +17,7 @@ class VerticalScrolledFrame:
     """
     def __init__(self, master, **kwargs):
         width = kwargs.pop('width', None)
-        height = kwargs.pop('height', None)
+        height = (kwargs.pop('height', None))
         bg = kwargs.pop('bg', kwargs.pop('background', None))
         self.outer = tk.Frame(master, **kwargs)
 
@@ -71,6 +72,7 @@ class VerticalScrolledFrame:
 
     def __str__(self):
         return str(self.outer)
+
 class ToggledFrame(tk.Frame):
 
     def __init__(self, parent, text="", *args, **options):
@@ -102,28 +104,40 @@ class ToggledFrame(tk.Frame):
             self.sub_frame.forget()
             self.toggle_button.configure(text='+')
 
+def lerRadioButton(_, __, ___):
+        if(rbProjecao.get() == 1):
+            txtPx['state'] = tk.DISABLED
+            txtPy['state'] = tk.DISABLED
+            txtPz['state'] = tk.DISABLED
+        else:
+            txtPx['state'] = tk.WRITABLE
+            txtPy['state'] = tk.WRITABLE
+            txtPz['state'] = tk.WRITABLE
 
 if __name__ == "__main__":
+
     root = tk.Tk()
     width = root.winfo_screenwidth()
     height = root.winfo_screenheight()
     root.geometry(str(int(width*0.2))+"x"+str(height))
+    rbProjecao = tk.IntVar()
+    rbProjecao.set(0)
 
     t = ToggledFrame(root, text='Informações do objeto', relief="raised", borderwidth=1)
     t.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
 
     labelCg = ttk.Label(t.sub_frame, text='Centro geométrico')
-    txtCg = ttk.Entry(t.sub_frame, name="txtCentroGeometrico")
+    txtCg = ttk.Entry(t.sub_frame, name="txtCentroGeometrico", width=15)
     labelRaioBase = ttk.Label(t.sub_frame, text='Raio da base')
-    txtRaioBase = ttk.Entry(t.sub_frame, name="txtRaioBase")
+    txtRaioBase = ttk.Entry(t.sub_frame, name="txtRaioBase", width=15)
     labelRaioTopo = ttk.Label(t.sub_frame, text='Raio do topo')
-    txtRaioTopo = ttk.Entry(t.sub_frame, name="txtRaioTopo")
+    txtRaioTopo = ttk.Entry(t.sub_frame, name="txtRaioTopo", width=15)
     labelNumLados = ttk.Label(t.sub_frame, text='Número de lados')
-    txtNumLados = ttk.Entry(t.sub_frame, name="txtNumLados")
+    txtNumLados = ttk.Entry(t.sub_frame, name="txtNumLados", width=15)
     labelAltura = ttk.Label(t.sub_frame, text='Altura')
-    txtAltura = ttk.Entry(t.sub_frame, name="txtAltura")
+    txtAltura = ttk.Entry(t.sub_frame, name="txtAltura", width=15)
 
-    labelCg.grid(row=1, column=1, padx=1, pady=1)
+    labelCg.grid(row=1, column=1, padx=10, pady=1)
     txtCg.grid(row=1, column=2, padx=1, pady=1)
     labelRaioBase.grid(row=2, column=1, padx=1, pady=1)
     txtRaioBase.grid(row=2, column=2, padx=1, pady=1)
@@ -138,60 +152,60 @@ if __name__ == "__main__":
     t2.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
 
     labelTipoProjecao = ttk.Label(t2.sub_frame, text="Tipo de projeção", font="-weight bold -size 9")
-    rbAxonometrica = ttk.Radiobutton(t2.sub_frame, text="Axonométrica", value=1)
-    rbPerspectiva = ttk.Radiobutton(t2.sub_frame, text="Perspectiva", value=2)
+    rbAxonometrica = ttk.Radiobutton(t2.sub_frame, text="Axonométrica", variable= rbProjecao, value=1)
+    rbPerspectiva = ttk.Radiobutton(t2.sub_frame, text="Perspectiva", variable= rbProjecao, value=0)
 
     labelVRP = ttk.Label(t2.sub_frame, text="VRP", font="-weight bold -size 9")
     labelVRPx = ttk.Label(t2.sub_frame, text="X")
-    txtVRPx = ttk.Entry(t2.sub_frame, name="txtVRPx")
+    txtVRPx = ttk.Entry(t2.sub_frame, name="txtVRPx", width=15)
     labelVRPy = ttk.Label(t2.sub_frame, text="Y")
-    txtVRPy= ttk.Entry(t2.sub_frame, name="txtVRPy")
+    txtVRPy= ttk.Entry(t2.sub_frame, name="txtVRPy", width=15)
     labelVRPz = ttk.Label(t2.sub_frame, text="Z")
-    txtVRPz = ttk.Entry(t2.sub_frame, name="txtVRPz")
+    txtVRPz = ttk.Entry(t2.sub_frame, name="txtVRPz", width=15)
 
     labelP = ttk.Label(t2.sub_frame, text="Vetor P", font="-weight bold -size 9")
     labelPx = ttk.Label(t2.sub_frame, text="X")
-    txtPx = ttk.Entry(t2.sub_frame, name="txtPx")
+    txtPx = ttk.Entry(t2.sub_frame, name="txtPx", width=15)
     labelPy = ttk.Label(t2.sub_frame, text="Y")
-    txtPy= ttk.Entry(t2.sub_frame, name="txtPy")
+    txtPy= ttk.Entry(t2.sub_frame, name="txtPy", width=15)
     labelPz = ttk.Label(t2.sub_frame, text="Z")
-    txtPz = ttk.Entry(t2.sub_frame, name="txtPz")
+    txtPz = ttk.Entry(t2.sub_frame, name="txtPz", width=15)
 
     labelViewUp = ttk.Label(t2.sub_frame, text="Vetor View-up", font="-weight bold -size 9")
     labelViewUpx = ttk.Label(t2.sub_frame, text="X")
-    txtViewUpx = ttk.Entry(t2.sub_frame, name="txtViewUpx")
+    txtViewUpx = ttk.Entry(t2.sub_frame, name="txtViewUpx", width=15)
     labelViewUpy = ttk.Label(t2.sub_frame, text="Y")
-    txtViewUpy= ttk.Entry(t2.sub_frame, name="txtViewUpy")
+    txtViewUpy= ttk.Entry(t2.sub_frame, name="txtViewUpy", width=15)
     labelViewUpz = ttk.Label(t2.sub_frame, text="Z")
-    txtViewUpz = ttk.Entry(t2.sub_frame, name="txtViewUpz")
+    txtViewUpz = ttk.Entry(t2.sub_frame, name="txtViewUpz", width=15)
 
     labelDistancia = ttk.Label(t2.sub_frame, text="Distâncias", font="-weight bold -size 9")
     labelNear = ttk.Label(t2.sub_frame, text="Plano Near")
-    txtNear = ttk.Entry(t2.sub_frame, name="txtNear")
+    txtNear = ttk.Entry(t2.sub_frame, name="txtNear", width=15)
     labelFar = ttk.Label(t2.sub_frame, text="Plano Far")
-    txtFar= ttk.Entry(t2.sub_frame, name="txtFar")
+    txtFar= ttk.Entry(t2.sub_frame, name="txtFar", width=15)
     labelPlanoProjecao = ttk.Label(t2.sub_frame, text="Plano de projeção")
-    txtPlanoProjecao = ttk.Entry(t2.sub_frame, name="txtPlanoProjecao")
+    txtPlanoProjecao = ttk.Entry(t2.sub_frame, name="txtPlanoProjecao", width=15)
 
     labelLimMundo = ttk.Label(t2.sub_frame, text="Limites do mundo", font="-weight bold -size 9")
     labelLimMundoxMin = ttk.Label(t2.sub_frame, text="X min")
-    txtLimMundoxMin = ttk.Entry(t2.sub_frame, name="txtLimMundoxMin")
+    txtLimMundoxMin = ttk.Entry(t2.sub_frame, name="txtLimMundoxMin", width=15)
     labelLimMundoxMax = ttk.Label(t2.sub_frame, text="X max")
-    txtLimMundoxMax = ttk.Entry(t2.sub_frame, name="txtLimMundoxMax")
+    txtLimMundoxMax = ttk.Entry(t2.sub_frame, name="txtLimMundoxMax", width=15)
     labelLimMundoyMin = ttk.Label(t2.sub_frame, text="Y min")
-    txtLimMundoyMin = ttk.Entry(t2.sub_frame, name="txtLimMundoyMin")
+    txtLimMundoyMin = ttk.Entry(t2.sub_frame, name="txtLimMundoyMin", width=15)
     labelLimMundoyMax = ttk.Label(t2.sub_frame, text="Y max")
-    txtLimMundoyMax = ttk.Entry(t2.sub_frame, name="txtLimMundoyMax")
+    txtLimMundoyMax = ttk.Entry(t2.sub_frame, name="txtLimMundoyMax", width=15)
 
     labelLimPlanoProj = ttk.Label(t2.sub_frame, text="Plano de projeção", font="-weight bold -size 9")
     labelLimPlanoProjxMin = ttk.Label(t2.sub_frame, text="X min")
-    txtLimPlanoProjxMin = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjxMin")
+    txtLimPlanoProjxMin = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjxMin", width=15)
     labelLimPlanoProjxMax = ttk.Label(t2.sub_frame, text="X max")
-    txtLimPlanoProjxMax = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjxMax")
+    txtLimPlanoProjxMax = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjxMax", width=15)
     labelLimPlanoProjyMin = ttk.Label(t2.sub_frame, text="Y min")
-    txtLimPlanoProjyMin = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjyMin")
+    txtLimPlanoProjyMin = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjyMin", width=15)
     labelLimPlanoProjyMax = ttk.Label(t2.sub_frame, text="Y max")
-    txtLimPlanoProjyMax = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjyMax")
+    txtLimPlanoProjyMax = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjyMax", width=15)
 
     labelTipoProjecao.grid(row=1, column=1, padx=1, pady=2)
     rbAxonometrica.grid(row=2, column=1, padx=5, pady=2)
@@ -248,5 +262,7 @@ if __name__ == "__main__":
     txtLimPlanoProjyMin.grid(row=27, column=2, padx=1, pady=1)
     labelLimPlanoProjyMax.grid(row=28, column=1, padx=1, pady=1)
     txtLimPlanoProjyMax.grid(row=28, column=2, padx=1, pady=1)
-    
+
+    rbProjecao.trace('w', lerRadioButton)
+
     root.mainloop()
