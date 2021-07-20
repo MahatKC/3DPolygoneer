@@ -39,3 +39,4 @@ point_array += np.array([1, 0, 0])
 # write and read meshes
 om.write_mesh('test.off', mesh)
 mesh_2 = om.read_trimesh('test.off')
+om.all_edges()
