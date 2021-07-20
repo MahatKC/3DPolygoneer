@@ -66,12 +66,14 @@ def rotXAlongAxis(M, alpha):
     sin = np.sin(alpha_radians)
     cos = np.cos(alpha_radians)
     avg = np.average(M, axis=1)
+    y = avg[1]
+    z = avg[2]
     T[1,1] = cos
     T[2,2] = cos
     T[1,2] = -sin
     T[2,1] = sin
-    T[1,3] = (avg[1]*(1-cos))+(avg[2]*sin)
-    T[2,3] = (avg[2]*(1-cos))-(avg[1]*sin)
+    T[1,3] = (y*(1-cos))+(z*sin)
+    T[2,3] = (z*(1-cos))-(y*sin)
     return np.dot(T,M) 
 
 def rotZAlongAxis(M, alpha):
@@ -83,12 +85,14 @@ def rotZAlongAxis(M, alpha):
     sin = np.sin(alpha_radians)
     cos = np.cos(alpha_radians)
     avg = np.average(M, axis=1)
+    x = avg[0]
+    y = avg[1]
     T[0,0] = cos
     T[1,1] = cos
     T[0,1] = -sin
     T[1,0] = sin
-    T[0,3] = (avg[0]*(1-cos))+(avg[1]*sin)
-    T[1,3] = (avg[1]*(1-cos))-(avg[0]*sin)
+    T[0,3] = (x*(1-cos))+(y*sin)
+    T[1,3] = (y*(1-cos))-(x*sin)
     return np.dot(T,M) 
 
 def rotYAlongAxis(M, alpha):
@@ -100,11 +104,13 @@ def rotYAlongAxis(M, alpha):
     sin = np.sin(alpha_radians)
     cos = np.cos(alpha_radians)
     avg = np.average(M, axis=1)
+    x = avg[0]
+    z = avg[2]
     T[0,0] = cos
     T[2,2] = cos
     T[0,2] = sin
     T[2,0] = -sin
-    T[0,3] = (avg[0]*(1-cos))-(avg[2]*sin)
-    T[2,3] = (avg[2]*(1-cos))+(avg[0]*sin)
+    T[0,3] = (x*(1-cos))-(z*sin)
+    T[2,3] = (z*(1-cos))+(x*sin)
     return np.dot(T,M) 
 
