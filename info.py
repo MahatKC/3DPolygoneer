@@ -2,7 +2,7 @@
 from tkscrolledframe import ScrolledFrame
 import tkinter as tk
 from tkinter import Canvas, Frame, Scrollbar, ttk
-from tkinter.constants import N, NS, RIGHT, S, VERTICAL, W, Y 
+from tkinter.constants import E, N, NS, RIGHT, S, VERTICAL, W, Y 
 
 class VerticalScrolledFrame:
     """
@@ -136,6 +136,7 @@ if __name__ == "__main__":
     txtNumLados = ttk.Entry(t.sub_frame, name="txtNumLados", width=15)
     labelAltura = ttk.Label(t.sub_frame, text='Altura')
     txtAltura = ttk.Entry(t.sub_frame, name="txtAltura", width=15)
+    btnAlterarObjeto = ttk.Button(t.sub_frame,text="Alterar objeto", width=20)
 
     labelCg.grid(row=1, column=1, padx=10, pady=1)
     txtCg.grid(row=1, column=2, padx=1, pady=1)
@@ -147,6 +148,7 @@ if __name__ == "__main__":
     txtNumLados.grid(row=4, column=2, padx=1, pady=1)
     labelAltura.grid(row=5, column=1, padx=1, pady=1)
     txtAltura.grid(row=5, column=2, padx=1, pady=1)
+    btnAlterarObjeto.grid(row=6, column=1, padx=4, pady=8, columnspan=2)
 
     t2 = ToggledFrame(root, text='Projeção', relief="raised", borderwidth=1)
     t2.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
@@ -206,6 +208,7 @@ if __name__ == "__main__":
     txtLimPlanoProjyMin = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjyMin", width=15)
     labelLimPlanoProjyMax = ttk.Label(t2.sub_frame, text="Y max")
     txtLimPlanoProjyMax = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjyMax", width=15)
+    btnAlterarPlano = ttk.Button(t2.sub_frame,text="Alterar plano", width=20)
 
     labelTipoProjecao.grid(row=1, column=1, padx=1, pady=2)
     rbAxonometrica.grid(row=2, column=1, padx=5, pady=2)
@@ -262,6 +265,7 @@ if __name__ == "__main__":
     txtLimPlanoProjyMin.grid(row=27, column=2, padx=1, pady=1)
     labelLimPlanoProjyMax.grid(row=28, column=1, padx=1, pady=1)
     txtLimPlanoProjyMax.grid(row=28, column=2, padx=1, pady=1)
+    btnAlterarPlano.grid(row=29, column=1, padx=4, pady=8, columnspan=2)
 
     rbProjecao.trace('w', lerRadioButton)
 
