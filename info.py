@@ -2,7 +2,7 @@
 from tkscrolledframe import ScrolledFrame
 import tkinter as tk
 from tkinter import Canvas, Frame, Scrollbar, ttk
-from tkinter.constants import N, NS, RIGHT, S, VERTICAL, W, Y 
+from tkinter.constants import E, N, NS, RIGHT, S, VERTICAL, W, Y 
 
 class VerticalScrolledFrame:
     """
@@ -15,7 +15,7 @@ class VerticalScrolledFrame:
     if you subclass this there is no built in way for the children to access it.
     You need to provide the controller separately.
     """
-    def __init__(self, master, **kwargs):
+    def __init__(self, master, janela, **kwargs):
         width = kwargs.pop('width', None)
         height = (kwargs.pop('height', None))
         bg = kwargs.pop('bg', kwargs.pop('background', None))
@@ -23,7 +23,12 @@ class VerticalScrolledFrame:
 
         self.vsb = tk.Scrollbar(self.outer, orient=tk.VERTICAL)
         self.vsb.pack(fill=tk.Y, side=tk.RIGHT)
-        self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=height, bg=bg)
+        if(janela == 0):
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=160, bg=bg)
+        if(janela == 1):
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=420, bg=bg)
+        if(janela == 2):
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=100, bg=bg)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.canvas['yscrollcommand'] = self.vsb.set
         # mouse scroll does not seem to work with just "bind"; You have
@@ -73,6 +78,7 @@ class VerticalScrolledFrame:
     def __str__(self):
         return str(self.outer)
 
+numberJanela = 0
 class ToggledFrame(tk.Frame):
 
     def __init__(self, parent, text="", *args, **options):
@@ -90,10 +96,15 @@ class ToggledFrame(tk.Frame):
                                             variable=self.show, style='Toolbutton')
         self.toggle_button.pack(side="left")
 
+        if(text == "Informações do objeto"):
+            numberJanela = 0
+        if(text == "Projeção"):
+            numberJanela = 1
+        if(text == "Iluminação"):
+            numberJanela = 2
+            
         #self.sub_frame = tk.Frame(self, relief="sunken", borderwidth=1)
-        self.sub_frame = VerticalScrolledFrame(self, 
-        borderwidth=1, 
-        relief=tk.SUNKEN)
+        self.sub_frame = VerticalScrolledFrame(self, borderwidth=1, janela=numberJanela, relief=tk.SUNKEN)
 
     def toggle(self):
         if bool(self.show.get()):
@@ -136,6 +147,7 @@ if __name__ == "__main__":
     txtNumLados = ttk.Entry(t.sub_frame, name="txtNumLados", width=15)
     labelAltura = ttk.Label(t.sub_frame, text='Altura')
     txtAltura = ttk.Entry(t.sub_frame, name="txtAltura", width=15)
+    btnAlterarObjeto = ttk.Button(t.sub_frame,text="Alterar objeto", width=20)
 
     labelCg.grid(row=1, column=1, padx=10, pady=1)
     txtCg.grid(row=1, column=2, padx=1, pady=1)
@@ -147,6 +159,7 @@ if __name__ == "__main__":
     txtNumLados.grid(row=4, column=2, padx=1, pady=1)
     labelAltura.grid(row=5, column=1, padx=1, pady=1)
     txtAltura.grid(row=5, column=2, padx=1, pady=1)
+    btnAlterarObjeto.grid(row=6, column=1, padx=4, pady=8, columnspan=2)
 
     t2 = ToggledFrame(root, text='Projeção', relief="raised", borderwidth=1)
     t2.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
@@ -206,6 +219,7 @@ if __name__ == "__main__":
     txtLimPlanoProjyMin = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjyMin", width=15)
     labelLimPlanoProjyMax = ttk.Label(t2.sub_frame, text="Y max")
     txtLimPlanoProjyMax = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjyMax", width=15)
+    btnAlterarPlano = ttk.Button(t2.sub_frame,text="Alterar cena", width=20)
 
     labelTipoProjecao.grid(row=1, column=1, padx=1, pady=2)
     rbAxonometrica.grid(row=2, column=1, padx=5, pady=2)
@@ -262,7 +276,11 @@ if __name__ == "__main__":
     txtLimPlanoProjyMin.grid(row=27, column=2, padx=1, pady=1)
     labelLimPlanoProjyMax.grid(row=28, column=1, padx=1, pady=1)
     txtLimPlanoProjyMax.grid(row=28, column=2, padx=1, pady=1)
+    btnAlterarPlano.grid(row=29, column=1, padx=4, pady=8, columnspan=2)
 
     rbProjecao.trace('w', lerRadioButton)
+
+    t3 = ToggledFrame(root, text='Iluminação', relief="raised", borderwidth=1)
+    t3.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
 
     root.mainloop()
