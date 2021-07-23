@@ -9,7 +9,6 @@ class Object():
         self.numberFaces = sides + 2
         self.sides = sides
 
-
         for i in range(0, sides):
             self.faces[i] =  (i, (i + 1) % sides, ((i + 1) % sides) + sides , i + sides)
         self.faces[sides] = (np.arange(sides))

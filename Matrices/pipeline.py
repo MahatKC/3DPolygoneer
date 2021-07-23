@@ -1,8 +1,6 @@
 import numpy as np
 import time
-
-from numpy.ma.core import MaskedArray
-from prism import create_prism
+from Matrices.prism import create_prism
 
 """
 Variáveis:
@@ -73,7 +71,29 @@ def SRC_to_SRT_matrix(Xmin,Xmax,Ymin,Ymax,Umax,Umin,Vmax,Vmin):
     
     return M
 
-def pipeline(M, VRPx, VRPy, VRPz, Px, Py, Pz, Yx, Yy, Yz, 
+def jp_times_proj_matrix(Xmin, Xmax, Ymin, Ymax, Umax, Umin, Vmax, Vmin, dist_projecao):
+    u_by_x = (Umax-Umin)/(Xmax-Xmin)
+    v_by_y = (Vmax-Vmin)/(Ymax-Ymin)
+
+    minus_inverted_dp = -(1/dist_projecao)
+    if is_perspectiva:
+        jp_times_proj = np.zeros((4,4))
+        jp_times_proj[0,0] = u_by_x
+        jp_times_proj[1,1] = -v_by_y
+        jp_times_proj[0,2] = (-(Xmin*u_by_x)+Umin)*minus_inverted_dp
+        jp_times_proj[1,2] = ((Ymin*v_by_y)+Vmax)*minus_inverted_dp
+        jp_times_proj[2,2] = 1
+        jp_times_proj[3,2] = minus_inverted_dp
+    else:
+        jp = np.eye(4)
+        jp[0,0] = u_by_x
+        jp[1,1] = -v_by_y
+        jp[0,3] = -(Xmin*u_by_x)+Umin
+        jp[1,3] = (Ymin*v_by_y)+Vmax
+
+
+
+def pipeline_full(M, VRPx, VRPy, VRPz, Px, Py, Pz, Yx, Yy, Yz, 
     dist_near, dist_far, is_perspectiva, dist_projecao, 
     Xmin, Xmax, Ymin, Ymax, Umax, Umin, Vmax, Vmin):
     """
@@ -141,6 +161,54 @@ def pipeline(M, VRPx, VRPy, VRPz, Px, Py, Pz, Yx, Yy, Yz,
     pipelinedM[3,:] /= pipelinedM[3,:]
 
     return draw, pipelinedM
+
+def pipeline_steps(M, VRPx, VRPy, VRPz, Px, Py, Pz, Yx, Yy, Yz, 
+    dist_near, dist_far, is_perspectiva, dist_projecao, 
+    Xmin, Xmax, Ymin, Ymax, Umax, Umin, Vmax, Vmin):
+    """
+    Returns a Boolean value determining if the object should be drawn
+    and a numpy array for the prism after the application of the pipeline.
+    Args:
+    M is the numpy array for the prism to be drawn.
+    VRPx, VRPy, VRPz, Px, Py, Pz, Yx, Yy, Yz
+    M, dist_near, dist_far
+    is_perspectiva, dist_projecao
+    Xmin, Xmax, Ymin, Ymax, Umax, Umin, Vmax, Vmin
+    """
+    VRP = np.array([VRPx, VRPy, VRPz])
+    Y = np.array([Yx, Yy, Yz])
+    N = VRP-np.array([Px, Py, Pz])
+    n = N/(np.linalg.norm(N))
+    V = Y-np.dot(np.dot(Y,n),n)
+    v = V/(np.linalg.norm(V))
+    u = np.cross(v,n)
+
+    SRC = np.zeros((4,4))
+    SRC[0,:3] = u
+    SRC[1,:3] = v
+    SRC[2,:3] = n
+    SRC[0,3] = -np.dot(VRP,u)
+    SRC[1,3] = -np.dot(VRP,v)
+    SRC[2,3] = -np.dot(VRP,n)
+    SRC[3,3] = 1
+
+    M_in_SRC = np.dot(SRC, M)
+
+    draw = np.any(np.logical_or(
+                    np.less(M_in_SRC[2,:],-dist_near),
+                    np.greater(M_in_SRC[2,:],-dist_far)
+                ))
+
+    if not draw:
+        return draw, np.zeros((4,1))
+    else:
+        pipelinedM = np.dot(jp_times_proj_matrix(),M_in_SRC)
+        
+        pipelinedM[0,:] /= pipelinedM[3,:]
+        pipelinedM[1,:] /= pipelinedM[3,:]
+        pipelinedM[3,:] /= pipelinedM[3,:]
+
+        return draw, pipelinedM
 
 def pipeline3(M, VRPx, VRPy, VRPz, Px, Py, Pz, Yx, Yy, Yz, 
     dist_near, dist_far, is_perspectiva, dist_projecao, 
@@ -221,10 +289,7 @@ poliedro_teste = np.array([[30, 35, 25, 20,   30],
                            [25, 20, 18, 23, 22.5],
                            [ 1,  1,  1,  1,    1]])
 
-
-
 draw, R = pipeline3(poliedro_teste, 50, 15, 30, 20, 6, 15, 0, 1, 0, 10, 40, True, 17, -8, 8, -5, 5, 320, 0, 240, 0)
-
 
 """
 t_ms=round((t1-t0),6)
