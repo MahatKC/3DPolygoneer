@@ -2,13 +2,14 @@ from Matrices.prism import create_prism
 import numpy as np
 import math
 
+#counter clockwise
+#fazer as funções para chamar os métodos do objeto
 class Object():
     def __init__(self, x, y, z, h, r_bottom, r_top, sides):
         self.vertex = create_prism(x, y, z, h, r_bottom, r_top, sides)
         self.faces = {}
         self.numberFaces = sides + 2
         self.sides = sides
-
 
         for i in range(0, sides):
             self.faces[i] =  (i, (i + 1) % sides, ((i + 1) % sides) + sides , i + sides)
@@ -18,9 +19,7 @@ class Object():
         self.vertexFaces = {} 
         for i in range (0, sides * 2):
             self.vertexFaces[i] = (i % sides, (i + sides - 1) % sides, math.floor(i / sides) + sides)
-        print(self.vertexFaces)
 
-            
     def getCoordinates(self, face):
         list = []
         for i in range(0, len(self.faces[face])):

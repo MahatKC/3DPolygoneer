@@ -16,4 +16,4 @@ def create_prism(x,y,z,h,r_bottom,r_top,sides):
     while the next "sides" vertices define the polygon on top of it.
     The last vertix is actually the geometric center of the object, stored for ease of use."""
     return np.concatenate((vertices(sides, r_top, np.array([[x],[y],[z+h]])),vertices(sides, r_bottom, np.array([[x],[y],[z]]))),axis=1)
-
+    
