@@ -27,6 +27,8 @@ class VerticalScrolledFrame:
             self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=160, bg=bg)
         if(janela == 1):
             self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=420, bg=bg)
+        if(janela == 2):
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=100, bg=bg)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.canvas['yscrollcommand'] = self.vsb.set
         # mouse scroll does not seem to work with just "bind"; You have
@@ -98,12 +100,11 @@ class ToggledFrame(tk.Frame):
             numberJanela = 0
         if(text == "Projeção"):
             numberJanela = 1
+        if(text == "Iluminação"):
+            numberJanela = 2
             
         #self.sub_frame = tk.Frame(self, relief="sunken", borderwidth=1)
-        self.sub_frame = VerticalScrolledFrame(self, 
-        borderwidth=1, 
-        janela=numberJanela,
-        relief=tk.SUNKEN)
+        self.sub_frame = VerticalScrolledFrame(self, borderwidth=1, janela=numberJanela, relief=tk.SUNKEN)
 
     def toggle(self):
         if bool(self.show.get()):
@@ -278,5 +279,8 @@ if __name__ == "__main__":
     btnAlterarPlano.grid(row=29, column=1, padx=4, pady=8, columnspan=2)
 
     rbProjecao.trace('w', lerRadioButton)
+
+    t3 = ToggledFrame(root, text='Iluminação', relief="raised", borderwidth=1)
+    t3.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
 
     root.mainloop()
