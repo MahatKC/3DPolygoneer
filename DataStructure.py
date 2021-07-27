@@ -8,6 +8,7 @@ class Object():
     def __init__(self, x, y, z, h, r_bottom, r_top, sides):
         self.vertex = create_prism(x, y, z, h, r_bottom, r_top, sides)
         self.faces = {}
+        self.vertexFaces = {} 
         self.numberFaces = sides + 2
         self.sides = sides
 
@@ -16,7 +17,6 @@ class Object():
         self.faces[sides] = (np.arange(sides))
         self.faces[sides + 1] = (np.arange(sides) + sides)
         
-        self.vertexFaces = {} 
         for i in range (0, sides * 2):
             self.vertexFaces[i] = (i % sides, (i + sides - 1) % sides, math.floor(i / sides) + sides)
 
