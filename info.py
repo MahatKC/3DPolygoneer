@@ -24,11 +24,11 @@ class VerticalScrolledFrame:
         self.vsb = tk.Scrollbar(self.outer, orient=tk.VERTICAL)
         self.vsb.pack(fill=tk.Y, side=tk.RIGHT)
         if(janela == 0):
-            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=160, bg=bg)
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=155, bg=bg)
         if(janela == 1):
-            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=420, bg=bg)
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=330, bg=bg)
         if(janela == 2):
-            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=100, bg=bg)
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=200, bg=bg)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.canvas['yscrollcommand'] = self.vsb.set
         # mouse scroll does not seem to work with just "bind"; You have
@@ -100,7 +100,7 @@ class ToggledFrame(tk.Frame):
             numberJanela = 0
         if(text == "Projeção"):
             numberJanela = 1
-        if(text == "Iluminação"):
+        if(text == "Iluminação e sombreamento"):
             numberJanela = 2
             
         #self.sub_frame = tk.Frame(self, relief="sunken", borderwidth=1)
@@ -133,6 +133,8 @@ if __name__ == "__main__":
     root.geometry(str(int(width*0.2))+"x"+str(height))
     rbProjecao = tk.IntVar()
     rbProjecao.set(0)
+    rbSombreamento = tk.IntVar()
+    rbSombreamento.set(0)
 
     t = ToggledFrame(root, text='Informações do objeto', relief="raised", borderwidth=1)
     t.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
@@ -147,7 +149,7 @@ if __name__ == "__main__":
     txtNumLados = ttk.Entry(t.sub_frame, name="txtNumLados", width=15)
     labelAltura = ttk.Label(t.sub_frame, text='Altura')
     txtAltura = ttk.Entry(t.sub_frame, name="txtAltura", width=15)
-    btnAlterarObjeto = ttk.Button(t.sub_frame,text="Alterar objeto", width=20)
+    btnAlterarObjeto = ttk.Button(t.sub_frame,text="Alterar objeto", width=15)
 
     labelCg.grid(row=1, column=1, padx=10, pady=1)
     txtCg.grid(row=1, column=2, padx=1, pady=1)
@@ -219,7 +221,7 @@ if __name__ == "__main__":
     txtLimPlanoProjyMin = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjyMin", width=15)
     labelLimPlanoProjyMax = ttk.Label(t2.sub_frame, text="Y max")
     txtLimPlanoProjyMax = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjyMax", width=15)
-    btnAlterarPlano = ttk.Button(t2.sub_frame,text="Alterar cena", width=20)
+    btnAlterarPlano = ttk.Button(t2.sub_frame,text="Alterar cena", width=15)
 
     labelTipoProjecao.grid(row=1, column=1, padx=1, pady=2)
     rbAxonometrica.grid(row=2, column=1, padx=5, pady=2)
@@ -280,7 +282,40 @@ if __name__ == "__main__":
 
     rbProjecao.trace('w', lerRadioButton)
 
-    t3 = ToggledFrame(root, text='Iluminação', relief="raised", borderwidth=1)
+    t3 = ToggledFrame(root, text='Iluminação e sombreamento', relief="raised", borderwidth=1)
     t3.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
+
+    labelIluminacao = ttk.Label(t3.sub_frame, text="Iluminação", font="-weight bold -size 9")
+    labelKa = ttk.Label(t3.sub_frame, text='Ka')
+    txtKa = ttk.Entry(t3.sub_frame, name="ka", width=15)
+    labelKd = ttk.Label(t3.sub_frame, text='Kd')
+    txtKd = ttk.Entry(t3.sub_frame, name="kd", width=15)
+    labelKs = ttk.Label(t3.sub_frame, text='Ks')
+    txtKs = ttk.Entry(t3.sub_frame, name="ks", width=15)
+    labelN = ttk.Label(t3.sub_frame, text='n')
+    txtN = ttk.Entry(t3.sub_frame, name="n", width=15)
+
+    labelTipoSombreamento = ttk.Label(t3.sub_frame, text="Sombreamento", font="-weight bold -size 9")
+    rbConstante = ttk.Radiobutton(t3.sub_frame, text="Constante", variable= rbSombreamento, value=0)
+    rbGourad = ttk.Radiobutton(t3.sub_frame, text="Gourad", variable= rbSombreamento, value=1)
+    rbPhong = ttk.Radiobutton(t3.sub_frame, text="Phong", variable= rbSombreamento, value=2)
+    btnAlterarIluminacao = ttk.Button(t3.sub_frame,text="Alterar Ilum/Somb", width=20)
+
+    labelTipoSombreamento.grid(row=1, column=1, padx=12, pady=4, sticky=W)
+    rbConstante.grid(row=2, column=1, padx=25, pady=1, sticky=W)
+    rbGourad.grid(row=3, column=1, padx=25, pady=1, sticky=W)
+    rbPhong.grid(row=4, column=1, padx=25, pady=1, sticky=W)
+
+    labelIluminacao.grid(row=5, column=1, padx=12, pady=4, sticky=W)
+    labelKa.grid(row=6, column=1, padx=1, pady=1)
+    txtKa.grid(row=6, column=2, padx=1, pady=1)
+    labelKd.grid(row=7, column=1, padx=1, pady=1)
+    txtKd.grid(row=7, column=2, padx=1, pady=1)
+    labelKs.grid(row=8, column=1, padx=1, pady=1)
+    txtKs.grid(row=8, column=2, padx=1, pady=1)
+    labelN.grid(row=9, column=1, padx=1, pady=1)
+    txtN.grid(row=9, column=2, padx=1, pady=1)
+
+    btnAlterarIluminacao.grid(row=10, column=1, padx=4, pady=8, columnspan=2)
 
     root.mainloop()
