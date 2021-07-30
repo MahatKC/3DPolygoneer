@@ -2,7 +2,6 @@ from DataStructure import Object
 import Matrices.pipeline
 import numpy as np
 from tkinter import *
-
 class Screen():
     def __init__(self, frame):
         self.objects = {}
