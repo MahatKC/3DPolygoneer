@@ -22,8 +22,8 @@ class Object():
         self.numberFaces = sides + 2
         self.sides = sides
 
+        sides_minus_one = sides*2-1
         for f in range(0, sides):
-            sides_minus_one = sides*2-1
             complement_of_next = (f+1)%sides
             self.faces.append([f, sides_minus_one-f, sides_minus_one-complement_of_next, complement_of_next])
         self.faces.append(np.arange(sides).tolist())
