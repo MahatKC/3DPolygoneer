@@ -1,14 +1,18 @@
 import numpy as np
 
-def SRC_matrix(VRPx, VRPy, VRPz, Px, Py, Pz, Yx, Yy, Yz):
+def VRP_and_n(VRPx, VRPy, VRPz, Px, Py, Pz):
+    VRP = np.array([VRPx, VRPy, VRPz])
+    N = VRP-np.array([Px, Py, Pz])
+    n = N/(np.linalg.norm(N))
+
+    return VRP,n
+
+def SRC_matrix(VRP, n, Yx, Yy, Yz):
     """Returns the transformation matrix to change the prism from SRU coordinates
     to SRC. 
     Args: VRP coordinates, P coordinates, View-up (Y) coordinates"""
     
-    VRP = np.array([VRPx, VRPy, VRPz])
     Y = np.array([Yx, Yy, Yz])
-    N = VRP-np.array([Px, Py, Pz])
-    n = N/(np.linalg.norm(N))
     V = Y-np.dot(np.dot(Y,n),n)
     v = V/(np.linalg.norm(V))
     SRC = np.eye(4)
@@ -82,7 +86,8 @@ def first_pipeline(VRPx, VRPy, VRPz, Px, Py, Pz, Yx, Yy, Yz,
     """Returns matrices that shall be used in the pipeline based on all the parameters necessary
     for the SRU to SRT conversion, except the 3D cut step."""
 
-    SRC = SRC_matrix(VRPx, VRPy, VRPz, Px, Py, Pz, Yx, Yy, Yz)
+    VRP, n = VRP_and_n(VRPx, VRPy, VRPz, Px, Py, Pz)
+    SRC = SRC_matrix(VRP, n, Yx, Yy, Yz)
     jp_times_proj = jp_times_proj_matrix(is_perspectiva, dist_projecao, 
     Xmin, Xmax, Ymin, Ymax, Umax, Umin, Vmax, Vmin)
 
