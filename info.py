@@ -20,7 +20,6 @@ class VerticalScrolledFrame:
         height = (kwargs.pop('height', None))
         bg = kwargs.pop('bg', kwargs.pop('background', None))
         self.outer = tk.Frame(master, **kwargs)
-
         self.vsb = tk.Scrollbar(self.outer, orient=tk.VERTICAL)
         self.vsb.pack(fill=tk.Y, side=tk.RIGHT)
         if(janela == 0):
@@ -37,12 +36,10 @@ class VerticalScrolledFrame:
         self.canvas.bind("<Enter>", self._bind_mouse)
         self.canvas.bind("<Leave>", self._unbind_mouse)
         self.vsb['command'] = self.canvas.yview
-
         self.inner = tk.Frame(self.canvas, bg=bg)
         # pack the inner Frame into the Canvas with the topleft corner 4 pixels offset
         self.canvas.create_window(4, 4, window=self.inner, anchor='nw')
         self.inner.bind("<Configure>", self._on_frame_configure)
-
         self.outer_attr = set(dir(tk.Widget))
 
     def __getattr__(self, item):
@@ -56,7 +53,7 @@ class VerticalScrolledFrame:
     def _on_frame_configure(self, event=None):
         x1, y1, x2, y2 = self.canvas.bbox("all")
         height = self.canvas.winfo_height()
-        self.canvas.config(scrollregion = (0,0, x2, max(y2, height)))
+        self.canvas.config(scrollregion = (0, 0, x2, max(y2, height)))
 
     def _bind_mouse(self, event=None):
         self.canvas.bind_all("<4>", self._on_mousewheel)
@@ -116,17 +113,16 @@ class ToggledFrame(tk.Frame):
             self.toggle_button.configure(text='+')
 
 def lerRadioButton(_, __, ___):
-        if(rbProjecao.get() == 1):
-            txtPx['state'] = tk.DISABLED
-            txtPy['state'] = tk.DISABLED
-            txtPz['state'] = tk.DISABLED
-        else:
-            txtPx['state'] = tk.WRITABLE
-            txtPy['state'] = tk.WRITABLE
-            txtPz['state'] = tk.WRITABLE
+    if(rbProjecao.get() == 1):
+        txtPx['state'] = tk.DISABLED
+        txtPy['state'] = tk.DISABLED
+        txtPz['state'] = tk.DISABLED
+    else:
+        txtPx['state'] = tk.WRITABLE
+        txtPy['state'] = tk.WRITABLE
+        txtPz['state'] = tk.WRITABLE
 
 if __name__ == "__main__":
-
     root = tk.Tk()
     width = root.winfo_screenwidth()
     height = root.winfo_screenheight()

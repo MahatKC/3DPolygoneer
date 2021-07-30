@@ -5,6 +5,11 @@ import math
 
 #counter clockwise
 #fazer as funções para chamar os métodos do objeto
+#quando clicar em um objeto, selecionar o objeto que esta sendo clicado
+#fazer uma lista de objetos que estão existindo
+#fazer um modo de ao clicar selecionar um dos objetos do tkinter
+#fazer um modo de alterar esse objeto do tkinter e alterar na lista
+#ver se consegue ao clicar pegar por exemplo a cor que esta o pixel na coordenada clicada, além de pegar a posição X e Y
 class Object():
     def __init__(self, x, y, z, h, r_bottom, r_top, sides):
         self.vertex = create_prism(x, y, z, h, r_bottom, r_top, sides)
