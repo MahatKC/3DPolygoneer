@@ -1,4 +1,5 @@
 from Matrices.prism import create_prism
+from Matrices.normal_test import normal_test
 import numpy as np
 import math
 
@@ -14,18 +15,21 @@ import math
 class Object():
     def __init__(self, x, y, z, h, r_bottom, r_top, sides):
         self.vertex = create_prism(x, y, z, h, r_bottom, r_top, sides)
-        self.faces = {}
-        self.vertexFaces = {} 
+        self.faces = []
+        self.draw_faces = []
+        self.vertexFaces = []
+        self.draw_vertex = [False]*sides*2
         self.numberFaces = sides + 2
         self.sides = sides
 
-        for i in range(0, sides): #ajeitar utilizando sem for
-            self.faces[i] =  (i, (i + 1) % sides, ((i + 1) % sides) + sides , i + sides)
-        self.faces[sides] = (np.arange(sides))
-        self.faces[sides + 1] = (np.arange(sides) + sides)
+        for f in range(0, sides):
+            next_vertice = (f + 1)%sides
+            self.faces.append([f, next_vertice, next_vertice+sides , f + sides])
+        self.faces.append(np.arange(sides).tolist())
+        self.faces.append((np.arange(sides) + sides).tolist())
         
-        for i in range (0, sides * 2):
-            self.vertexFaces[i] = (i % sides, (i + sides - 1) % sides, math.floor(i / sides) + sides)
+        for v in range(0, sides*2):
+            self.vertexFaces.append([v%sides, (v+sides-1)%sides, np.floor(v/sides)+sides])
 
     def getCoordinates(self, face):
         list = []
@@ -33,3 +37,16 @@ class Object():
             list.append(int(self.vertex[0][self.faces[face][i]]))
             list.append(int(self.vertex[1][self.faces[face][i]]))     
         return list
+
+    def normalVisualizationTest(self):
+        for face in self.faces:
+            face_vertices = []
+            for i in range(3):
+                face_vertices.append(self.vertex[face[i]])
+            draw_this_face = normal_test(face_vertices)
+            self.draw_faces.append(draw_this_face)
+            if draw_this_face:
+                for vertex in face:
+                    self.draw_vertex[vertex] = True
+
+obj = Object(150, 150, 150, 150, 60, 100, 6)
