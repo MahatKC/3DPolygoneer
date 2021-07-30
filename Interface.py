@@ -49,7 +49,7 @@ class VerticalScrolledFrame:
         if(janela == 0):
             self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=250, height=155, bg=bg)
         if(janela == 1):
-            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=250, height=330, bg=bg)
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=250, height=235, bg=bg)
         if(janela == 2):
             self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=250, height=200, bg=bg)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -160,15 +160,17 @@ if __name__ == "__main__":
     frameDrawingInterface.place(x = int(width*0.01), y = int(height * 0.01))
 
     # Fazendo janela com as informações do usuário
-    userInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = 250, height = 500)
+    userInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = 280, height = 690)
     userInterface.place(x = int(width*0.75), y = int(height * 0.01))
+    userInterface.pack_propagate(0)
 
     # Fazendo o canvas
     drawing = Canvas(frameDrawingInterface, width = int(width*0.7), height = int(height*(0.85)), bg = "white") 
     drawing.pack()
 
     btnLimpar = ttk.Button(window,text="Limpar", width=15)
-    btnLimpar.place(x=int(width*0.01), y = int(height * 0.88))
+    #btnLimpar.place(x=int(width*0.01), y = int(height * 0.88))
+    btnLimpar.place(x=int(width*0.642), y = int(height * 0.88))
 
     # Salvando coortenadas
     drawing.old_coords = None
@@ -213,7 +215,7 @@ if __name__ == "__main__":
     btnAlterarObjeto.grid(row=6, column=1, padx=4, pady=8, columnspan=2)
 
     t2 = ToggledFrame(userInterface, text='Projeção', relief="raised", borderwidth=1)
-    t2.pack(fill="both", expand=1, pady=2, padx=2, anchor="n")
+    t2.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
 
     labelTipoProjecao = ttk.Label(t2.sub_frame, text="Tipo de projeção", font="-weight bold -size 9")
     rbAxonometrica = ttk.Radiobutton(t2.sub_frame, text="Axonométrica", variable= rbProjecao, value=1)
