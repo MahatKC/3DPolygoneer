@@ -3,12 +3,12 @@ import Matrices.pipeline
 import numpy as np
 from tkinter import *
 
-
 class Screen():
     def __init__(self, frame):
         self.objects = {}
         self.number_objects = 0
         self.canvas = Canvas(frame, width = int(width*0.7), height = int(height*(0.9)), bg = "white")
+        self.object_Selected = None
 
     def draw(self, object):
         self.objects[self.number_objects] = []
@@ -19,6 +19,7 @@ class Screen():
     def deleteObject(self, face):
         for i in range(0, self.number_objects):
             if face in self.objects[i]:
+                self.object_Selected = i
                 return self.objects[i]
 
                 
@@ -65,8 +66,10 @@ def draw_objects(event):
     obj2 = Object(600, 600, 150, 150, 60, 100, 10)
     obj3 = Object(400, 400, 150, 150, 60, 100, 5)
     obj4 = Object(150, 150, 150, 150, 60, 100, 17)
-    obj5 = Object(650, 150, 250, 250, 60, 100, 3)
+    obj5 = Object(1, 1, 1, 200, 100, 100, 6)
     obj6 = Object(1000, 400, 250, 250, 60, 100, 18)
+
+    print(obj5.vertex)
 
     drawing.draw(obj)
     drawing.draw(obj2)

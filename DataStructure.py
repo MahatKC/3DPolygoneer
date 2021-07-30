@@ -9,6 +9,8 @@ import math
 #fazer um modo de ao clicar selecionar um dos objetos do tkinter
 #fazer um modo de alterar esse objeto do tkinter e alterar na lista
 #ver se consegue ao clicar pegar por exemplo a cor que esta o pixel na coordenada clicada, além de pegar a posição X e Y
+#Desselecionar o objeto ao apertar no branco da tela
+#enviar o objeto pra fazer TG
 class Object():
     def __init__(self, x, y, z, h, r_bottom, r_top, sides):
         self.vertex = create_prism(x, y, z, h, r_bottom, r_top, sides)
