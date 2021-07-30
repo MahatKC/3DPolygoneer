@@ -21,13 +21,15 @@ class Object():
         self.sides = sides
 
         for f in range(0, sides):
-            next_vertice = (f + 1)%sides
-            self.faces.append([f, next_vertice, next_vertice+sides , f + sides])
+            sides_minus_one = sides*2-1
+            complement_of_next = (f+1)%sides
+            self.faces.append([f, sides_minus_one-f, sides_minus_one-complement_of_next, complement_of_next])
         self.faces.append(np.arange(sides).tolist())
         self.faces.append((np.arange(sides) + sides).tolist())
         
         for v in range(0, sides*2):
-            self.vertexFaces.append([v%sides, (v+sides-1)%sides, np.floor(v/sides)+sides])
+            floor = np.floor(v/sides)
+            self.vertexFaces.append([v%sides, (sides*(1+floor))-v-1, floor+sides])
 
     def getCoordinates(self, face):
         list = []
