@@ -1,5 +1,5 @@
 from Matrices.prism import create_prism
-from Matrices.normal_test import normal_test
+#from normal_test import normal_test
 import numpy as np
 import math
 
@@ -30,9 +30,9 @@ class Object():
         self.faces.append((np.arange(sides) + sides).tolist())
         
         for v in range(0, sides*2):
-            floor = np.floor(v/sides)
+            floor = int(np.floor(v/sides))
             self.vertexFaces.append([v%sides, (sides*(1+floor))-v-1, floor+sides])
-
+    
     def getCoordinates(self, face):
         list = []
         for i in range(0, len(self.faces[face])):
@@ -51,4 +51,5 @@ class Object():
                 for vertex in face:
                     self.draw_vertex[vertex] = True
 
-obj = Object(150, 150, 150, 150, 60, 100, 6)
+#obj = Object(150, 150, 150, 150, 60, 100, 6)
+
