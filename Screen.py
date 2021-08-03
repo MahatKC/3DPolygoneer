@@ -1,4 +1,4 @@
-from DataStructure import Object
+from DataStructure.DataStructure import Object
 from DataStructure.Matrices.pipeline import first_pipeline, VRP_and_n, pipeline_steps
 import numpy as np
 from tkinter import *
@@ -27,9 +27,11 @@ class Screen():
     def AddObjects(self, r_bottom, r_top, sides, h):
         new_obj = Object(0, 0, 0, h, r_bottom, r_top, sides)
         new_obj.normalVisualizationTest(self.n)
+        new_obj.pipeline_me(self.SRC, self.jp_times_proj, )
         self.objects.append(new_obj)
 
-    
+
+
 
         
 
