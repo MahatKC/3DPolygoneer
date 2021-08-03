@@ -22,12 +22,14 @@ class Screen():
         for i in range(0, self.number_objects):
             if face in self.objects[i]:
                 self.object_Selected = i
-                return self.objects[i]
+                return self.objects[i] 
 
     def AddObjects(self, r_bottom, r_top, sides, h):
         new_obj = Object(0, 0, 0, h, r_bottom, r_top, sides)
         new_obj.normalVisualizationTest(self.n)
         self.objects.append(new_obj)
+
+    
 
         
 

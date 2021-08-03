@@ -45,7 +45,7 @@ class Object():
             face_vertices = []
             for i in range(3):
                 face_vertices.append(self.vertex[face[i]])
-            draw_this_face = normal_test(face_vertices)
+            draw_this_face = normal_test(face_vertices, n)
             self.draw_faces.append(draw_this_face)
             if draw_this_face:
                 for vertex in face:
