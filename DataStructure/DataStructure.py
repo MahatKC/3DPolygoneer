@@ -1,5 +1,6 @@
 from DataStructure.normal_test import normal_test
 from Matrices.prism import create_prism
+from Matrices.pipeline import pipeline_steps
 #from normal_test import normal_test
 import numpy as np
 import math
@@ -15,7 +16,8 @@ import math
 #enviar o objeto pra fazer TG
 class Object():
     def __init__(self, x, y, z, h, r_bottom, r_top, sides):
-        self.vertex = create_prism(x, y, z, h, r_bottom, r_top, sides)
+        self.prism_in_SRU = create_prism(x, y, z, h, r_bottom, r_top, sides)
+        self.prism_in_SRT
         self.faces = []
         self.draw_faces = []
         self.vertexFaces = []
@@ -37,20 +39,24 @@ class Object():
     def getCoordinates(self, face):
         list = []
         for i in range(0, len(self.faces[face])):
-            list.append(int(self.vertex[0][self.faces[face][i]]))
-            list.append(int(self.vertex[1][self.faces[face][i]]))     
+            list.append(int(self.prism_in_SRU[0][self.faces[face][i]]))
+            list.append(int(self.prism_in_SRU[1][self.faces[face][i]]))     
         return list
 
-    def normalVisualizationTest(self):
+    def normalVisualizationTest(self, n):
         for face in self.faces:
             face_vertices = []
             for i in range(3):
-                face_vertices.append(self.vertex[face[i][:3]])
+                face_vertices.append(self.prism_in_SRU[face[i][:3]])
             draw_this_face = normal_test(face_vertices, n)
             self.draw_faces.append(draw_this_face)
             if draw_this_face:
                 for vertex in face:
                     self.draw_vertex[vertex] = True
+
+    def pipeline_me(self, SRC_matrix, jp_proj_matrix, dist_near, dist_far):
+        self.prism_in_SRU = pipeline_steps(M, SRC_matrix, jp_proj_matrix, dist_near, dist_far)
+
 
 #obj = Object(150, 150, 150, 150, 60, 100, 6)
 
