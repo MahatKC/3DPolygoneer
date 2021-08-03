@@ -1,3 +1,4 @@
+from DataStructure.normal_test import normal_test
 from Matrices.prism import create_prism
 #from normal_test import normal_test
 import numpy as np
@@ -45,7 +46,7 @@ class Object():
             face_vertices = []
             for i in range(3):
                 face_vertices.append(self.vertex[face[i][:3]])
-            draw_this_face = normal_test(face_vertices, VRP, n)
+            draw_this_face = normal_test(face_vertices, n)
             self.draw_faces.append(draw_this_face)
             if draw_this_face:
                 for vertex in face:
