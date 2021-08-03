@@ -39,9 +39,11 @@ class Object():
     
     def getCoordinates(self, face_SRU, face_SRT):
         list = []
-        for i in range(len(self.faces[face_SRU])): 
-            list.append(int(self.prism_in_SRT[0][self.faces[face_SRT][i]]))
-            list.append(int(self.prism_in_SRT[1][self.faces[face_SRT][i]]))     
+        for i in range(len(self.faces[face_SRU])):
+            vertex_in_SRU = self.faces[face_SRU][i]
+            vertex_in_SRT = np.arange(self.sides * 2)[self.draw_vertex].tolist().index(vertex_in_SRU)
+            list.append(int(self.prism_in_SRT[0][vertex_in_SRT]))
+            list.append(int(self.prism_in_SRT[1][vertex_in_SRT]))     
         return list
 
     def normalVisualizationTest(self, n):

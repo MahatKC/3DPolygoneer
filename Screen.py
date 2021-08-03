@@ -5,8 +5,8 @@ from tkinter import *
 
 class Screen():
     def __init__(self, frame, width, height):
-        self.VRP, self.n = VRP_and_n(200, 200, 0, width//3, height//3, 0)  
-        self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, 0, 1, 0, True, 150, -200, 200, -200, 200, width/2, -width/2, height/2, -height/2)
+        self.VRP, self.n = VRP_and_n(200, 200, 0, width, height, 0)  
+        self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, 0, 1, 0, True, 150, -200, 200, -200, 200, width, 0, height, 0)
         self.objects = []
         self.number_objects = 0
         self.canvas = Canvas(frame, width = int(width*0.7), height = int(height*(0.9)), bg = "white")
@@ -62,6 +62,10 @@ def draw_objects(event):
     drawing.AddObjects(40, 20, 8, 50) 
 drawing.canvas.bind_all('<x>', draw_objects)
 
+
+def draw_objects2(event):
+    drawing.AddObjects(30, 60, 15, 90) 
+drawing.canvas.bind_all('<c>', draw_objects2)
 
 def erase(event):
     drawing.canvas.delete("current")
