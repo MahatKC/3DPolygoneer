@@ -18,6 +18,7 @@ class Object():
     def __init__(self, x, y, z, h, r_bottom, r_top, sides):
         self.prism_in_SRU = create_prism(x, y, z, h, r_bottom, r_top, sides)
         self.prism_in_SRT
+        self.draw_me
         self.faces = []
         self.draw_faces = []
         self.vertexFaces = []
@@ -55,7 +56,7 @@ class Object():
                     self.draw_vertex[vertex] = True
 
     def pipeline_me(self, SRC_matrix, jp_proj_matrix, dist_near, dist_far):
-        self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
+        self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
 
 
 
