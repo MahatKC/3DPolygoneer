@@ -21,8 +21,6 @@ class Screen():
                 self.object_Selected = i
                 return self.objects[i]
 
-                
-
 
 window = Tk()
 window.title('The Marvelous Polygoneer')
@@ -53,6 +51,7 @@ poliedro_teste = np.array([[30, 35, 25, 20,   30],
 
 def object_clicked(event):
     print("voce cricou no objeto")
+    #drawing.canvas.delete("current")
     object = drawing.deleteObject(drawing.canvas.find_withtag("current")[0])
     for i in object:
         drawing.canvas.delete(i)
