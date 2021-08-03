@@ -1,4 +1,4 @@
-from DataStructure import Object
+from DataStructure.DataStructure import Object
 from DataStructure.Matrices.pipeline import first_pipeline, VRP_and_n, pipeline_steps
 import numpy as np
 from tkinter import *
