@@ -89,9 +89,43 @@ drawing.canvas.bind_all('<x>', draw_objects)
 window.mainloop()
 
 
+def move_x_left():
+    move_object(-value_move)
+
+def move_x_right():
+    move_object(value_move)
+
+def move_z_front():
+    move_object(-value_move)
+
+def move_z_back():
+    move_object(value_move)
+
+def move_y_up():
+    move_object(-value_move)
+
+def move_y_down():
+    move_object(value_move)
+
 drawing.canvas.bind_all('<q>', move_x_left)
 drawing.canvas.bind_all('<a>', move_x_right)
 drawing.canvas.bind_all('<w>', move_z_front)
 drawing.canvas.bind_all('<s>', move_z_back)
 drawing.canvas.bind_all('<e>', move_y_up)
 drawing.canvas.bind_all('<d>', move_y_down)
+
+drawing.canvas.bind_all('<r>', scale_x_less)
+drawing.canvas.bind_all('<f>', scale_x_more)
+drawing.canvas.bind_all('<t>', scale_z_less)
+drawing.canvas.bind_all('<g>', scale_z_more)
+drawing.canvas.bind_all('<y>', scale_y_less)
+drawing.canvas.bind_all('<h>', scale_y_more)
+
+drawing.canvas.bind_all('<u>', rot_x_left)
+drawing.canvas.bind_all('<j>', rot_x_right)
+drawing.canvas.bind_all('<i>', rot_z_front)
+drawing.canvas.bind_all('<k>', rot_z_back)
+drawing.canvas.bind_all('<o>', rot_y_up)
+drawing.canvas.bind_all('<l>', rot_y_down)
+
+
