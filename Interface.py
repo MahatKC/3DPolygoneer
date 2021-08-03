@@ -47,7 +47,7 @@ class VerticalScrolledFrame:
         self.vsb = tk.Scrollbar(self.outer, orient=tk.VERTICAL)
         self.vsb.pack(fill=tk.Y, side=tk.RIGHT)
         if(janela == 0):
-            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=250, height=155, bg=bg)
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=250, height=135, bg=bg)
         if(janela == 1):
             self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=250, height=235, bg=bg)
         if(janela == 2):
@@ -146,6 +146,14 @@ def lerRadioButton(_, __, ___):
         txtPy['state'] = tk.WRITABLE
         txtPz['state'] = tk.WRITABLE
 
+def botaoObjeto(_, __, ___):
+    if (textNumLados.get() == ""):
+        btnAlterarObjeto['state'] = tk.WRITABLE
+        btnCriarObjeto['state'] = tk.DISABLED
+    else:
+        btnAlterarObjeto['state'] = tk.DISABLED
+        btnCriarObjeto['state'] = tk.WRITABLE
+
 if __name__ == "__main__":
     window = tk.Tk()
     window.title('The Marvelous Polygoneer')
@@ -186,33 +194,35 @@ if __name__ == "__main__":
     rbProjecao.set(0)
     rbSombreamento = tk.IntVar()
     rbSombreamento.set(0)
+    textNumLados = tk.StringVar()
+    textNumLados.set("")
 
     t = ToggledFrame(userInterface, text='Informações do objeto', relief="raised", borderwidth=1)
     t.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
 
-    labelCg = ttk.Label(t.sub_frame, text='Centro geométrico')
-    txtCg = ttk.Entry(t.sub_frame, name="txtCentroGeometrico", width=15)
     labelRaioBase = ttk.Label(t.sub_frame, text='Raio da base')
     txtRaioBase = ttk.Entry(t.sub_frame, name="txtRaioBase", width=15)
     labelRaioTopo = ttk.Label(t.sub_frame, text='Raio do topo')
     txtRaioTopo = ttk.Entry(t.sub_frame, name="txtRaioTopo", width=15)
     labelNumLados = ttk.Label(t.sub_frame, text='Número de lados')
-    txtNumLados = ttk.Entry(t.sub_frame, name="txtNumLados", width=15)
+    txtNumLados = ttk.Entry(t.sub_frame, name="txtNumLados", width=15, textvariable=textNumLados)
     labelAltura = ttk.Label(t.sub_frame, text='Altura')
     txtAltura = ttk.Entry(t.sub_frame, name="txtAltura", width=15)
+    btnCriarObjeto = ttk.Button(t.sub_frame,text="Criar objeto", width=15)
     btnAlterarObjeto = ttk.Button(t.sub_frame,text="Alterar objeto", width=15)
 
-    labelCg.grid(row=1, column=1, padx=10, pady=1)
-    txtCg.grid(row=1, column=2, padx=1, pady=1)
+    labelNumLados.grid(row=1, column=1, padx=10, pady=1)
+    txtNumLados.grid(row=1, column=2, padx=1, pady=1)
     labelRaioBase.grid(row=2, column=1, padx=1, pady=1)
     txtRaioBase.grid(row=2, column=2, padx=1, pady=1)
     labelRaioTopo.grid(row=3, column=1, padx=1, pady=1)
     txtRaioTopo.grid(row=3, column=2, padx=1, pady=1)
-    labelNumLados.grid(row=4, column=1, padx=1, pady=1)
-    txtNumLados.grid(row=4, column=2, padx=1, pady=1)
     labelAltura.grid(row=5, column=1, padx=1, pady=1)
     txtAltura.grid(row=5, column=2, padx=1, pady=1)
-    btnAlterarObjeto.grid(row=6, column=1, padx=4, pady=8, columnspan=2)
+    btnCriarObjeto.grid(row=6, column=1, padx=4, pady=8)
+    btnAlterarObjeto.grid(row=6, column=2, padx=4, pady=8)
+
+    textNumLados.trace('w', botaoObjeto)
 
     t2 = ToggledFrame(userInterface, text='Projeção', relief="raised", borderwidth=1)
     t2.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
