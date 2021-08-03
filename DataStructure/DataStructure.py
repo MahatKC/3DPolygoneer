@@ -55,7 +55,8 @@ class Object():
                     self.draw_vertex[vertex] = True
 
     def pipeline_me(self, SRC_matrix, jp_proj_matrix, dist_near, dist_far):
-        self.prism_in_SRU = pipeline_steps(M, SRC_matrix, jp_proj_matrix, dist_near, dist_far)
+        self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
+
 
 
 #obj = Object(150, 150, 150, 150, 60, 100, 6)
