@@ -1,6 +1,6 @@
 from DataStructure.normal_test import normal_test
-from Matrices.prism import create_prism
-from Matrices.pipeline import pipeline_steps
+from DataStructure.Matrices.prism import create_prism
+from DataStructure.Matrices.pipeline import pipeline_steps
 #from normal_test import normal_test
 import numpy as np
 import math
@@ -17,8 +17,8 @@ import math
 class Object():
     def __init__(self, x, y, z, h, r_bottom, r_top, sides):
         self.prism_in_SRU = create_prism(x, y, z, h, r_bottom, r_top, sides)
-        self.prism_in_SRT
-        self.draw_me
+        self.prism_in_SRT = None
+        self.draw_me = None
         self.faces = []
         self.draw_faces = []
         self.vertexFaces = []
@@ -37,18 +37,18 @@ class Object():
             floor = int(np.floor(v/sides))
             self.vertexFaces.append([v%sides, (sides*(1+floor))-v-1, floor+sides])
     
-    def getCoordinates(self, face):
+    def getCoordinates(self, face_SRU, face_SRT):
         list = []
-        for i in range(0, len(self.faces[face])):
-            list.append(int(self.prism_in_SRU[0][self.faces[face][i]]))
-            list.append(int(self.prism_in_SRU[1][self.faces[face][i]]))     
+        for i in range(len(self.faces[face_SRU])): 
+            list.append(int(self.prism_in_SRT[0][self.faces[face_SRT][i]]))
+            list.append(int(self.prism_in_SRT[1][self.faces[face_SRT][i]]))     
         return list
 
     def normalVisualizationTest(self, n):
         for face in self.faces:
             face_vertices = []
             for i in range(3):
-                face_vertices.append(self.prism_in_SRU[face[i][:3]])
+                face_vertices.append(self.prism_in_SRU[:3,face[i]])
             draw_this_face = normal_test(face_vertices, n)
             self.draw_faces.append(draw_this_face)
             if draw_this_face:
