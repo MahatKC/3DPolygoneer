@@ -40,7 +40,7 @@ class Object():
             list.append(int(self.vertex[1][self.faces[face][i]]))     
         return list
 
-    def normalVisualizationTest(self):
+    def normalVisualizationTest(self, n):
         for face in self.faces:
             face_vertices = []
             for i in range(3):

@@ -1,10 +1,10 @@
 from DataStructure import Object
-import Matrices.pipeline
+from DataStructure.Matrices.pipeline import first_pipeline, VRP_and_n, pipeline_steps
 import numpy as np
 from tkinter import *
 class Screen():
     def __init__(self, frame):
-        self.objects = {}
+        self.objects = []
         self.number_objects = 0
         self.canvas = Canvas(frame, width = int(width*0.7), height = int(height*(0.9)), bg = "white")
         self.object_Selected = None
@@ -20,6 +20,7 @@ class Screen():
             if face in self.objects[i]:
                 self.object_Selected = i
                 return self.objects[i]
+
 
 
 window = Tk()
@@ -86,3 +87,11 @@ drawing.canvas.bind_all('<space>', erase)
 drawing.canvas.bind_all('<x>', draw_objects)
 
 window.mainloop()
+
+
+drawing.canvas.bind_all('<q>', move_x_left)
+drawing.canvas.bind_all('<a>', move_x_right)
+drawing.canvas.bind_all('<w>', move_z_front)
+drawing.canvas.bind_all('<s>', move_z_back)
+drawing.canvas.bind_all('<e>', move_y_up)
+drawing.canvas.bind_all('<d>', move_y_down)
