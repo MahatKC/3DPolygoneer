@@ -37,11 +37,11 @@ class Object():
             floor = int(np.floor(v/sides))
             self.vertexFaces.append([v%sides, (sides*(1+floor))-v-1, floor+sides])
     
-    def getCoordinates(self, face):
+    def getCoordinates(self, face_SRU, face_SRT):
         list = []
-        for i in range(len(self.faces[face])): 
-            list.append(int(self.prism_in_SRT[0][self.faces[face][i]]))
-            list.append(int(self.prism_in_SRT[1][self.faces[face][i]]))     
+        for i in range(len(self.faces[face_SRU])): 
+            list.append(int(self.prism_in_SRT[0][self.faces[face_SRT][i]]))
+            list.append(int(self.prism_in_SRT[1][self.faces[face_SRT][i]]))     
         return list
 
     def normalVisualizationTest(self, n):

@@ -34,9 +34,11 @@ class Screen():
         self.objects.append(new_obj) 
         
         for i in range(new_obj.numberFaces):
+            j=0
             if(new_obj.draw_faces[i]):
-                self.canvas.create_polygon(new_obj.getCoordinates(i), outline='blue', fill='light blue', width = 2, tags = "objeto")
-                print(new_obj.getCoordinates(i))
+                self.canvas.create_polygon(new_obj.getCoordinates(i,j), outline='blue', fill='light blue', width = 2, tags = "objeto")
+                print(new_obj.getCoordinates(i,j))
+                j+=1
 
 
 window = Tk()
