@@ -1,6 +1,6 @@
-from DataStructure.normal_test import normal_test
-from DataStructure.Matrices.prism import create_prism
-from DataStructure.Matrices.pipeline import pipeline_steps
+from normal_test import normal_test
+from Matrices.prism import create_prism
+from Matrices.pipeline import pipeline_steps
 #from normal_test import normal_test
 import numpy as np
 import math
@@ -37,6 +37,14 @@ class Object():
             floor = int(np.floor(v/sides))
             self.vertexFaces.append([v%sides, (sides*(1+floor))-v-1, floor+sides])
     
+    def printa_tudo(self):
+        print("Faces list: ")
+        print(self.faces)
+        print("-"*10)
+        print("Vertices list: ")
+        print(self.vertexFaces)
+        print("-"*10)
+
     def getCoordinates(self, face_SRU):
         list = []
         for i in range(len(self.faces[face_SRU])):
@@ -61,6 +69,6 @@ class Object():
         self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
 
 
-
-#obj = Object(150, 150, 150, 150, 60, 100, 6)
+obj = Object(150, 150, 150, 150, 60, 100, 6)
+obj.printa_tudo()
 

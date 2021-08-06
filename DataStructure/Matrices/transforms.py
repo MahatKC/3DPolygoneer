@@ -12,6 +12,8 @@ def translation(M, dx, dy, dz):
 def scale(M, Sx, Sy, Sz):
     """Scales polygon M by Sx, Sy and Sz.
     M needs to be a Numpy Array with shape (4,N) with N>=1"""
+    
+    M = translation(M,)
     T = np.eye(4)
     T[0,0] = Sx
     T[1,1] = Sy
