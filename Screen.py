@@ -1,3 +1,4 @@
+from exemplo_prova import exemplo_prova
 from DataStructure.DataStructure import Object
 from DataStructure.Matrices.pipeline import first_pipeline, VRP_and_n, pipeline_steps
 import numpy as np
@@ -5,8 +6,8 @@ from tkinter import *
 
 class Screen():
     def __init__(self, frame, width, height):
-        self.VRP, self.n = VRP_and_n(200, 200, 0, width, height, 0)  
-        self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, 0, 1, 0, True, 150, -200, 200, -200, 200, width, 0, height, 0)
+        self.VRP, self.n = VRP_and_n(100, -50, 70, 2, 1, 3)  
+        self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, 0, 1, 0, True, 50, -50, 40, -40, 30, 300, 1000, 200, 600)
         self.objects = [] 
         self.objectsInCanvas = [] # list of all the objects with all the faces that each one has
         self.numberObjects = 0
@@ -35,7 +36,7 @@ class Screen():
 
 
     def AddObjects(self, r_bottom, r_top, sides, h):
-        new_obj = Object(width//3, height//3, 0, h, r_bottom, r_top, sides)
+        new_obj = Object(0, 0, 0, h, r_bottom, r_top, sides) 
         new_obj.normalVisualizationTest(self.n)
         new_obj.pipeline_me(self.SRC, self.jp_times_proj, 10, 1000)
         self.objects.append(new_obj) 
@@ -44,7 +45,22 @@ class Screen():
         for i in range(new_obj.numberFaces):
             j=0
             if(new_obj.draw_faces[i]):
-                self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(i,j), outline='blue', fill='light blue', width = 2, tags = "objeto"))
+                self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(i), outline='blue', fill='light blue', width = 2, tags = "objeto"))
+                j+=1
+        
+        self.numberObjects += 1
+
+    def AddObjectsProva(self, r_bottom, r_top, sides, h):
+        new_obj = exemplo_prova() 
+        new_obj.normalVisualizationTest(self.n)
+        new_obj.pipeline_me(self.SRC, self.jp_times_proj, 10, 1000)
+        self.objects.append(new_obj) 
+        self.objectsInCanvas.append([])
+        
+        for i in range(new_obj.numberFaces):
+            j=0
+            if(new_obj.draw_faces[i]):
+                self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(i), outline='blue', fill='light blue', width = 2, tags = "objeto"))
                 j+=1
         
         self.numberObjects += 1
@@ -72,7 +88,7 @@ def draw_objects(event):
 drawing.canvas.bind_all('<x>', draw_objects)
 
 def draw_objects2(event):
-    drawing.AddObjects(30, 60, 15, 90) 
+    drawing.AddObjectsProva(30, 60, 15, 90) 
 drawing.canvas.bind_all('<c>', draw_objects2)
 
 def erase(event):
@@ -83,6 +99,7 @@ def selectObject(event):
         object = drawing.ObjectSelection(drawing.canvas.find_withtag("current")[0])
         for i in object:
             drawing.canvas.itemconfig(i, fill='red')
+            #drawing.canvas.coords(i, [30, 30, 50, 80, 100, 100, 200, 200, 420, 100]) readapta as coordenadas de cada face do objeto
     else:
         drawing.objectSelected = None
     
