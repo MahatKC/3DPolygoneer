@@ -1,10 +1,11 @@
 from DataStructure.normal_test import normal_test
 from DataStructure.Matrices.pipeline import pipeline_steps
+from DataStructure.Matrices.transforms import scale
 import numpy as np
 
 class exemplo_prova():
     def __init__(self):
-        self.prism_in_SRU = np.array([[-10.868, -70.001, -5.67,   3.98,  7.847,  9.178],
+        self.prism_in_SRU = np.array([[-10.868, -7.001, -5.67,   3.98,  7.847,  9.178],
                                       [   1.64,   5.736, 9.832, -9.832, -5.736,  -1.64],
                                       [  2.861,   4.368, 0.437, -4.062, -2.556, -6.487],
                                       [      1,       1,     1,      1,      1,     1,]])
@@ -48,10 +49,26 @@ class exemplo_prova():
             list.append(int(self.prism_in_SRT[0][vertex_in_SRT]))
             list.append(int(self.prism_in_SRT[1][vertex_in_SRT]))     
         return list
+    """
+    def getCoordinates(self, face_SRU):
+        list = []
+        for i in range(len(self.faces[face_SRU])):
+            list.append(int(self.prism_in_SRU[0][self.faces[face_SRU][i]]))
+            list.append(int(self.prism_in_SRU[1][self.faces[face_SRU][i]]))
+        return list
+
+    def getCoordinates(self, face_SRU):
+        list = []
+        for i in range(len(self.faces[face_SRU])):
+            list.append(int(self.prism_in_SRT[0][i]))
+            list.append(int(self.prism_in_SRT[1][i]))     
+        return list
+    """ 
 
     def normalVisualizationTest(self, n):
         for face in self.faces:
             face_vertices = []
+            print(face)
             for i in range(3):
                 face_vertices.append(self.prism_in_SRU[:3,face[i]])
             draw_this_face = normal_test(face_vertices, n)
@@ -61,7 +78,4 @@ class exemplo_prova():
                     self.draw_vertex[vertex] = True
 
     def pipeline_me(self, SRC_matrix, jp_proj_matrix, dist_near, dist_far):
-        self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
-
-teste = exemplo_prova()
-teste.printa_tudo()
+        self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:, self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)

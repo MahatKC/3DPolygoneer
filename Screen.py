@@ -1,19 +1,23 @@
 from exemplo_prova import exemplo_prova
 from DataStructure.DataStructure import Object
 from DataStructure.Matrices.pipeline import first_pipeline, VRP_and_n, pipeline_steps
-import numpy as np
+import numpy as np 
+np.set_printoptions(precision=6)
+np.set_printoptions(suppress=True)
 from tkinter import *
 
+
+# apagar também das listas quando trabalhar com os objetos
 class Screen():
     def __init__(self, frame, width, height):
         self.VRP, self.n = VRP_and_n(100, -50, 70, 2, 1, 3)  
-        self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, 0, 1, 0, True, 50, -50, 40, -40, 30, 300, 1000, 200, 600)
+        self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, 0, 1, 0, False, 50, -50, 40, -40, 30, 300, 1000, 200, 600)
         self.objects = [] 
         self.objectsInCanvas = [] # list of all the objects with all the faces that each one has
         self.numberObjects = 0
         self.canvas = Canvas(frame, width = int(width*0.7), height = int(height*(0.9)), bg = "white")
-        self.objectSelected = None
-
+        self.objectSelected = None 
+        
     #def draw(self, object):
     #    self.objects[self.number_objects] = []
     #    for i in range(0, object.numberFaces): 
@@ -41,12 +45,13 @@ class Screen():
         new_obj.pipeline_me(self.SRC, self.jp_times_proj, 10, 1000)
         self.objects.append(new_obj) 
         self.objectsInCanvas.append([])
+        print(new_obj.prism_in_SRT)
+
+        print(new_obj.draw_faces)
         
         for i in range(new_obj.numberFaces):
-            j=0
             if(new_obj.draw_faces[i]):
                 self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(i), outline='blue', fill='light blue', width = 2, tags = "objeto"))
-                j+=1
         
         self.numberObjects += 1
 
@@ -57,25 +62,26 @@ class Screen():
         self.objects.append(new_obj) 
         self.objectsInCanvas.append([])
         
+        print(new_obj.draw_faces)
+        print(new_obj.prism_in_SRT)
         for i in range(new_obj.numberFaces):
-            j=0
             if(new_obj.draw_faces[i]):
                 self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(i), outline='blue', fill='light blue', width = 2, tags = "objeto"))
-                j+=1
-        
+
+        # 
         self.numberObjects += 1
 
 
 window = Tk()
 window.title('The Marvelous Polygoneer')
-width = window.winfo_screenwidth()
+width = window.winfo_screenwidth() 
 height = window.winfo_screenheight()
 window.state('zoomed')
 
-frameDrawingInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = int(width*0.7), height = int(height*(0.9)))
+frameDrawingInterface = Frame(window, highlightbackground= "black", highlightthickness= 1, width = int(width*0.7), height = int(height*(0.9)))
 frameDrawingInterface.place(x = int(width*0.01), y = int(height * 0.01))
 
-UserInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = int(width*0.20), height = int(height*(0.9)))
+UserInterface = Frame(window, highlightbackground= "black", highlightthickness= 1, width = int(width*0.20), height = int(height*(0.9)))
 UserInterface.place(x = int(width*0.75), y = int(height * 0.01))
 
 
@@ -83,9 +89,30 @@ drawing = Screen(frameDrawingInterface, width, height)
 
 drawing.canvas.pack()
 
-def draw_objects(event):
+def draw_objects1(event):
     drawing.AddObjects(40, 20, 8, 50) 
-drawing.canvas.bind_all('<x>', draw_objects)
+
+def draw_objects2(event):
+    drawing.AddObjects(150, 60, 20, 10)
+
+def draw_objects3(event):
+    drawing.AddObjects(150, 60, 4, 5)
+
+def draw_objects4(event):
+    drawing.AddObjects(150, 100, 12, 20) 
+    
+def draw_objects5(event):
+    drawing.AddObjects(150, 100, 12, 10) 
+
+def draw_objects6(event):
+    drawing.AddObjects(150, 100, 12, 5)   
+
+drawing.canvas.bind_all('<q>', draw_objects1) 
+drawing.canvas.bind_all('<w>', draw_objects2) 
+drawing.canvas.bind_all('<e>', draw_objects3) 
+drawing.canvas.bind_all('<r>', draw_objects4) 
+drawing.canvas.bind_all('<t>', draw_objects5) 
+drawing.canvas.bind_all('<y>', draw_objects6) 
 
 def draw_objects2(event):
     drawing.AddObjectsProva(30, 60, 15, 90) 
@@ -99,14 +126,12 @@ def selectObject(event):
         object = drawing.ObjectSelection(drawing.canvas.find_withtag("current")[0])
         for i in object:
             drawing.canvas.itemconfig(i, fill='red')
-            #drawing.canvas.coords(i, [30, 30, 50, 80, 100, 100, 200, 200, 420, 100]) readapta as coordenadas de cada face do objeto
+            drawing.canvas.coords(i, [30, 30, 50, 80, 100, 100, 200, 200, 420, 100]) #readapta as coordenadas de cada face do objeto
     else:
         drawing.objectSelected = None
     
-#drawing.canvas.bind('<Button-1>', erase)
-drawing.canvas.bind('<Button-1>', selectObject)
+drawing.canvas.bind('<Button-1>', erase)
+#drawing.canvas.bind('<Button-1>', selectObject)
             
 
 window.mainloop()
-
-#calculo da normal só diz se aquela face é possível de ser vista pelo observador, não diz se uma outra face tamparia
