@@ -37,7 +37,7 @@ class Object():
             floor = int(np.floor(v/sides))
             self.vertexFaces.append([v%sides, (sides*(1+floor))-v-1, floor+sides])
     
-    def getCoordinates(self, face_SRU, face_SRT):
+    def getCoordinates(self, face_SRU):
         list = []
         for i in range(len(self.faces[face_SRU])):
             vertex_in_SRU = self.faces[face_SRU][i]
