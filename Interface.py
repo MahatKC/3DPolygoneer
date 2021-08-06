@@ -155,27 +155,62 @@ def botaoObjeto(_, __, ___):
         btnCriarObjeto['state'] = tk.WRITABLE
 
 def objetoClick():
-    criarObjeto(txtNumLados.get(), txtAltura.get(), txtRaioBase.get(), txtRaioTopo.get())
+    numLados = int(isVazio(txtNumLados.get()))
+    altura = isVazio(txtAltura.get())
+    raioBase = isVazio(txtRaioBase.get())
+    raioTopo = isVazio(txtRaioTopo.get())
+    criarObjeto(numLados, altura, raioBase, raioTopo)
 
 def criarObjeto(numLados, altura, raioBase, raioTopo):
-    print(altura+raioBase+raioTopo+numLados)
+    print(numLados*4)
 
 def projecaoClick():
     #rbProjeção = 0 -> perspectiva; rbProjeção = 1 -> axonometrica
-    criarCena(rbProjecao.get(), txtVRPx.get(), txtVRPy.get(), txtVRPz.get(), txtPx.get(), txtPy.get(), txtPz.get(), 
-                txtViewUpx.get(), txtViewUpy.get(), txtViewUpz.get(), txtNear.get(), txtFar.get(), txtPlanoProjecao.get(),
-                txtLimMundoxMin.get(), txtLimMundoxMax.get(), txtLimMundoyMin.get(), txtLimMundoyMax.get(), 
-                txtLimPlanoProjxMin.get(), txtLimPlanoProjxMax.get(), txtLimPlanoProjyMin.get(), txtLimPlanoProjyMax.get())
+    projecao = int(rbProjecao.get())
+    vrpX = isVazio(txtVRPx.get())
+    vrpY = isVazio(txtVRPy.get())
+    vrpZ = isVazio(txtVRPz.get())
+    pX = isVazio(txtPx.get())
+    pY = isVazio(txtPy.get())
+    pZ = isVazio(txtPz.get())
+    viewUpX = isVazio(txtViewUpx.get())
+    viewUpY = isVazio(txtViewUpy.get())
+    viewUpZ = isVazio(txtViewUpz.get())
+    near = isVazio(txtNear.get())
+    far = isVazio(txtFar.get())
+    planoProj = isVazio(txtPlanoProjecao.get())
+    mundoxMin = isVazio(txtLimMundoxMin.get())
+    mundoxMax = isVazio(txtLimMundoxMax.get())
+    mundoyMin = isVazio(txtLimMundoyMin.get())
+    mundoyMax = isVazio(txtLimMundoyMax.get())
+    planoProjxMin = isVazio(txtLimPlanoProjxMin.get())
+    planoProjxMax = isVazio(txtLimPlanoProjxMax.get())
+    planoProjyMin = isVazio(txtLimPlanoProjyMin.get())
+    planoProjyMax = isVazio(txtLimPlanoProjyMax.get())
+
+    criarCena(projecao, vrpX, vrpY, vrpZ, pX, pY, pZ, viewUpX, viewUpY, viewUpZ, near, far, planoProj,
+                mundoxMin, mundoxMax, mundoyMin, mundoyMax, planoProjxMin, planoProjxMax, planoProjyMin, planoProjyMax)
 
 def criarCena(projecao, vrpX, vrpY, vrpZ, pX, pY, pZ, viewUpX, viewUpY, viewUpZ, near, far, planoProj, 
 mundoXMin, mundoXMax, mundoYMin, mundoYMax, planoProjXMin, planoProjXMax, planoProjYMin, planoProjYMax):
-    print(vrpX)
+    print(vrpX+vrpY+vrpZ)
 
 def iluminacaoClick():
-    criarIluminacao(rbSombreamento.get(), txtKa.get(), txtKd.get(), txtKs.get(), txtN.get())
+    #sombreamento = 0 -> constante; sombreamento = 1 -> gourad; sombreamento = 2 -> phong
+    sombreamento = int(rbSombreamento.get())
+    ka = isVazio(txtKa.get())
+    kd = isVazio(txtKd.get())
+    ks = isVazio(txtKs.get())
+    n = isVazio(txtN.get())
+    criarIluminacao(sombreamento, ka, kd, ks, n)
+
+def isVazio(string):
+    if(string == ""):
+        return 0.0
+    return float(string)
 
 def criarIluminacao(sombreamento, ka, kd, ks, n):
-    print(sombreamento, ka, kd, ks, n)
+    print(sombreamento*2)
 
 if __name__ == "__main__":
     window = tk.Tk()
