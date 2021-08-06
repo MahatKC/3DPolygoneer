@@ -2,6 +2,8 @@ from DataStructure.DataStructure import Object
 from DataStructure.Matrices.pipeline import first_pipeline, VRP_and_n, pipeline_steps
 import numpy as np
 from tkinter import *
+
+#verificar de alterar as coordenadas da face dando o id pra ela, pra não ter que desenhar por cima depois e bugar o calculo do zbuffer que tinha sido feito
 class Screen():
     def __init__(self, frame):
         self.objects = []
@@ -15,7 +17,7 @@ class Screen():
             self.objects[self.number_objects].append(self.canvas.create_polygon(object.getCoordinates(i), outline='blue', fill='light blue', width = 2, tags = "objeto"))
         self.number_objects = self.number_objects + 1
 
-    def deleteObject(self, face):
+    def selectFacesObject(self, face):
         for i in range(0, self.number_objects):
             if face in self.objects[i]:
                 self.object_Selected = i
@@ -68,7 +70,6 @@ def draw_objects(event):
     obj5 = Object(1, 1, 1, 200, 100, 100, 6)
     obj6 = Object(1000, 400, 250, 250, 60, 100, 18)
 
-    print(obj5.vertex)
 
     drawing.draw(obj)
     drawing.draw(obj2)
@@ -83,29 +84,44 @@ def erase(event):
         print("test")
         drawing.canvas.delete(ALL)
 
+def select_object(event):
+    if event.char == ' ':
+        print("test")
+    
+
 drawing.canvas.bind_all('<space>', erase)
 drawing.canvas.bind_all('<x>', draw_objects)
+drawing.canvas.bind('<Button-1>', select_object)
 
 window.mainloop()
 
+value_move = 10
+
+
+def move_object_x(value):
+    x = 10
+"""   
+def move_object_y(value):
+def move_object_z(value):
+"""
 
 def move_x_left():
-    move_object(-value_move)
+    move_object_x(-value_move)
 
 def move_x_right():
-    move_object(value_move)
+    move_object_x(value_move)
 
-def move_z_front():
-    move_object(-value_move)
-
-def move_z_back():
-    move_object(value_move)
-
-def move_y_up():
-    move_object(-value_move)
+"""def move_y_up():
+    move_object_y(-value_move)
 
 def move_y_down():
-    move_object(value_move)
+    move_object_y(value_move)
+
+def move_z_front():
+    move_object_z(-value_move)
+
+def move_z_back():
+    move_object_z(value_move)"""
 
 drawing.canvas.bind_all('<q>', move_x_left)
 drawing.canvas.bind_all('<a>', move_x_right)
@@ -113,7 +129,7 @@ drawing.canvas.bind_all('<w>', move_z_front)
 drawing.canvas.bind_all('<s>', move_z_back)
 drawing.canvas.bind_all('<e>', move_y_up)
 drawing.canvas.bind_all('<d>', move_y_down)
-
+"""
 drawing.canvas.bind_all('<r>', scale_x_less)
 drawing.canvas.bind_all('<f>', scale_x_more)
 drawing.canvas.bind_all('<t>', scale_z_less)
@@ -127,5 +143,4 @@ drawing.canvas.bind_all('<i>', rot_z_front)
 drawing.canvas.bind_all('<k>', rot_z_back)
 drawing.canvas.bind_all('<o>', rot_y_up)
 drawing.canvas.bind_all('<l>', rot_y_down)
-
-
+"""
