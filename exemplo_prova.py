@@ -78,4 +78,4 @@ class exemplo_prova():
                     self.draw_vertex[vertex] = True
 
     def pipeline_me(self, SRC_matrix, jp_proj_matrix, dist_near, dist_far):
-        self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:, self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
+        self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
