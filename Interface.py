@@ -162,14 +162,20 @@ def criarObjeto(numLados, altura, raioBase, raioTopo):
 
 def projecaoClick():
     #rbProjeção = 0 -> perspectiva; rbProjeção = 1 -> axonometrica
-    criarCena(rbProjecao.get(), txtVRPx, txtVRPy, txtVRPz, txtPx, txtPy, txtPz, 
-                txtViewUpx, txtViewUpy, txtViewUpz, txtNear, txtFar, txtPlanoProjecao,
-                txtLimMundoxMin, txtLimMundoxMax, txtLimMundoyMin, txtLimMundoyMax, 
-                txtLimPlanoProjxMin, txtLimPlanoProjxMax, txtLimPlanoProjyMin, txtLimPlanoProjyMax)
+    criarCena(rbProjecao.get(), txtVRPx.get(), txtVRPy.get(), txtVRPz.get(), txtPx.get(), txtPy.get(), txtPz.get(), 
+                txtViewUpx.get(), txtViewUpy.get(), txtViewUpz.get(), txtNear.get(), txtFar.get(), txtPlanoProjecao.get(),
+                txtLimMundoxMin.get(), txtLimMundoxMax.get(), txtLimMundoyMin.get(), txtLimMundoyMax.get(), 
+                txtLimPlanoProjxMin.get(), txtLimPlanoProjxMax.get(), txtLimPlanoProjyMin.get(), txtLimPlanoProjyMax.get())
 
 def criarCena(projecao, vrpX, vrpY, vrpZ, pX, pY, pZ, viewUpX, viewUpY, viewUpZ, near, far, planoProj, 
 mundoXMin, mundoXMax, mundoYMin, mundoYMax, planoProjXMin, planoProjXMax, planoProjYMin, planoProjYMax):
-    print(projecao)
+    print(vrpX)
+
+def iluminacaoClick():
+    criarIluminacao(rbSombreamento.get(), txtKa.get(), txtKd.get(), txtKs.get(), txtN.get())
+
+def criarIluminacao(sombreamento, ka, kd, ks, n):
+    print(sombreamento, ka, kd, ks, n)
 
 if __name__ == "__main__":
     window = tk.Tk()
@@ -377,7 +383,7 @@ if __name__ == "__main__":
     rbConstante = ttk.Radiobutton(t3.sub_frame, text="Constante", variable= rbSombreamento, value=0)
     rbGourad = ttk.Radiobutton(t3.sub_frame, text="Gourad", variable= rbSombreamento, value=1)
     rbPhong = ttk.Radiobutton(t3.sub_frame, text="Phong", variable= rbSombreamento, value=2)
-    btnAlterarIluminacao = ttk.Button(t3.sub_frame,text="Alterar Ilum/Somb", width=20)
+    btnAlterarIluminacao = ttk.Button(t3.sub_frame,text="Alterar Ilum/Somb", width=20, command=iluminacaoClick)
 
     labelTipoSombreamento.grid(row=1, column=1, padx=12, pady=4, sticky=W)
     rbConstante.grid(row=2, column=1, padx=25, pady=1, sticky=W)
