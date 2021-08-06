@@ -19,15 +19,26 @@ class exemplo_prova():
         sides=3
 
         sides_minus_one = 5
-        for f in range(0, sides):
-            complement_of_next = (f+1)%sides
-            self.faces.append([f, sides_minus_one-f, sides_minus_one-complement_of_next, complement_of_next])
+        self.faces.append([0,3,4,1])
+        self.faces.append([1,4,5,2])
+        self.faces.append([2,5,3,0])
         self.faces.append(np.arange(sides).tolist())
-        self.faces.append((np.arange(sides) + sides).tolist())
+        self.faces.append([3,5,4])
         
-        for v in range(0, sides*2):
-            floor = int(np.floor(v/sides))
-            self.vertexFaces.append([v%sides, (sides*(1+floor))-v-1, floor+sides])
+        self.vertexFaces.append([0,2,3])
+        self.vertexFaces.append([1,0,3])
+        self.vertexFaces.append([2,1,3])
+        self.vertexFaces.append([2,0,4])
+        self.vertexFaces.append([1,2,4])
+        self.vertexFaces.append([0,1,4])
+
+    def printa_tudo(self):
+        print("Faces list: ")
+        print(self.faces)
+        print("-"*10)
+        print("Vertices list: ")
+        print(self.vertexFaces)
+        print("-"*10)
 
     def getCoordinates(self, face_SRU):
         list = []
@@ -51,3 +62,4 @@ class exemplo_prova():
 
     def pipeline_me(self, SRC_matrix, jp_proj_matrix, dist_near, dist_far):
         self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
+

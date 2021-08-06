@@ -82,7 +82,7 @@ def pipeline_steps(M, SRC_matrix, jp_proj_matrix, dist_near, dist_far):
 
 def first_pipeline(VRP, n, Yx, Yy, Yz, 
     is_perspectiva, dist_projecao, 
-    Xmin, Xmax, Ymin, Ymax, Umax, Umin, Vmax, Vmin):
+    Xmin, Xmax, Ymin, Ymax, Umin, Umax, Vmin, Vmax):
     """Returns matrices that shall be used in the pipeline based on all the parameters necessary
     for the SRU to SRT conversion, except the 3D cut step."""
 
