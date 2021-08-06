@@ -1,32 +1,24 @@
 from DataStructure.normal_test import normal_test
-from DataStructure.Matrices.prism import create_prism
 from DataStructure.Matrices.pipeline import pipeline_steps
-#from normal_test import normal_test
 import numpy as np
-import math
 
-#counter clockwise
-#fazer as funções para chamar os métodos do objeto
-#quando clicar em um objeto, selecionar o objeto que esta sendo clicado
-#fazer uma lista de objetos que estão existindo
-#fazer um modo de ao clicar selecionar um dos objetos do tkinter
-#fazer um modo de alterar esse objeto do tkinter e alterar na lista
-#ver se consegue ao clicar pegar por exemplo a cor que esta o pixel na coordenada clicada, além de pegar a posição X e Y
-#Desselecionar o objeto ao apertar no branco da tela
-#enviar o objeto pra fazer TG
-class Object():
-    def __init__(self, x, y, z, h, r_bottom, r_top, sides):
-        self.prism_in_SRU = create_prism(x, y, z, h, r_bottom, r_top, sides)
+class exemplo_prova():
+    def __init__(self):
+        self.prism_in_SRU = np.array([[-10.868, -70.001, -5.67,   3.98,  7.847,  9.178],
+                                      [   1.64,   5.736, 9.832, -9.832, -5.736,  -1.64],
+                                      [  2.861,   4.368, 0.437, -4.062, -2.556, -6.487],
+                                      [      1,       1,     1,      1,      1,     1,]])
         self.prism_in_SRT = None
         self.draw_me = None
         self.faces = []
         self.draw_faces = []
         self.vertexFaces = []
-        self.draw_vertex = [False]*sides*2
-        self.numberFaces = sides + 2
-        self.sides = sides
+        self.draw_vertex = [False]*6
+        self.numberFaces = 5
+        self.sides = 3
+        sides=3
 
-        sides_minus_one = sides*2-1
+        sides_minus_one = 5
         for f in range(0, sides):
             complement_of_next = (f+1)%sides
             self.faces.append([f, sides_minus_one-f, sides_minus_one-complement_of_next, complement_of_next])
@@ -36,7 +28,7 @@ class Object():
         for v in range(0, sides*2):
             floor = int(np.floor(v/sides))
             self.vertexFaces.append([v%sides, (sides*(1+floor))-v-1, floor+sides])
-    
+
     def getCoordinates(self, face_SRU):
         list = []
         for i in range(len(self.faces[face_SRU])):
@@ -59,8 +51,3 @@ class Object():
 
     def pipeline_me(self, SRC_matrix, jp_proj_matrix, dist_near, dist_far):
         self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
-
-
-
-#obj = Object(150, 150, 150, 150, 60, 100, 6)
-
