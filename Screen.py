@@ -1,4 +1,4 @@
-from exemplo_prova import exemplo_prova
+#from exemplo_prova import exemplo_prova
 from DataStructure.DataStructure import Object
 from DataStructure.Matrices.pipeline import first_pipeline, VRP_and_n, pipeline_steps
 import numpy as np 
@@ -10,10 +10,10 @@ class Screen():
     def __init__(self, frame, width, height):
         self.VRP, self.n = VRP_and_n(100, -50, 70, 2, 1, 3)  
         self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, 0, 1, 0, False, 50, -50, 40, -40, 30, 300, 1000, 200, 600)
-        self.objects = [] 
+        self.objects = []
         self.objectsInCanvas = [] # list of all the objects with all the faces that each one has
         self.numberObjects = 0
-        self.canvas = Canvas(frame, width = int(width*0.7), height = int(height*(0.9)), bg = "white")
+        self.canvas = Canvas(frame, width = int(width*0.8), height = int(height*(0.88)), bg = "white")
         self.objectSelected = None 
         
     #def draw(self, object):
@@ -53,7 +53,7 @@ class Screen():
         
         self.numberObjects += 1
 
-    def AddObjectsProva(self, r_bottom, r_top, sides, h):
+    """def AddObjectsProva(self, r_bottom, r_top, sides, h):
         new_obj = exemplo_prova() 
         new_obj.normalVisualizationTest(self.n)
         new_obj.pipeline_me(self.SRC, self.jp_times_proj, 10, 1000)
@@ -67,8 +67,8 @@ class Screen():
                 self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(i), outline='blue', fill='light blue', width = 2, tags = "objeto"))
 
         # 
-        self.numberObjects += 1
-
+        self.numberObjects += 1"""
+"""
 
 window = Tk()
 window.title('The Marvelous Polygoneer')
@@ -129,7 +129,4 @@ def selectObject(event):
         drawing.objectSelected = None
     
 drawing.canvas.bind('<Button-1>', erase)
-#drawing.canvas.bind('<Button-1>', selectObject)
-            
-
-window.mainloop()
+#drawing.canvas.bind('<Button-1>', selectObject)"""

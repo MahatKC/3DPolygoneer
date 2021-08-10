@@ -1,6 +1,6 @@
-from normal_test import normal_test
-from Matrices.prism import create_prism
-from Matrices.pipeline import pipeline_steps
+from DataStructure.normal_test import normal_test
+from DataStructure.Matrices.prism import create_prism
+from DataStructure.Matrices.pipeline import pipeline_steps
 #from normal_test import normal_test
 import numpy as np
 import math

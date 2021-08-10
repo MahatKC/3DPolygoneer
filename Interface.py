@@ -1,5 +1,6 @@
 #from typing_extensions import IntVar
 from tkscrolledframe import ScrolledFrame
+from Screen import Screen
 import tkinter as tk
 from tkinter import Canvas, Frame, Scrollbar, ttk
 from tkinter.constants import ALL, E, N, NS, RIGHT, S, VERTICAL, W, Y 
@@ -39,19 +40,17 @@ class VerticalScrolledFrame:
     if you subclass this there is no built in way for the children to access it.
     You need to provide the controller separately.
     """
-    def __init__(self, master, janela, **kwargs):
-        width = kwargs.pop('width', None)
-        height = (kwargs.pop('height', None))
+    def __init__(self, master, width, height, janela, **kwargs):
         bg = kwargs.pop('bg', kwargs.pop('background', None))
         self.outer = tk.Frame(master, **kwargs)
         self.vsb = tk.Scrollbar(self.outer, orient=tk.VERTICAL)
-        self.vsb.pack(fill=tk.Y, side=tk.RIGHT)
-        if(janela == 0):
-            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=250, height=135, bg=bg)
+        self.vsb.pack(fill=tk.Y, side=tk.RIGHT) 
+        if(janela == 0): 
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width = width, height = int(height * 0.13) , bg=bg)
         if(janela == 1):
-            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=250, height=235, bg=bg)
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width = width, height = int(height * 0.41), bg=bg)
         if(janela == 2):
-            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=250, height=200, bg=bg)
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width= width, height= int(height * 0.36), bg=bg)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.canvas['yscrollcommand'] = self.vsb.set
         # mouse scroll does not seem to work with just "bind"; You have
@@ -102,7 +101,7 @@ class VerticalScrolledFrame:
 numberJanela = 0
 class ToggledFrame(tk.Frame):
 
-    def __init__(self, parent, text="", *args, **options):
+    def __init__(self, parent, width, height, text="", *args, **options):
         tk.Frame.__init__(self, parent, *args, **options)
 
         self.show = tk.IntVar()
@@ -118,14 +117,15 @@ class ToggledFrame(tk.Frame):
         self.toggle_button.pack(side="left")
 
         if(text == "Informações do objeto"):
-            numberJanela = 0
+            self.sub_frame = VerticalScrolledFrame(self, width, height, borderwidth=1, janela= 0, relief=tk.SUNKEN)
         if(text == "Projeção"):
-            numberJanela = 1
+            self.sub_frame = VerticalScrolledFrame(self, width, height, borderwidth=1, janela= 1, relief=tk.SUNKEN)
         if(text == "Iluminação e sombreamento"):
-            numberJanela = 2
-            
+            self.sub_frame = VerticalScrolledFrame(self, width, height, borderwidth=1, janela= 2, relief=tk.SUNKEN)
+        
+
         #self.sub_frame = tk.Frame(self, relief="sunken", borderwidth=1)
-        self.sub_frame = VerticalScrolledFrame(self, borderwidth=1, janela=numberJanela, relief=tk.SUNKEN)
+        #self.sub_frame = VerticalScrolledFrame(self, width, height, borderwidth=1, janela=numberJanela, relief=tk.SUNKEN)
 
     def toggle(self):
         if bool(self.show.get()):
@@ -217,36 +217,35 @@ if __name__ == "__main__":
     window.title('The Marvelous Polygoneer')
     width = window.winfo_screenwidth()
     height = window.winfo_screenheight()
-    
-    #window.geometry("%dx%d+0+0" %(width, height))
     window.state('zoomed')
 
     # Fazendo Frame
-    frameDrawingInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = int(width*0.7), height = int(height*(0.9)))
+    frameDrawingInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = int(width*0.7), height = int(height*0.9))
     frameDrawingInterface.place(x = int(width*0.01), y = int(height * 0.01))
 
     # Fazendo janela com as informações do usuário
-    userInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = 280, height = 690)
-    userInterface.place(x = int(width*0.75), y = int(height * 0.01))
+    userInterface = Frame(window, highlightbackground= "black", highlightthickness= 1, width = int(width*0.15), height = int(height*0.88))
+    userInterface.place(x = int(width*0.82), y = int(height * 0.01))
     userInterface.pack_propagate(0)
 
     # Fazendo o canvas
-    drawing = Canvas(frameDrawingInterface, width = int(width*0.7), height = int(height*(0.85)), bg = "white") 
-    drawing.pack()
 
-    btnLimpar = ttk.Button(window,text="Limpar", width=15)
+    drawing = Screen(frameDrawingInterface, width, height) 
+    drawing.canvas.pack()
+
+    btnLimpar = ttk.Button(window,text="Limpar", width=15) 
     #btnLimpar.place(x=int(width*0.01), y = int(height * 0.88))
-    btnLimpar.place(x=int(width*0.642), y = int(height * 0.88))
+    btnLimpar.place(x=int(width*0.76), y = int(height * 0.90))
 
     # Salvando coortenadas
     drawing.old_coords = None
 
-    drawing.bind("<ButtonPress-1>", draw_line)
-    drawing.bind('<ButtonRelease-1>', draw_line)
+    drawing.canvas.bind("<ButtonPress-1>", draw_line)
+    drawing.canvas.bind('<ButtonRelease-1>', draw_line)
 
-    drawing.bind('<B1-Motion>', draw)
-    drawing.bind('<ButtonRelease-1>', reset_coords)
-    drawing.bind_all('<space>', erase)
+    drawing.canvas.bind('<B1-Motion>', draw)
+    drawing.canvas.bind('<ButtonRelease-1>', reset_coords)
+    drawing.canvas.bind_all('<space>', erase)
 
     rbProjecao = tk.IntVar()
     rbProjecao.set(0)
@@ -255,7 +254,7 @@ if __name__ == "__main__":
     textNumLados = tk.StringVar()
     textNumLados.set("")
 
-    t = ToggledFrame(userInterface, text='Informações do objeto', relief="raised", borderwidth=1)
+    t = ToggledFrame(userInterface, width, height, text='Informações do objeto', relief="raised", borderwidth=1)
     t.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
 
     labelRaioBase = ttk.Label(t.sub_frame, text='Raio da base')
@@ -281,8 +280,7 @@ if __name__ == "__main__":
     btnAlterarObjeto.grid(row=6, column=2, padx=4, pady=8)
 
     textNumLados.trace('w', botaoObjeto)
-
-    t2 = ToggledFrame(userInterface, text='Projeção', relief="raised", borderwidth=1)
+    t2 = ToggledFrame(userInterface, width, height, text='Projeção', relief="raised", borderwidth=1)
     t2.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
 
     labelTipoProjecao = ttk.Label(t2.sub_frame, text="Tipo de projeção", font="-weight bold -size 9")
@@ -344,7 +342,7 @@ if __name__ == "__main__":
 
     labelTipoProjecao.grid(row=1, column=1, padx=1, pady=2)
     rbAxonometrica.grid(row=2, column=1, padx=5, pady=2)
-    rbPerspectiva.grid(row=2, column=2, padx=5, pady=2)
+    rbPerspectiva.grid(row=2, column=2, padx=5, pady=2) 
     
     labelVRP.grid(row=3, column=1, padx=10, pady=2, sticky=W)
     labelVRPx.grid(row=4, column=1, padx=1, pady=1)
@@ -401,7 +399,7 @@ if __name__ == "__main__":
 
     rbProjecao.trace('w', lerRadioButton)
 
-    t3 = ToggledFrame(userInterface, text='Iluminação e sombreamento', relief="raised", borderwidth=1)
+    t3 = ToggledFrame(userInterface, width, height, text='Iluminação e sombreamento', relief="raised", borderwidth=1)
     t3.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
 
     labelIluminacao = ttk.Label(t3.sub_frame, text="Iluminação", font="-weight bold -size 9")
