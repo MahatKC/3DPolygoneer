@@ -13,7 +13,7 @@ class Screen():
         self.objects = []
         self.objectsInCanvas = [] # list of all the objects with all the faces that each one has
         self.numberObjects = 0
-        self.canvas = Canvas(frame, width = int(width*0.8), height = int(height*(0.88)), bg = "white")
+        self.canvas = Canvas(frame, width = int(width*0.7), height = int(height*(0.88)), bg = "white")
         self.objectSelected = None 
         
     #def draw(self, object):

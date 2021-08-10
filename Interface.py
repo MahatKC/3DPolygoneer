@@ -45,7 +45,7 @@ class VerticalScrolledFrame:
         self.outer = tk.Frame(master, **kwargs)
         self.vsb = tk.Scrollbar(self.outer, orient=tk.VERTICAL)
         self.vsb.pack(fill=tk.Y, side=tk.RIGHT) 
-        if(janela == 0): 
+        if(janela == 0):
             self.canvas = tk.Canvas(self.outer, highlightthickness=0, width = width, height = int(height * 0.13) , bg=bg)
         if(janela == 1):
             self.canvas = tk.Canvas(self.outer, highlightthickness=0, width = width, height = int(height * 0.41), bg=bg)
@@ -159,7 +159,7 @@ def objetoClick():
     altura = isVazio(txtAltura.get())
     raioBase = isVazio(txtRaioBase.get())
     raioTopo = isVazio(txtRaioTopo.get())
-    criarObjeto(numLados, altura, raioBase, raioTopo)
+    criarObjeto(numLados, altura, raioBase, raioTopo) 
 
 def criarObjeto(numLados, altura, raioBase, raioTopo):
     print(numLados*4)
@@ -215,17 +215,16 @@ def criarIluminacao(sombreamento, ka, kd, ks, n):
 if __name__ == "__main__":
     window = tk.Tk()
     window.title('The Marvelous Polygoneer')
-    width = window.winfo_screenwidth()
-    height = window.winfo_screenheight()
+    width = window.winfo_screenwidth()  
+    height = window.winfo_screenheight() 
     window.state('zoomed')
-
     # Fazendo Frame
     frameDrawingInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = int(width*0.7), height = int(height*0.9))
     frameDrawingInterface.place(x = int(width*0.01), y = int(height * 0.01))
 
     # Fazendo janela com as informações do usuário
-    userInterface = Frame(window, highlightbackground= "black", highlightthickness= 1, width = int(width*0.15), height = int(height*0.88))
-    userInterface.place(x = int(width*0.82), y = int(height * 0.01))
+    userInterface = Frame(window, highlightbackground= "black", highlightthickness= 1, width = int(width*0.2), height = int(height*0.88))
+    userInterface.place(x = int(width*0.72), y = int(height * 0.01))
     userInterface.pack_propagate(0)
 
     # Fazendo o canvas
@@ -235,7 +234,7 @@ if __name__ == "__main__":
 
     btnLimpar = ttk.Button(window,text="Limpar", width=15) 
     #btnLimpar.place(x=int(width*0.01), y = int(height * 0.88))
-    btnLimpar.place(x=int(width*0.76), y = int(height * 0.90))
+    btnLimpar.place(x=int(width*0.66), y = int(height * 0.90))
 
     # Salvando coortenadas
     drawing.old_coords = None
