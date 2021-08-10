@@ -20,6 +20,20 @@ def scale(M, Sx, Sy, Sz):
     T[2,2] = Sz
     return np.dot(T,M)
 
+def scaleAlongAxis(M, Sx, Sy, Sz):
+    """Scales polygon M based on its geometric center by Sx, Sy and Sz."""
+    T = np.zeros((4,4))
+    avg = np.average(M, axis=1)
+    T[0,0]=Sx
+    T[1,1]=Sy
+    T[2,2]=Sz
+    T[3,3]=1
+    T[0,3]=avg[0]*(1-Sx)
+    T[1,3]=avg[1]*(1-Sy)
+    T[2,3]=avg[2]*(1-Sz)
+
+    return np.dot(T,M)
+
 def rotX(M, alpha):
     """Rotates polygon M around X axis by alpha degrees.
     M needs to be a Numpy Array with shape (4,N) with N>=1"""
