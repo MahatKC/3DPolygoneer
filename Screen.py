@@ -36,6 +36,10 @@ class Screen():
                 self.objectSelected = object
                 return self.objectsInCanvas[object]
 
+    def Clear_all(self):
+        self.objects.clear()
+        self.objectsInCanvas.clear()
+        self.numberObjects = 0
 
     def AddObjects(self, r_bottom, r_top, sides, h):
         new_obj = Object(0, 0, 0, h, r_bottom, r_top, sides) 
@@ -43,9 +47,6 @@ class Screen():
         new_obj.pipeline_me(self.SRC, self.jp_times_proj, 10, 1000)
         self.objects.append(new_obj) 
         self.objectsInCanvas.append([])
-        print(new_obj.prism_in_SRT)
-
-        print(new_obj.draw_faces)
         
         for i in range(new_obj.numberFaces):
             if(new_obj.draw_faces[i]):

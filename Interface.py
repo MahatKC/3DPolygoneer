@@ -1,4 +1,6 @@
 #from typing_extensions import IntVar
+from shutil import disk_usage
+from _pytest.store import D
 from tkscrolledframe import ScrolledFrame
 from Screen import Screen
 import tkinter as tk
@@ -154,12 +156,39 @@ def botaoObjeto(_, __, ___):
         btnAlterarObjeto['state'] = tk.DISABLED
         btnCriarObjeto['state'] = tk.WRITABLE
 
+def ClearScreen():
+    drawing.canvas.delete(ALL)
+    drawing.Clear_all()
+
+def SendUI(values):
+    txtNumLados.delete(0, tk.END)
+    txtNumLados.insert(0, str(values[0]))
+    txtRaioBase.delete(0, tk.END)
+    txtRaioBase.insert(0, str(values[1]))
+    txtRaioTopo.delete(0, tk.END)
+    txtRaioTopo.insert(0, str(values[2]))
+    txtAltura.delete(0, tk.END)
+    txtAltura.insert(0, str(values[3]))
+
+def SelectingObject(event):
+    if event.widget.find_withtag("current"):
+        object = drawing.ObjectSelection(drawing.canvas.find_withtag("current")[0])
+        values = (10, 20, 15, 10) # criar função pra conseguir os valores daquele objeto
+        SendUI(values)
+        for i in object:
+            drawing.canvas.itemconfig(i, fill='red')
+            #drawing.canvas.coords(i, [30, 30, 50, 80, 100, 100, 200, 200, 420, 100]) #readapta as coordenadas de cada face do objeto
+    else:
+        drawing.objectSelected = None
+    
+
 def objetoClick():
     numLados = int(isVazio(txtNumLados.get()))
     altura = isVazio(txtAltura.get())
     raioBase = isVazio(txtRaioBase.get())
     raioTopo = isVazio(txtRaioTopo.get())
-    criarObjeto(numLados, altura, raioBase, raioTopo) 
+
+    drawing.AddObjects(raioBase, raioTopo, numLados, altura)
 
 def criarObjeto(numLados, altura, raioBase, raioTopo):
     print(numLados*4)
@@ -219,22 +248,21 @@ if __name__ == "__main__":
     height = window.winfo_screenheight() 
     window.state('zoomed')
     # Fazendo Frame
-    frameDrawingInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = int(width*0.7), height = int(height*0.9))
-    frameDrawingInterface.place(x = int(width*0.01), y = int(height * 0.01))
+    frameDrawingInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = int(width*0.7), height = int(height*0.88))
+    frameDrawingInterface.place(x = int(width*0.01), y = int(height * 0.01)) 
 
     # Fazendo janela com as informações do usuário
-    userInterface = Frame(window, highlightbackground= "black", highlightthickness= 1, width = int(width*0.2), height = int(height*0.88))
+    userInterface = Frame(window, highlightbackground= "black", highlightthickness= 1, width = int(width*0.27), height = int(height*0.88))
     userInterface.place(x = int(width*0.72), y = int(height * 0.01))
     userInterface.pack_propagate(0)
 
     # Fazendo o canvas
-
     drawing = Screen(frameDrawingInterface, width, height) 
     drawing.canvas.pack()
 
-    btnLimpar = ttk.Button(window,text="Limpar", width=15) 
+    btnLimpar = ttk.Button(window,text="Limpar", width=15, command = ClearScreen) 
     #btnLimpar.place(x=int(width*0.01), y = int(height * 0.88))
-    btnLimpar.place(x=int(width*0.66), y = int(height * 0.90))
+    btnLimpar.place(x=int(width*0.66), y = int(height * 0.9))
 
     # Salvando coortenadas
     drawing.old_coords = None
@@ -433,5 +461,7 @@ if __name__ == "__main__":
     txtN.grid(row=9, column=2, padx=1, pady=1)
 
     btnAlterarIluminacao.grid(row=10, column=1, padx=4, pady=8, columnspan=2)
+
+    drawing.canvas.bind('<Button-1>', SelectingObject)
 
     window.mainloop()
