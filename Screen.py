@@ -5,8 +5,6 @@ import numpy as np
 np.set_printoptions(precision=6)
 np.set_printoptions(suppress=True)
 from tkinter import *
-
-
 # apagar também das listas quando trabalhar com os objetos
 class Screen():
     def __init__(self, frame, width, height):
