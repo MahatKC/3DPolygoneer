@@ -45,6 +45,7 @@ class Screen():
         self.numberObjects = 0
 
     def Draw(self):
+        self.objectsInCanvas.clear()
         for objects in range(self.numberObjects):
             for faces in range(self.objects[objects].numberFaces):
                  self.objectsInCanvas[objects].append(self.canvas.create_polygon(new_obj.getCoordinates(faces), outline='blue', fill='light blue', width = 2, tags = "objeto"))

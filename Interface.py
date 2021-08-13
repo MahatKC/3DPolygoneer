@@ -7,30 +7,6 @@ import tkinter as tk
 from tkinter import Canvas, Frame, Scrollbar, ttk
 from tkinter.constants import ALL, E, N, NS, RIGHT, S, VERTICAL, W, Y 
 
-def draw(event):
-    x, y = event.x, event.y
-    if drawing.old_coords:
-        x1, y1 = drawing.old_coords
-        drawing.create_line(x, y, x1, y1)
-    drawing.old_coords = x, y
-
-def draw_line(event):
-
-    if str(event.type) == 'ButtonPress':
-        drawing.old_coords = event.x, event.y
-
-    elif str(event.type) == 'ButtonRelease':
-        x, y = event.x, event.y
-        x1, y1 = drawing.old_coords
-        drawing.create_line(x, y, x1, y1)
-
-def reset_coords(event):
-    drawing.old_coords = None
-
-def erase(event):
-    if event.char == ' ':
-        print("test")
-        drawing.delete(ALL)
 class VerticalScrolledFrame:
     """
     A vertically scrolled Frame that can be treated like any other Frame
@@ -262,16 +238,6 @@ if __name__ == "__main__":
     btnLimpar = ttk.Button(window,text="Limpar", width=15, command = ClearScreen) 
     #btnLimpar.place(x=int(width*0.01), y = int(height * 0.88))
     btnLimpar.place(x=int(width*0.66), y = int(height * 0.9))
-
-    # Salvando coortenadas
-    drawing.old_coords = None
-
-    drawing.canvas.bind("<ButtonPress-1>", draw_line)
-    drawing.canvas.bind('<ButtonRelease-1>', draw_line)
-
-    drawing.canvas.bind('<B1-Motion>', draw)
-    drawing.canvas.bind('<ButtonRelease-1>', reset_coords)
-    drawing.canvas.bind_all('<space>', erase)
 
     rbProjecao = tk.IntVar()
     rbProjecao.set(0)
