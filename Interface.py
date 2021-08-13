@@ -157,7 +157,6 @@ def botaoObjeto(_, __, ___):
         btnCriarObjeto['state'] = tk.WRITABLE
 
 def ClearScreen():
-    drawing.canvas.delete(ALL)
     drawing.ClearAll()
 
 def SendUI(values):

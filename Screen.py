@@ -13,6 +13,8 @@ class Screen():
         self.objects = []
         self.objectsInCanvas = [] # list of all the objects with all the faces that each one has
         self.numberObjects = 0
+        self.near_value = 10
+        self.far_value = 1000
         self.canvas = Canvas(frame, width = int(width*0.7), height = int(height*(0.88)), bg = "white")
         self.objectSelected = None 
         
@@ -37,20 +39,26 @@ class Screen():
                 return self.objectsInCanvas[object]
 
     def ClearAll(self):
+        self.canvas.delete(ALL)
         self.objects.clear()
         self.objectsInCanvas.clear()
         self.numberObjects = 0
 
+    def Draw(self):
+        for objects in range(self.numberObjects):
+            for faces in range(self.objects[objects].numberFaces):
+                 self.objectsInCanvas[objects].append(self.canvas.create_polygon(new_obj.getCoordinates(faces), outline='blue', fill='light blue', width = 2, tags = "objeto"))
+                
+
     def moveObject(self, valueX, valueY, valueZ):
         self.objects[self.objectSelected].translation(valueX, valueY, valueZ)
-        
-
-
+        self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.near_value, self.far_value)
+        self.Draw()
 
     def AddObjects(self, r_bottom, r_top, sides, h):
         new_obj = Object(0, 0, 0, h, r_bottom, r_top, sides) 
         new_obj.normalVisualizationTest(self.n)
-        new_obj.pipeline_me(self.SRC, self.jp_times_proj, 10, 1000)
+        new_obj.pipeline_me(self.SRC, self.jp_times_proj, self.near_value, self.far_value)
         self.objects.append(new_obj) 
         self.objectsInCanvas.append([])
         
