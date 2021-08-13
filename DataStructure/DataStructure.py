@@ -1,6 +1,7 @@
 from DataStructure.normal_test import normal_test
 from DataStructure.Matrices.prism import create_prism
-from DataStructure.Matrices.pipeline import pipeline_steps
+from DataStructure.Matrices.pipeline import SRC_matrix, pipeline_steps
+from DataStructure.Matrices.transforms import translation, scaleAlongAxis, rotXAlongAxis, rotYAlongAxis, rotZAlongAxis
 #from normal_test import normal_test
 import numpy as np
 import math
@@ -44,6 +45,10 @@ class Object():
         print("Vertices list: ")
         print(self.vertexFaces)
         print("-"*10)
+
+    def translation(self, valueX, valueY, valueZ):
+        self.prism_in_SRU = translation(self.prism_in_SRU, valueX, valueY, valueZ)
+        
 
     def getCoordinates(self, face_SRU):
         list = []

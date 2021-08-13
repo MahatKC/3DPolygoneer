@@ -158,7 +158,7 @@ def botaoObjeto(_, __, ___):
 
 def ClearScreen():
     drawing.canvas.delete(ALL)
-    drawing.Clear_all()
+    drawing.ClearAll()
 
 def SendUI(values):
     txtNumLados.delete(0, tk.END)

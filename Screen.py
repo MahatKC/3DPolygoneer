@@ -27,7 +27,7 @@ class Screen():
     def deleteObject(self, face):
         for i in range(0, self.numberObjects):
             if face in self.objects[i]:
-                self.object_Selected = i
+                self.objectSelected = i
                 return self.objects[i] 
 
     def ObjectSelection(self, face):
@@ -36,10 +36,16 @@ class Screen():
                 self.objectSelected = object
                 return self.objectsInCanvas[object]
 
-    def Clear_all(self):
+    def ClearAll(self):
         self.objects.clear()
         self.objectsInCanvas.clear()
         self.numberObjects = 0
+
+    def moveObject(self, valueX, valueY, valueZ):
+        self.objects[self.objectSelected].translation(valueX, valueY, valueZ)
+        
+
+
 
     def AddObjects(self, r_bottom, r_top, sides, h):
         new_obj = Object(0, 0, 0, h, r_bottom, r_top, sides) 
