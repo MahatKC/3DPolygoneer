@@ -1,4 +1,5 @@
 #from typing_extensions import IntVar
+from DataStructure.Matrices.transforms import translation
 from shutil import disk_usage
 from _pytest.store import D
 from tkscrolledframe import ScrolledFrame
@@ -145,6 +146,65 @@ def SendUI(values):
     txtAltura.delete(0, tk.END)
     txtAltura.insert(0, str(values[3]))
 
+translationValue = 5
+scaleLessValue = 0.9
+scaleMoreValue = 1.111111
+rotationValue = 5
+
+def move_x_left(event):
+    drawing.moveObject(-translationValue, 0, 0)
+
+def move_x_right(event):
+    drawing.moveObject(translationValue, 0, 0)
+
+def move_z_front(event):
+    drawing.moveObject(0, 0, translationValue)
+
+def move_z_back(event):
+    drawing.moveObject(0, 0, -translationValue)
+
+def move_y_up(event):
+    drawing.moveObject(0, translationValue, 0)
+
+def move_y_down(event):
+    drawing.moveObject(0, -translationValue, 0)
+
+def scale_x_less(event):
+    drawing.scaleObject(scaleLessValue, 1, 1)
+
+def scale_x_more(event):
+    drawing.scaleObject(scaleMoreValue, 1, 1)
+
+def scale_z_less(event):
+    drawing.scaleObject(1, 1, scaleLessValue)
+
+def scale_z_more(event):
+    drawing.scaleObject(1, 1, scaleMoreValue)
+
+def scale_y_less(event):
+    drawing.scaleObject(1, scaleLessValue, 1)
+
+def scale_y_more(event):
+    drawing.scaleObject(1, scaleMoreValue, 1)
+
+def rot_x_left(event):
+    drawing.rotObjectX(-rotationValue)
+
+def rot_x_right(event):
+    drawing.rotObjectX(rotationValue)
+
+def rot_z_front(event):
+    drawing.rotObjectZ(rotationValue)
+
+def rot_z_back(event):
+    drawing.rotObjectZ(-rotationValue)
+
+def rot_y_up(event):
+    drawing.rotObjectY(rotationValue)
+
+def rot_y_down(event):
+    drawing.rotObjectY(-rotationValue)
+
 def SelectingObject(event):
     if event.widget.find_withtag("current"):
         object = drawing.ObjectSelection(drawing.canvas.find_withtag("current")[0])
@@ -238,6 +298,27 @@ if __name__ == "__main__":
     btnLimpar = ttk.Button(window,text="Limpar", width=15, command = ClearScreen) 
     #btnLimpar.place(x=int(width*0.01), y = int(height * 0.88))
     btnLimpar.place(x=int(width*0.66), y = int(height * 0.9))
+
+    drawing.canvas.bind_all('<q>', move_x_left)
+    drawing.canvas.bind_all('<a>', move_x_right)
+    drawing.canvas.bind_all('<w>', move_z_front)
+    drawing.canvas.bind_all('<s>', move_z_back)
+    drawing.canvas.bind_all('<e>', move_y_up)
+    drawing.canvas.bind_all('<d>', move_y_down)
+
+    drawing.canvas.bind_all('<r>', scale_x_less)
+    drawing.canvas.bind_all('<f>', scale_x_more)
+    drawing.canvas.bind_all('<t>', scale_z_less)
+    drawing.canvas.bind_all('<g>', scale_z_more)
+    drawing.canvas.bind_all('<y>', scale_y_less)
+    drawing.canvas.bind_all('<h>', scale_y_more)
+
+    drawing.canvas.bind_all('<u>', rot_x_left)
+    drawing.canvas.bind_all('<j>', rot_x_right)
+    drawing.canvas.bind_all('<i>', rot_z_front)
+    drawing.canvas.bind_all('<k>', rot_z_back)
+    drawing.canvas.bind_all('<o>', rot_y_up)
+    drawing.canvas.bind_all('<l>', rot_y_down)
 
     rbProjecao = tk.IntVar()
     rbProjecao.set(0)

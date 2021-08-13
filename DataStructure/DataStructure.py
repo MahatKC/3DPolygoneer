@@ -48,6 +48,18 @@ class Object():
 
     def translation(self, valueX, valueY, valueZ):
         self.prism_in_SRU = translation(self.prism_in_SRU, valueX, valueY, valueZ)
+
+    def scale(self, Sx, Sy, Sz):
+        self.prism_in_SRU = scaleAlongAxis(self.prism_in_SRU, Sx, Sy, Sz)
+
+    def rotationX(self, rotationValue):
+        self.prism_in_SRU = rotXAlongAxis(self.prism_in_SRU, rotationValue)
+
+    def rotationY(self, rotationValue):
+        self.prism_in_SRU = rotYAlongAxis(self.prism_in_SRU, rotationValue)
+
+    def rotationZ(self, rotationValue):
+        self.prism_in_SRU = rotZAlongAxis(self.prism_in_SRU, rotationValue)
         
 
     def getCoordinates(self, face_SRU):
@@ -60,6 +72,7 @@ class Object():
         return list
 
     def normalVisualizationTest(self, n):
+        self.draw_faces.clear()
         for face in self.faces:
             face_vertices = []
             for i in range(3):
@@ -73,7 +86,4 @@ class Object():
     def pipeline_me(self, SRC_matrix, jp_proj_matrix, dist_near, dist_far):
         self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
 
-
-obj = Object(150, 150, 150, 150, 60, 100, 6)
-obj.printa_tudo()
 

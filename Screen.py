@@ -9,7 +9,7 @@ from tkinter import *
 class Screen():
     def __init__(self, frame, width, height):
         self.VRP, self.n = VRP_and_n(100, -50, 70, 2, 1, 3)  
-        self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, 0, 1, 0, False, 50, -50, 40, -40, 30, 300, 1000, 200, 600)
+        self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, 0, 1, 0, True, 50, -50, 40, -40, 30, 300, 1000, 200, 600)
         self.objects = []
         self.objectsInCanvas = [] # list of all the objects with all the faces that each one has
         self.numberObjects = 0
@@ -45,16 +45,49 @@ class Screen():
         self.numberObjects = 0
 
     def Draw(self):
+        self.canvas.delete(ALL)
         self.objectsInCanvas.clear()
         for objects in range(self.numberObjects):
+            self.objectsInCanvas.append([])
             for faces in range(self.objects[objects].numberFaces):
-                 self.objectsInCanvas[objects].append(self.canvas.create_polygon(new_obj.getCoordinates(faces), outline='blue', fill='light blue', width = 2, tags = "objeto"))
+                if(self.objects[objects].draw_faces[faces]):
+                    self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(faces), outline='blue', fill='light blue', width = 2, tags = "objeto"))
                 
 
     def moveObject(self, valueX, valueY, valueZ):
-        self.objects[self.objectSelected].translation(valueX, valueY, valueZ)
-        self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.near_value, self.far_value)
-        self.Draw()
+        if(self.objectSelected is not None):
+            self.objects[self.objectSelected].translation(valueX, valueY, valueZ)
+            self.objects[self.objectSelected].normalVisualizationTest(self.n)
+            self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.near_value, self.far_value)
+            self.Draw()
+    
+    def scaleObject(self, Sx, Sy, Sz):
+        if(self.objectSelected is not None):
+            self.objects[self.objectSelected].scale(Sx, Sy, Sz)
+            self.objects[self.objectSelected].normalVisualizationTest(self.n)
+            self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.near_value, self.far_value)
+            self.Draw()
+
+    def rotObjectX(self, rotationValue):
+        if(self.objectSelected is not None):
+            self.objects[self.objectSelected].rotationX(rotationValue)
+            self.objects[self.objectSelected].normalVisualizationTest(self.n)
+            self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.near_value, self.far_value)
+            self.Draw()
+
+    def rotObjectY(self, rotationValue):
+        if(self.objectSelected is not None):
+            self.objects[self.objectSelected].rotationY(rotationValue)
+            self.objects[self.objectSelected].normalVisualizationTest(self.n)
+            self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.near_value, self.far_value)
+            self.Draw()
+
+    def rotObjectZ(self, rotationValue):
+        if(self.objectSelected is not None):
+            self.objects[self.objectSelected].rotationZ(rotationValue)
+            self.objects[self.objectSelected].normalVisualizationTest(self.n)
+            self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.near_value, self.far_value)
+            self.Draw()
 
     def AddObjects(self, r_bottom, r_top, sides, h):
         new_obj = Object(0, 0, 0, h, r_bottom, r_top, sides) 
