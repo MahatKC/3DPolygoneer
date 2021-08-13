@@ -8,26 +8,42 @@ from tkinter import *
 # apagar também das listas quando trabalhar com os objetos
 class Screen():
     def __init__(self, frame, width, height):
-        self.VRP, self.n = VRP_and_n(100, -50, 70, 2, 1, 3)  
-        self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, 0, 1, 0, False, 50, -50, 40, -40, 30, 300, 1000, 200, 600)
+        self.isPerspective = False
+        
+        self.near_value = 10
+        self.far_value = 1000
+
+        self.mundoXmin = -50
+        self.mundoXmax = 40
+        self.mundoYmin = -40
+        self.mundoYmax = 30
+        
+        self.projecaoXmin = 300
+        self.projecaoXmax = 1000
+        self.projecaoYmin = 200
+        self.projecaoYmax = 600
+
+        self.VRPx = 100
+        self.VRPy = -50
+        self.VRPz = 70
+
+        self.Px = 2
+        self.Py = 1
+        self.Pz = 3
+
+        self.ViewUpX = 0
+        self.ViewUpY = 1
+        self.ViewUpZ = 0
+
+        self.DistanciaProjecao = 50
+
+        self.VRP, self.n = VRP_and_n(self.VRPx, self.VRPy, self.VRPz, self.Px, self.Py, self.Pz)  
+        self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, self.ViewUpX, self.ViewUpY, self.ViewUpZ, self.isPerspective, self.DistanciaProjecao, self.mundoXmin, self.mundoXmax, self.mundoYmin, self.mundoYmax, self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
         self.objects = []
         self.objectsInCanvas = [] # list of all the objects with all the faces that each one has
         self.numberObjects = 0
         self.canvas = Canvas(frame, width = int(width*0.7), height = int(height*(0.88)), bg = "white")
         self.objectSelected = None 
-        
-        self.near_value = 10
-        self.far_value = 1000
-                
-        self.mundoXmin = 1
-        self.mundoXmax = 10
-        self.mundoYmin = 1
-        self.mundoYmax = 10
-        
-        self.projecaoXmin = 1
-        self.projecaoXmax = 10
-        self.projecaoYmin = 1
-        self.projecaoYmax = 10
 
 
 
