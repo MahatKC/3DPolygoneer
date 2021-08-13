@@ -112,7 +112,8 @@ def move_object_z(value):
 #rotObjectY mandando o value -> rotação
 #rotObjectZ mandando o value -> rotation
 translationValue = 5
-scaleValue = 5
+scaleLessValue = 5
+scaleMoreValue = 5
 rotationValue = 5
 
 def move_x_left():
@@ -134,22 +135,22 @@ def move_y_down():
     moveObject(0, -translationValue, 0)
 
 def scale_x_less():
-    scaleObject(-scaleValue, 0, 0)
+    scaleObject(-scaleLessValue, 0, 0)
 
 def scale_x_more():
-    scaleObject(scaleValue, 0, 0)
+    scaleObject(scaleMoreValue, 0, 0)
 
 def scale_z_less():
-    scaleObject(0, 0, -scaleValue)
+    scaleObject(0, 0, -scaleLessValue)
 
 def scale_z_more():
-    scaleObject(0, 0, scaleValue)
+    scaleObject(0, 0, scaleMoreValue)
 
 def scale_y_less():
-    scaleObject(0, -scaleValue, 0)
+    scaleObject(0, -scaleLessValue, 0)
 
 def scale_y_more():
-    scaleObject(0, scaleValue, 0)
+    scaleObject(0, scaleMoreValue, 0)
 
 def rot_x_left():
     rotObjectX(-rotationValue)
