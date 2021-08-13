@@ -135,19 +135,19 @@ def move_y_down():
     moveObject(0, -translationValue, 0)
 
 def scale_x_less():
-    scaleObject(-scaleLessValue, 0, 0)
+    scaleObject(scaleLessValue, 0, 0)
 
 def scale_x_more():
     scaleObject(scaleMoreValue, 0, 0)
 
 def scale_z_less():
-    scaleObject(0, 0, -scaleLessValue)
+    scaleObject(0, 0, scaleLessValue)
 
 def scale_z_more():
     scaleObject(0, 0, scaleMoreValue)
 
 def scale_y_less():
-    scaleObject(0, -scaleLessValue, 0)
+    scaleObject(0, scaleLessValue, 0)
 
 def scale_y_more():
     scaleObject(0, scaleMoreValue, 0)
