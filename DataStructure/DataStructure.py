@@ -17,6 +17,11 @@ import math
 #enviar o objeto pra fazer TG
 class Object():
     def __init__(self, x, y, z, h, r_bottom, r_top, sides):
+        self.r_bottom = r_bottom
+        self.r_top = r_top
+        self.height = h
+        self.sides = sides
+        
         self.prism_in_SRU = create_prism(x, y, z, h, r_bottom, r_top, sides)
         self.prism_in_SRT = None
         self.draw_me = None
@@ -25,7 +30,6 @@ class Object():
         self.vertexFaces = []
         self.draw_vertex = [False]*sides*2
         self.numberFaces = sides + 2
-        self.sides = sides
 
         sides_minus_one = sides*2-1
         for f in range(0, sides):

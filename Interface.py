@@ -126,7 +126,7 @@ def lerRadioButton(_, __, ___):
         txtPz['state'] = tk.WRITABLE
 
 def botaoObjeto(_, __, ___):
-    if (txtNumLados.get() == ""):
+    if (drawing.objectSelected is not None):
         btnAlterarObjeto['state'] = tk.WRITABLE
         btnCriarObjeto['state'] = tk.DISABLED
     else:
@@ -136,7 +136,8 @@ def botaoObjeto(_, __, ___):
 def ClearScreen():
     drawing.ClearAll()
 
-def SendUI(values):
+def SendUI(values): # PEGAR VALORES DO PIPELINE E ATUALIZAR NAS INFORMAÇÕES DO OBJETO
+    print(values)
     txtNumLados.delete(0, tk.END)
     txtNumLados.insert(0, str(values[0]))
     txtRaioBase.delete(0, tk.END)
@@ -153,69 +154,94 @@ rotationValue = 5
 
 def move_x_left(event):
     drawing.moveObject(-translationValue, 0, 0)
+    SendUI(drawing.GetAttributes())
 
 def move_x_right(event):
     drawing.moveObject(translationValue, 0, 0)
+    SendUI(drawing.GetAttributes())
 
 def move_z_front(event):
     drawing.moveObject(0, 0, translationValue)
+    SendUI(drawing.GetAttributes())
 
 def move_z_back(event):
     drawing.moveObject(0, 0, -translationValue)
+    SendUI(drawing.GetAttributes())
 
 def move_y_up(event):
     drawing.moveObject(0, translationValue, 0)
+    SendUI(drawing.GetAttributes())
 
 def move_y_down(event):
     drawing.moveObject(0, -translationValue, 0)
+    SendUI(drawing.GetAttributes())
 
 def scale_x_less(event):
     drawing.scaleObject(scaleLessValue, 1, 1)
+    SendUI(drawing.GetAttributes())
 
 def scale_x_more(event):
     drawing.scaleObject(scaleMoreValue, 1, 1)
+    SendUI(drawing.GetAttributes())
 
 def scale_z_less(event):
     drawing.scaleObject(1, 1, scaleLessValue)
+    SendUI(drawing.GetAttributes())
 
 def scale_z_more(event):
     drawing.scaleObject(1, 1, scaleMoreValue)
+    SendUI(drawing.GetAttributes())
 
 def scale_y_less(event):
     drawing.scaleObject(1, scaleLessValue, 1)
+    SendUI(drawing.GetAttributes())
 
 def scale_y_more(event):
     drawing.scaleObject(1, scaleMoreValue, 1)
+    SendUI(drawing.GetAttributes())
 
 def rot_x_left(event):
     drawing.rotObjectX(-rotationValue)
+    SendUI(drawing.GetAttributes())
 
 def rot_x_right(event):
     drawing.rotObjectX(rotationValue)
+    SendUI(drawing.GetAttributes())
 
 def rot_z_front(event):
     drawing.rotObjectZ(rotationValue)
+    SendUI(drawing.GetAttributes())
 
 def rot_z_back(event):
     drawing.rotObjectZ(-rotationValue)
+    SendUI(drawing.GetAttributes())
 
 def rot_y_up(event):
     drawing.rotObjectY(rotationValue)
+    SendUI(drawing.GetAttributes())
 
 def rot_y_down(event):
     drawing.rotObjectY(-rotationValue)
+    SendUI(drawing.GetAttributes())
 
 def SelectingObject(event):
     if event.widget.find_withtag("current"):
         object = drawing.ObjectSelection(drawing.canvas.find_withtag("current")[0])
-        values = (10, 20, 15, 10) # criar função pra conseguir os valores daquele objeto
-        SendUI(values)
+        SendUI(drawing.GetAttributes())
         for i in object:
             drawing.canvas.itemconfig(i, fill='red')
             #drawing.canvas.coords(i, [30, 30, 50, 80, 100, 100, 200, 200, 420, 100]) #readapta as coordenadas de cada face do objeto
     else:
         drawing.objectSelected = None
+    botaoObjeto(1, 2, 3)
     
+def atualizarObjeto():
+    numLados = int(isVazio(txtNumLados.get()))
+    altura = isVazio(txtAltura.get())
+    raioBase = isVazio(txtRaioBase.get())
+    raioTopo = isVazio(txtRaioTopo.get()) 
+
+    drawing.UpdateObject(raioBase, raioTopo, numLados, altura)
 
 def objetoClick():
     numLados = int(isVazio(txtNumLados.get()))
@@ -227,6 +253,15 @@ def objetoClick():
 
 def criarObjeto(numLados, altura, raioBase, raioTopo):
     print(numLados*4)
+
+def projecaoSet():
+    txtVRPx.delete(0, tk.END)
+    txtVRPx.insert(0, str(values[0]))
+    txtVRPy.delete(0, tk.END)
+    txtVRPy.insert(0, str(values[0]))
+    txtVRPz.delete(0, tk.END)
+    txtVRPz.insert(0, str(values[0]))
+
 
 def projecaoClick():
     #rbProjeção = 0 -> perspectiva; rbProjeção = 1 -> axonometrica
@@ -299,6 +334,8 @@ if __name__ == "__main__":
     #btnLimpar.place(x=int(width*0.01), y = int(height * 0.88))
     btnLimpar.place(x=int(width*0.66), y = int(height * 0.9))
 
+    drawing.canvas.bind('<Button-1>', SelectingObject)
+
     drawing.canvas.bind_all('<q>', move_x_left)
     drawing.canvas.bind_all('<a>', move_x_right)
     drawing.canvas.bind_all('<w>', move_z_front)
@@ -339,7 +376,7 @@ if __name__ == "__main__":
     labelAltura = ttk.Label(t.sub_frame, text='Altura')
     txtAltura = ttk.Entry(t.sub_frame, name="txtAltura", width=15)
     btnCriarObjeto = ttk.Button(t.sub_frame,text="Criar objeto", width=15, command=objetoClick)
-    btnAlterarObjeto = ttk.Button(t.sub_frame,text="Alterar objeto", width=15, command=objetoClick)
+    btnAlterarObjeto = ttk.Button(t.sub_frame,text="Alterar objeto", width=15, command=atualizarObjeto)
 
     labelNumLados.grid(row=1, column=1, padx=10, pady=1)
     txtNumLados.grid(row=1, column=2, padx=1, pady=1)
@@ -507,7 +544,5 @@ if __name__ == "__main__":
     txtN.grid(row=9, column=2, padx=1, pady=1)
 
     btnAlterarIluminacao.grid(row=10, column=1, padx=4, pady=8, columnspan=2)
-
-    drawing.canvas.bind('<Button-1>', SelectingObject)
-
+    botaoObjeto(1, 1, 1)
     window.mainloop()

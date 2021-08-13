@@ -9,15 +9,29 @@ from tkinter import *
 class Screen():
     def __init__(self, frame, width, height):
         self.VRP, self.n = VRP_and_n(100, -50, 70, 2, 1, 3)  
-        self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, 0, 1, 0, True, 50, -50, 40, -40, 30, 300, 1000, 200, 600)
+        self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, 0, 1, 0, False, 50, -50, 40, -40, 30, 300, 1000, 200, 600)
         self.objects = []
         self.objectsInCanvas = [] # list of all the objects with all the faces that each one has
         self.numberObjects = 0
-        self.near_value = 10
-        self.far_value = 1000
         self.canvas = Canvas(frame, width = int(width*0.7), height = int(height*(0.88)), bg = "white")
         self.objectSelected = None 
         
+        self.near_value = 10
+        self.far_value = 1000
+                
+        self.mundoXmin = 1
+        self.mundoXmax = 10
+        self.mundoYmin = 1
+        self.mundoYmax = 10
+        
+        self.projecaoXmin = 1
+        self.projecaoXmax = 10
+        self.projecaoYmin = 1
+        self.projecaoYmax = 10
+
+
+
+
     #def draw(self, object):
     #    self.objects[self.number_objects] = []
     #    for i in range(0, object.numberFaces): 
@@ -37,6 +51,15 @@ class Screen():
             if face in self.objectsInCanvas[object]:
                 self.objectSelected = object
                 return self.objectsInCanvas[object]
+    
+    def GetAttributes(self):
+        list = []
+        list.append(self.objects[self.objectSelected].sides)
+        list.append(self.objects[self.objectSelected].r_bottom)
+        list.append(self.objects[self.objectSelected].r_top)
+        list.append(self.objects[self.objectSelected].height)
+        return list
+        
 
     def ClearAll(self):
         self.canvas.delete(ALL)
@@ -101,6 +124,13 @@ class Screen():
                 self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(i), outline='blue', fill='light blue', width = 2, tags = "objeto"))
         
         self.numberObjects += 1
+    
+    def UpdateObject(self, r_bottom, r_top, sides, h):
+        new_obj = Object(0, 0, 0, h, r_bottom, r_top, sides) # alterar o X, Y e Z para pegar o do objeto atual
+        new_obj.normalVisualizationTest(self.n)
+        new_obj.pipeline_me(self.SRC, self.jp_times_proj, self.near_value, self.far_value)
+        self.objects[self.objectSelected] = new_obj 
+        self.Draw()
 
     """def AddObjectsProva(self, r_bottom, r_top, sides, h):
         new_obj = exemplo_prova() 
