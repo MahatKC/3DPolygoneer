@@ -9,9 +9,6 @@ from tkinter import *
 class Screen():
     def __init__(self, frame, width, height):
         self.isPerspective = False
-        
-        self.near_value = 10
-        self.far_value = 1000
 
         self.mundoXmin = -50
         self.mundoXmax = 40
@@ -34,19 +31,18 @@ class Screen():
         self.ViewUpX = 0
         self.ViewUpY = 1
         self.ViewUpZ = 0
-
-        self.DistanciaProjecao = 50
+        
+        self.near_value = 10
+        self.far_value = 1000
+        self.distanciaProjecao = 50
 
         self.VRP, self.n = VRP_and_n(self.VRPx, self.VRPy, self.VRPz, self.Px, self.Py, self.Pz)  
-        self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, self.ViewUpX, self.ViewUpY, self.ViewUpZ, self.isPerspective, self.DistanciaProjecao, self.mundoXmin, self.mundoXmax, self.mundoYmin, self.mundoYmax, self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
+        self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, self.ViewUpX, self.ViewUpY, self.ViewUpZ, self.isPerspective, self.distanciaProjecao, self.mundoXmin, self.mundoXmax, self.mundoYmin, self.mundoYmax, self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
         self.objects = []
         self.objectsInCanvas = [] # list of all the objects with all the faces that each one has
         self.numberObjects = 0
         self.canvas = Canvas(frame, width = int(width*0.7), height = int(height*(0.88)), bg = "white")
         self.objectSelected = None 
-
-
-
 
     #def draw(self, object):
     #    self.objects[self.number_objects] = []
@@ -76,6 +72,42 @@ class Screen():
         list.append(self.objects[self.objectSelected].height)
         return list
         
+    def GetProjecao(self):
+        list = []
+        list.append(self.VRPx)
+        list.append(self.VRPy)
+        list.append(self.VRPz)
+        list.append(self.Px)
+        list.append(self.Py)
+        list.append(self.Pz)
+        list.append(self.ViewUpX)
+        list.append(self.ViewUpY)
+        list.append(self.ViewUpZ)
+        list.append(self.near_value)
+        list.append(self.far_value)
+        list.append(self.distanciaProjecao)
+        list.append(self.mundoXmin)
+        list.append(self.mundoXmax)
+        list.append(self.mundoYmin)
+        list.append(self.mundoYmax)
+        list.append(self.projecaoXmin)
+        list.append(self.projecaoXmax)
+        list.append(self.projecaoYmin)
+        list.append(self.projecaoYmax)
+        return list
+
+    def RedoPipeline(self, isPerspective, VRPx, VRPy, VRPz, Px, Py, Pz, ViewUpX, ViewUpY, ViewUpZ, near, far, distanciaProjecao,
+                mundoXmin, mundoXmax, mundoYmin, mundoYmax, projecaoXmin, projecaoXmax, projecaoYmin, projecaoYmax):
+        self.VRP, self.n = VRP_and_n(VRPx, VRPy, VRPz, Px, Py, Pz)  
+        self.near_value = near
+        self.far_value = far
+        self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, ViewUpX, ViewUpY, ViewUpZ, isPerspective, distanciaProjecao, mundoXmin, mundoXmax, mundoYmin, mundoYmax, projecaoXmin, projecaoXmax, projecaoYmin, projecaoYmax)
+        
+        for object in range(self.numberObjects):
+            self.objects[object].normalVisualizationTest(self.n)
+            self.objects[object].pipeline_me(self.SRC, self.jp_times_proj, self.near_value, self.far_value)
+        
+        self.Draw()
 
     def ClearAll(self):
         self.canvas.delete(ALL)
@@ -86,9 +118,9 @@ class Screen():
     def Draw(self):
         self.canvas.delete(ALL)
         self.objectsInCanvas.clear()
-        for objects in range(self.numberObjects):
+        for objects in range(self.numberObjects): # gerar uma lista com a ordem de todos os objetos em Z
             self.objectsInCanvas.append([])
-            for faces in range(self.objects[objects].numberFaces):
+            for faces in range(self.objects[objects].numberFaces): # gerar uma lista com as faces do objeto em Z
                 if(self.objects[objects].draw_faces[faces]):
                     self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(faces), outline='blue', fill='light blue', width = 2, tags = "objeto"))
                 

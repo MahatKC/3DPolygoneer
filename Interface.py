@@ -116,7 +116,7 @@ class ToggledFrame(tk.Frame):
             self.toggle_button.configure(text='+')
 
 def lerRadioButton(_, __, ___):
-    if(rbProjecao.get() == 1):
+    if(rbProjecao.get() == 0):
         txtPx['state'] = tk.DISABLED
         txtPy['state'] = tk.DISABLED
         txtPz['state'] = tk.DISABLED
@@ -296,9 +296,10 @@ def projecaoSet(values):
     txtLimPlanoProjyMax.delete(0, tk.END)
     txtLimPlanoProjyMax.insert(0, str(values[19]))
 
+
 def projecaoClick():
     #rbProjeção = 0 -> perspectiva; rbProjeção = 1 -> axonometrica
-    projecao = int(rbProjecao.get())
+    projecao = bool(int(rbProjecao.get())) # mudar pra true ou false
     vrpX = isVazio(txtVRPx.get())
     vrpY = isVazio(txtVRPy.get())
     vrpZ = isVazio(txtVRPz.get())
@@ -320,12 +321,8 @@ def projecaoClick():
     planoProjyMin = isVazio(txtLimPlanoProjyMin.get())
     planoProjyMax = isVazio(txtLimPlanoProjyMax.get())
 
-    criarCena(projecao, vrpX, vrpY, vrpZ, pX, pY, pZ, viewUpX, viewUpY, viewUpZ, near, far, planoProj,
+    drawing.RedoPipeline(projecao, vrpX, vrpY, vrpZ, pX, pY, pZ, viewUpX, viewUpY, viewUpZ, near, far, planoProj,
                 mundoxMin, mundoxMax, mundoyMin, mundoyMax, planoProjxMin, planoProjxMax, planoProjyMin, planoProjyMax)
-
-def criarCena(projecao, vrpX, vrpY, vrpZ, pX, pY, pZ, viewUpX, viewUpY, viewUpZ, near, far, planoProj, 
-mundoXMin, mundoXMax, mundoYMin, mundoYMax, planoProjXMin, planoProjXMax, planoProjYMin, planoProjYMax):
-    print(vrpX+vrpY+vrpZ)
 
 def iluminacaoClick():
     #sombreamento = 0 -> constante; sombreamento = 1 -> gourad; sombreamento = 2 -> phong
@@ -427,8 +424,8 @@ if __name__ == "__main__":
     t2.pack(fill="x", expand=1, pady=2, padx=2, anchor="n")
 
     labelTipoProjecao = ttk.Label(t2.sub_frame, text="Tipo de projeção", font="-weight bold -size 9")
-    rbAxonometrica = ttk.Radiobutton(t2.sub_frame, text="Axonométrica", variable= rbProjecao, value=1)
-    rbPerspectiva = ttk.Radiobutton(t2.sub_frame, text="Perspectiva", variable= rbProjecao, value=0)
+    rbAxonometrica = ttk.Radiobutton(t2.sub_frame, text="Axonométrica", variable= rbProjecao, value=0)
+    rbPerspectiva = ttk.Radiobutton(t2.sub_frame, text="Perspectiva", variable= rbProjecao, value=1)
 
     labelVRP = ttk.Label(t2.sub_frame, text="VRP", font="-weight bold -size 9")
     labelVRPx = ttk.Label(t2.sub_frame, text="X")
@@ -577,5 +574,8 @@ if __name__ == "__main__":
     txtN.grid(row=9, column=2, padx=1, pady=1)
 
     btnAlterarIluminacao.grid(row=10, column=1, padx=4, pady=8, columnspan=2)
+
     botaoObjeto(1, 1, 1)
+    projecaoSet(drawing.GetProjecao())
+
     window.mainloop()
