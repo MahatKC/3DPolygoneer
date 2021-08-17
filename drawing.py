@@ -1,3 +1,4 @@
+from DataStructure.Matrices.transforms import translation
 from DataStructure.DataStructure import Object
 from DataStructure.Matrices.pipeline import first_pipeline, VRP_and_n, pipeline_steps
 import numpy as np
@@ -105,23 +106,69 @@ def move_object_y(value):
 def move_object_z(value):
 """
 
+#moveObject mandando o X, Y e Z -> translation
+#scaleObject mandando o Sx, Sy, Sz -> escala
+#rotObjectX mandando o value -> rotação
+#rotObjectY mandando o value -> rotação
+#rotObjectZ mandando o value -> rotation
+translationValue = 5
+scaleLessValue = 5
+scaleMoreValue = 5
+rotationValue = 5
+
 def move_x_left():
-    move_object_x(-value_move)
+    moveObject(-translationValue, 0, 0)
 
 def move_x_right():
-    move_object_x(value_move)
-
-"""def move_y_up():
-    move_object_y(-value_move)
-
-def move_y_down():
-    move_object_y(value_move)
+    moveObject(translationValue, 0, 0)
 
 def move_z_front():
-    move_object_z(-value_move)
+    moveObject(0, 0, translationValue)
 
 def move_z_back():
-    move_object_z(value_move)"""
+    moveObject(0, 0, -translationValue)
+
+def move_y_up():
+    moveObject(0, translationValue, 0)
+
+def move_y_down():
+    moveObject(0, -translationValue, 0)
+
+def scale_x_less():
+    scaleObject(scaleLessValue, 0, 0)
+
+def scale_x_more():
+    scaleObject(scaleMoreValue, 0, 0)
+
+def scale_z_less():
+    scaleObject(0, 0, scaleLessValue)
+
+def scale_z_more():
+    scaleObject(0, 0, scaleMoreValue)
+
+def scale_y_less():
+    scaleObject(0, scaleLessValue, 0)
+
+def scale_y_more():
+    scaleObject(0, scaleMoreValue, 0)
+
+def rot_x_left():
+    rotObjectX(-rotationValue)
+
+def rot_x_right():
+    rotObjectX(rotationValue)
+
+def rot_z_front():
+    rotObjectZ(rotationValue)
+
+def rot_z_back():
+    rotObjectZ(-rotationValue)
+
+def rot_y_up():
+    rotObjectY(rotationValue)
+
+def rot_y_down():
+    rotObjectY(-rotationValue)
 
 drawing.canvas.bind_all('<q>', move_x_left)
 drawing.canvas.bind_all('<a>', move_x_right)
@@ -129,7 +176,7 @@ drawing.canvas.bind_all('<w>', move_z_front)
 drawing.canvas.bind_all('<s>', move_z_back)
 drawing.canvas.bind_all('<e>', move_y_up)
 drawing.canvas.bind_all('<d>', move_y_down)
-"""
+
 drawing.canvas.bind_all('<r>', scale_x_less)
 drawing.canvas.bind_all('<f>', scale_x_more)
 drawing.canvas.bind_all('<t>', scale_z_less)
@@ -143,4 +190,3 @@ drawing.canvas.bind_all('<i>', rot_z_front)
 drawing.canvas.bind_all('<k>', rot_z_back)
 drawing.canvas.bind_all('<o>', rot_y_up)
 drawing.canvas.bind_all('<l>', rot_y_down)
-"""

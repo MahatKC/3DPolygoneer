@@ -1,6 +1,10 @@
 from normal_test import normal_test
 from Matrices.prism import create_prism
 from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
+from DataStructure.normal_test import normal_test
+from DataStructure.Matrices.prism import create_prism
+from DataStructure.Matrices.pipeline import SRC_matrix, pipeline_steps
+from DataStructure.Matrices.transforms import translation, scaleAlongAxis, rotXAlongAxis, rotYAlongAxis, rotZAlongAxis
 #from normal_test import normal_test
 import numpy as np
 import copy
@@ -18,6 +22,11 @@ np.set_printoptions(suppress=True)
 #enviar o objeto pra fazer TG
 class Object():
     def __init__(self, x, y, z, h, r_bottom, r_top, sides):
+        self.r_bottom = r_bottom
+        self.r_top = r_top
+        self.height = h
+        self.sides = sides
+        
         self.prism_in_SRU = create_prism(x, y, z, h, r_bottom, r_top, sides)
         self.prism_in_SRT = None
         self.zeroed_SRT = None
@@ -28,7 +37,6 @@ class Object():
         self.vertexFaces = []
         self.draw_vertex = [False]*sides*2
         self.numberFaces = sides + 2
-        self.sides = sides
 
         sides_minus_one = sides*2-1
         for f in range(0, sides):
@@ -49,6 +57,22 @@ class Object():
         print(self.vertexFaces)
         print("-"*10)
     
+    def translation(self, valueX, valueY, valueZ):
+        self.prism_in_SRU = translation(self.prism_in_SRU, valueX, valueY, valueZ)
+
+    def scale(self, Sx, Sy, Sz):
+        self.prism_in_SRU = scaleAlongAxis(self.prism_in_SRU, Sx, Sy, Sz)
+
+    def rotationX(self, rotationValue):
+        self.prism_in_SRU = rotXAlongAxis(self.prism_in_SRU, rotationValue)
+
+    def rotationY(self, rotationValue):
+        self.prism_in_SRU = rotYAlongAxis(self.prism_in_SRU, rotationValue)
+
+    def rotationZ(self, rotationValue):
+        self.prism_in_SRU = rotZAlongAxis(self.prism_in_SRU, rotationValue)
+        
+
     def getCoordinates(self, face_SRU):
         list = []
         for i in range(len(self.faces[face_SRU])):
@@ -59,6 +83,7 @@ class Object():
         return list
 
     def normalVisualizationTest(self, n):
+        self.draw_faces.clear()
         for face in self.faces:
             face_vertices = []
             for i in range(3):
