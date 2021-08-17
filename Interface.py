@@ -339,12 +339,13 @@ if __name__ == "__main__":
     frameDrawingInterface.place(x = int(width*0.01), y = int(height * 0.01)) 
 
     # Fazendo janela com as informações do usuário
-    userInterface = Frame(window, highlightbackground= "black", highlightthickness= 1, width = int(width*0.27), height = int(height*0.88))
+    #width variavel = int(width*0.27)
+    userInterface = Frame(window, highlightbackground= "black", highlightthickness= 1, width = 300, height = int(height*0.88))
     userInterface.place(x = int(width*0.72), y = int(height * 0.01))
     userInterface.pack_propagate(0)
 
     # Fazendo o canvas
-    drawing = Screen(frameDrawingInterface, width, height) 
+    drawing = Screen(frameDrawingInterface, width-300, height) 
     drawing.canvas.pack()
 
     btnLimpar = ttk.Button(window,text="Limpar", width=15, command = ClearScreen) 
