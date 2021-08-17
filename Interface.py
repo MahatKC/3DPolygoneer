@@ -238,7 +238,6 @@ def objetoClick():
     altura = isVazio(txtAltura.get())
     raioBase = isVazio(txtRaioBase.get())
     raioTopo = isVazio(txtRaioTopo.get())
-
     drawing.AddObjects(raioBase, raioTopo, numLados, altura)
 
 def criarObjeto(numLados, altura, raioBase, raioTopo):

@@ -10,7 +10,7 @@ class Screen():
     def __init__(self, frame, width, height):
         self.isPerspective = False
 
-        self.maxXviewPort = width
+        self.maxXviewPort = int(width)
         self.maxYviewPort = int(height*(0.88))
 
         self.mundoXmin = -50
@@ -46,7 +46,7 @@ class Screen():
         self.numberObjects = 0
         self.canvas = Canvas(frame, width = self.maxXviewPort, height = self.maxYviewPort, bg = "white")
         self.objectSelected = None 
-        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='light green', width = 3, tags = "objeto")
+        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='black', width = 3, tags = "objeto")
     
         #self.x = self.canvas.create_line(50, 500, 100, 50, fill="red")
 
@@ -148,19 +148,17 @@ class Screen():
         self.canvas.delete(ALL)
         self.objects.clear()
         self.objectsInCanvas.clear()
-        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='light green', width = 2, tags = "objeto")
+        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='black', width = 2, tags = "objeto")
         self.numberObjects = 0
 
     def Draw(self):
         self.canvas.delete(ALL)
         self.objectsInCanvas.clear()
-        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='light green', width = 2, tags = "objeto")
+        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='black', width = 2, tags = "objeto")
         for objects in range(self.numberObjects): # gerar uma lista com a ordem de todos os objetos em Z
             self.objectsInCanvas.append([])
-            for faces in range(self.objects[objects].numberFaces): # gerar uma lista com as faces do objeto em Z
-                if(self.objects[objects].draw_faces[faces]):
-                    self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(faces), outline='blue', fill='light blue', width = 2, tags = "objeto"))
-                
+            for viewport_face_idx in range(len(self.objects[objects].viewport_faces)):
+                self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline='blue', fill='light blue', width = 2, tags = "objeto"))
 
     def moveObject(self, valueX, valueY, valueZ):
         if(self.objectSelected is not None):
@@ -201,12 +199,13 @@ class Screen():
         new_obj = Object(0, 0, 0, h, r_bottom, r_top, sides) 
         new_obj.normalVisualizationTest(self.n)
         new_obj.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+        new_obj.crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
         self.objects.append(new_obj) 
         self.objectsInCanvas.append([])
         
-        for viewport_face_idx in range(new_obj.viewport_faces):
+        for viewport_face_idx in range(len(new_obj.viewport_faces)):
             self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(viewport_face_idx), outline='blue', fill='light blue', width = 2, tags = "objeto"))
-        
+ 
         self.numberObjects += 1
     
     def UpdateObject(self, r_bottom, r_top, sides, h):

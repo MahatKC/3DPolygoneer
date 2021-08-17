@@ -1,11 +1,10 @@
-from normal_test import normal_test
-from Matrices.prism import create_prism
-from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
-#from DataStructure.normal_test import normal_test
-#from DataStructure.Matrices.prism import create_prism
-#from DataStructure.Matrices.pipeline import SRC_matrix, pipeline_steps
-#from DataStructure.Matrices.transforms import translation, scaleAlongAxis, rotXAlongAxis, rotYAlongAxis, rotZAlongAxis
 #from normal_test import normal_test
+#from Matrices.prism import create_prism
+#from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
+from DataStructure.normal_test import normal_test
+from DataStructure.Matrices.prism import create_prism
+from DataStructure.Matrices.pipeline import  VRP_and_n, first_pipeline, SRC_matrix, pipeline_steps
+from DataStructure.Matrices.transforms import translation, scaleAlongAxis, rotXAlongAxis, rotYAlongAxis, rotZAlongAxis
 import numpy as np
 import copy
 np.set_printoptions(precision=6)
@@ -75,7 +74,7 @@ class Object():
 
     def getCoordinates(self, viewport_face_idx):
         list = []
-        for i in range(len(self.viewport_faces[viewport_face_idx])):
+        for i in range(np.shape(self.viewport_faces[viewport_face_idx])[1]):
             list.append(int(self.viewport_faces[viewport_face_idx][0,i]))
             list.append(int(self.viewport_faces[viewport_face_idx][1,i]))     
         return list
