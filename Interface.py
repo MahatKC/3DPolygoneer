@@ -1,7 +1,7 @@
 #from typing_extensions import IntVar
 from DataStructure.Matrices.transforms import translation
 from shutil import disk_usage
-from _pytest.store import D
+#from _pytest.store import D
 from tkscrolledframe import ScrolledFrame
 from Screen import Screen
 import tkinter as tk
@@ -12,16 +12,6 @@ from tkinter.constants import ALL, E, N, NS, RIGHT, S, VERTICAL, W, Y
     x, y = event.x, event.y
     print('{}, {}'.format(x, y))"""
 class VerticalScrolledFrame:
-    """
-    A vertically scrolled Frame that can be treated like any other Frame
-    ie it needs a master and layout and it can be a master.
-    :width:, :height:, :bg: are passed to the underlying Canvas
-    :bg: and all other keyword arguments are passed to the inner Frame
-    note that a widget layed out in this frame will have a self.master 3 layers deep,
-    (outer Frame, Canvas, inner Frame) so 
-    if you subclass this there is no built in way for the children to access it.
-    You need to provide the controller separately.
-    """
     def __init__(self, master, width, height, janela, **kwargs):
         bg = kwargs.pop('bg', kwargs.pop('background', None))
         self.outer = tk.Frame(master, **kwargs)
@@ -35,14 +25,12 @@ class VerticalScrolledFrame:
             self.canvas = tk.Canvas(self.outer, highlightthickness=0, width= width, height= int(height * 0.36), bg=bg)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.canvas['yscrollcommand'] = self.vsb.set
-        # mouse scroll does not seem to work with just "bind"; You have
-        # to use "bind_all". Therefore to use multiple windows you have
-        # to bind_all in the current widget
+
         self.canvas.bind("<Enter>", self._bind_mouse)
         self.canvas.bind("<Leave>", self._unbind_mouse)
         self.vsb['command'] = self.canvas.yview
         self.inner = tk.Frame(self.canvas, bg=bg)
-        # pack the inner Frame into the Canvas with the topleft corner 4 pixels offset
+
         self.canvas.create_window(4, 4, window=self.inner, anchor='nw')
         self.inner.bind("<Configure>", self._on_frame_configure)
         self.outer_attr = set(dir(tk.Widget))
@@ -105,7 +93,6 @@ class ToggledFrame(tk.Frame):
         if(text == "Iluminação e sombreamento"):
             self.sub_frame = VerticalScrolledFrame(self, width, height, borderwidth=1, janela= 2, relief=tk.SUNKEN)
         
-
         #self.sub_frame = tk.Frame(self, relief="sunken", borderwidth=1)
         #self.sub_frame = VerticalScrolledFrame(self, width, height, borderwidth=1, janela=numberJanela, relief=tk.SUNKEN)
 
@@ -464,7 +451,7 @@ if __name__ == "__main__":
     labelPlanoProjecao = ttk.Label(t2.sub_frame, text="Plano de projeção")
     txtPlanoProjecao = ttk.Entry(t2.sub_frame, name="txtPlanoProjecao", width=15)
 
-    labelLimMundo = ttk.Label(t2.sub_frame, text="Limites do mundo", font="-weight bold -size 9")
+    labelLimMundo = ttk.Label(t2.sub_frame, text="Limites da window", font="-weight bold -size 9")
     labelLimMundoxMin = ttk.Label(t2.sub_frame, text="X min")
     txtLimMundoxMin = ttk.Entry(t2.sub_frame, name="txtLimMundoxMin", width=15)
     labelLimMundoxMax = ttk.Label(t2.sub_frame, text="X max")
@@ -474,7 +461,7 @@ if __name__ == "__main__":
     labelLimMundoyMax = ttk.Label(t2.sub_frame, text="Y max")
     txtLimMundoyMax = ttk.Entry(t2.sub_frame, name="txtLimMundoyMax", width=15)
 
-    labelLimPlanoProj = ttk.Label(t2.sub_frame, text="Plano de projeção", font="-weight bold -size 9")
+    labelLimPlanoProj = ttk.Label(t2.sub_frame, text="Limites da viewport", font="-weight bold -size 9")
     labelLimPlanoProjxMin = ttk.Label(t2.sub_frame, text="X min")
     txtLimPlanoProjxMin = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjxMin", width=15)
     labelLimPlanoProjxMax = ttk.Label(t2.sub_frame, text="X max")
@@ -583,5 +570,8 @@ if __name__ == "__main__":
     botaoObjeto(1, 1, 1)
     projecaoSet(drawing.GetProjecao())
 
-    #window.bind('<Motion>', motion)
+    txtPx['state'] = tk.DISABLED
+    txtPy['state'] = tk.DISABLED
+    txtPz['state'] = tk.DISABLED
+
     window.mainloop()
