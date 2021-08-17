@@ -345,17 +345,17 @@ if __name__ == "__main__":
 
     # Fazendo janela com as informações do usuário
     #width variavel = int(width*0.27)
-    userInterface = Frame(window, highlightbackground= "black", highlightthickness= 1, width = 300, height = int(height*0.88))
-    userInterface.place(x = int(width*0.72), y = int(height * 0.01))
+    userInterface = Frame(window, highlightbackground= "black", highlightthickness= 1, width = 300, height = int(height*0.9))
+    userInterface.place(x = width-310, y = int(height * 0.01))
     userInterface.pack_propagate(0)
 
     # Fazendo o canvas
-    drawing = Screen(frameDrawingInterface, width-300, height) 
+    drawing = Screen(frameDrawingInterface, width-(330+width*0.01), height-20) 
     drawing.canvas.pack()
 
     btnLimpar = ttk.Button(window,text="Limpar", width=15, command = ClearScreen) 
     #btnLimpar.place(x=int(width*0.01), y = int(height * 0.88))
-    btnLimpar.place(x=int(width*0.66), y = int(height * 0.9))
+    btnLimpar.place(x=width-(410+width*0.01), y = int(height * 0.88))
 
     drawing.canvas.bind('<Button-1>', SelectingObject)
 
