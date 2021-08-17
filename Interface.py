@@ -1,7 +1,7 @@
 #from typing_extensions import IntVar
 from DataStructure.Matrices.transforms import translation
 from shutil import disk_usage
-from _pytest.store import D
+#from _pytest.store import D
 from tkscrolledframe import ScrolledFrame
 from Screen import Screen
 import tkinter as tk
@@ -459,7 +459,7 @@ if __name__ == "__main__":
     labelPlanoProjecao = ttk.Label(t2.sub_frame, text="Plano de projeção")
     txtPlanoProjecao = ttk.Entry(t2.sub_frame, name="txtPlanoProjecao", width=15)
 
-    labelLimMundo = ttk.Label(t2.sub_frame, text="Limites do mundo", font="-weight bold -size 9")
+    labelLimMundo = ttk.Label(t2.sub_frame, text="Limites da window", font="-weight bold -size 9")
     labelLimMundoxMin = ttk.Label(t2.sub_frame, text="X min")
     txtLimMundoxMin = ttk.Entry(t2.sub_frame, name="txtLimMundoxMin", width=15)
     labelLimMundoxMax = ttk.Label(t2.sub_frame, text="X max")
@@ -469,7 +469,7 @@ if __name__ == "__main__":
     labelLimMundoyMax = ttk.Label(t2.sub_frame, text="Y max")
     txtLimMundoyMax = ttk.Entry(t2.sub_frame, name="txtLimMundoyMax", width=15)
 
-    labelLimPlanoProj = ttk.Label(t2.sub_frame, text="Plano de projeção", font="-weight bold -size 9")
+    labelLimPlanoProj = ttk.Label(t2.sub_frame, text="Limites da viewport", font="-weight bold -size 9")
     labelLimPlanoProjxMin = ttk.Label(t2.sub_frame, text="X min")
     txtLimPlanoProjxMin = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjxMin", width=15)
     labelLimPlanoProjxMax = ttk.Label(t2.sub_frame, text="X max")
