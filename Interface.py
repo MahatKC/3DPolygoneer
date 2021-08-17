@@ -8,6 +8,9 @@ import tkinter as tk
 from tkinter import Canvas, Frame, Scrollbar, ttk
 from tkinter.constants import ALL, E, N, NS, RIGHT, S, VERTICAL, W, Y 
 
+"""def motion(event):
+    x, y = event.x, event.y
+    print('{}, {}'.format(x, y))"""
 class VerticalScrolledFrame:
     def __init__(self, master, width, height, janela, **kwargs):
         bg = kwargs.pop('bg', kwargs.pop('background', None))
@@ -310,6 +313,8 @@ def projecaoClick():
 
     drawing.RedoPipeline(projecao, vrpX, vrpY, vrpZ, pX, pY, pZ, viewUpX, viewUpY, viewUpZ, near, far, planoProj,
                 mundoxMin, mundoxMax, mundoyMin, mundoyMax, planoProjxMin, planoProjxMax, planoProjyMin, planoProjyMax)
+                
+    projecaoSet(drawing.GetProjecao())
 
 def iluminacaoClick():
     #sombreamento = 0 -> constante; sombreamento = 1 -> gourad; sombreamento = 2 -> phong
@@ -332,7 +337,7 @@ if __name__ == "__main__":
     window = tk.Tk()
     window.title('The Marvelous Polygoneer')
     width = window.winfo_screenwidth()  
-    height = window.winfo_screenheight() 
+    height = window.winfo_screenheight()
     window.state('zoomed')
     # Fazendo Frame
     frameDrawingInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = int(width*0.7), height = int(height*0.88))
