@@ -1,9 +1,11 @@
 from normal_test import normal_test
 from Matrices.prism import create_prism
-from Matrices.pipeline import pipeline_steps
+from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
 #from normal_test import normal_test
 import numpy as np
-import math
+import copy
+np.set_printoptions(precision=6)
+np.set_printoptions(suppress=True)
 
 #counter clockwise
 #fazer as funções para chamar os métodos do objeto
@@ -18,6 +20,8 @@ class Object():
     def __init__(self, x, y, z, h, r_bottom, r_top, sides):
         self.prism_in_SRU = create_prism(x, y, z, h, r_bottom, r_top, sides)
         self.prism_in_SRT = None
+        self.zeroed_SRT = None
+        self.viewport_faces = []
         self.draw_me = None
         self.faces = []
         self.draw_faces = []
@@ -44,7 +48,7 @@ class Object():
         print("Vertices list: ")
         print(self.vertexFaces)
         print("-"*10)
-
+    
     def getCoordinates(self, face_SRU):
         list = []
         for i in range(len(self.faces[face_SRU])):
@@ -67,8 +71,149 @@ class Object():
 
     def pipeline_me(self, SRC_matrix, jp_proj_matrix, dist_near, dist_far):
         self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
+    
+    def crop_to_screen(self, u_min, u_max, v_min, v_max):
+        self.zeroed_SRT = np.zeros((4,self.sides*2))+np.array([[u_min],[v_min],[0],[0]])
+        self.zeroed_SRT[:,self.draw_vertex] = self.prism_in_SRT[:,:]
+        
+        v0 = self.zeroed_SRT[0,:]<u_min
+        v1 = self.zeroed_SRT[0,:]>u_max
+        v2 = self.zeroed_SRT[1,:]>v_max
+        v3 = self.zeroed_SRT[1,:]<v_min
+        vfinal = np.any((v0,v1,v2,v3),axis=0)
+        boolean_mask = np.stack((v0,v1,v2,v3,vfinal),axis=0)
+
+        for i in range(self.numberFaces):
+            if self.draw_faces[i]:
+                print(f"i:{i}")
+                face = self.faces[i]
+                len_face = len(face)
+                #l1 = self.create_l1(face, len_face, boolean_mask, u_min, u_max, v_min, v_max)
+                self.viewport_faces.append(self.sutherland_hodgeman(face, len_face, boolean_mask, u_min, u_max, v_min, v_max))
+                
+        pass
+
+    def sutherland_hodgeman(self, face, len_face, boolean_mask, u_min, u_max, v_min, v_max):
+        face_vertices = copy.deepcopy(self.zeroed_SRT)
+        borders = [u_min, u_max, v_max, v_min]
+        for viewport_edge in range(4):
+            if np.any(boolean_mask[viewport_edge,:]):
+                for i in range(len_face):
+                    j=(i+1)%len_face
+                    v1_idx = face[i]
+                    v2_idx = face[j]
+
+                    v1_out = boolean_mask[viewport_edge,v1_idx]
+                    v2_out = boolean_mask[viewport_edge,v2_idx]
+
+                    if v1_out!=v2_out:
+                        if v1_out:
+                            face_vertices[:,v1_idx] = self.get_intersection_coordinate(face_vertices[:,v1_idx], face_vertices[:,v2_idx], viewport_edge<2, borders[viewport_edge])
+                            boolean_mask[viewport_edge,v1_idx]=0
+                        else:
+                            face_vertices[:,v2_idx] = self.get_intersection_coordinate(face_vertices[:,v2_idx], face_vertices[:,v1_idx], viewport_edge<2, borders[viewport_edge])
+                            boolean_mask[viewport_edge,v2_idx]=0
+
+        return face_vertices
+
+    def create_l1(self, face, len_face, boolean_mask, u_min, u_max, v_min, v_max):
+        l1=[]
+        for i in range(len_face):
+            if i==len_face-1:
+                j=0
+            else:
+                j=i+1
+
+            v1_idx = face[i]
+            v2_idx = face[j]
+            
+            l1.append(self.zeroed_SRT[:,v1_idx])
+            #não estão na mesma região nem estão de um mesmo lado de fora
+
+            if not np.array_equal(boolean_mask[:,v1_idx],boolean_mask[:,v2_idx]) and (not np.any(np.logical_and(boolean_mask[:4,v1_idx],boolean_mask[:4,v2_idx]))):
+                print("entrou if")
+                #um dentro, outro fora (iguais ja verificado acima)
+                if boolean_mask[3,v1_idx]==0 or boolean_mask[3,v2_idx]==0:
+                    point = self.get_intersection_point(boolean_mask, v1_idx, v2_idx, u_min, u_max, v_min, v_max)
+                    if np.shape(point)[0]>1:
+                        l1.append(point)
+                #um de cada lado, fora
+                else:
+                    point = self.get_intersection_point(boolean_mask, v1_idx, v2_idx, u_min, u_max, v_min, v_max)
+                    if np.shape(point)[0]>1:
+                        l1.append(point)
+                        l1.append(self.get_intersection_point(boolean_mask, v2_idx, v1_idx, u_min, u_max, v_min, v_max))
+
+        return l1
+
+    def get_intersection_point(self, boolean_mask, v1, v2, u_min, u_max, v_min, v_max):
+        found_it = False
+        if boolean_mask[0,v1]:
+            intersect_point, z_value = self.get_intersection_coordinate(self.zeroed_SRT[:,v1], self.zeroed_SRT[:,v2], True, u_min)
+            if intersect_point > v_min and intersect_point < v_max:
+                found_it = True
+                return np.array([[u_min-1],[intersect_point],[z_value],[1]])
+        elif boolean_mask[1,v1] and not found_it:
+            intersect_point, z_value = self.get_intersection_coordinate(self.zeroed_SRT[:,v1], self.zeroed_SRT[:,v2], True, u_max)
+            print("1")
+            print(intersect_point, z_value)
+            if intersect_point > v_min and intersect_point < v_max:
+                found_it = True
+                return np.array([[u_max+1],[intersect_point],[z_value],[1]])
+        elif boolean_mask[2,v1] and not found_it:
+            intersect_point, z_value = self.get_intersection_coordinate(self.zeroed_SRT[:,v1], self.zeroed_SRT[:,v2], False, v_min)
+            print("2")
+            print(intersect_point, z_value)
+            if intersect_point > u_min and intersect_point < u_max:
+                found_it = True
+                return np.array([[intersect_point],[v_max+1],[z_value],[1]])
+        elif boolean_mask[3,v1] and not found_it:
+            intersect_point, z_value = self.get_intersection_coordinate(self.zeroed_SRT[:,v1], self.zeroed_SRT[:,v2], False, v_max)
+            print("3")
+            print(intersect_point, z_value)
+            if intersect_point > u_min and intersect_point < u_max:
+                found_it = True
+                return np.array([[intersect_point],[v_min-1],[z_value],[1]])
+        else:
+            return np.array([0])
+
+    def get_intersection_coordinate(self, vert1, vert2, is_border_vertical, border_value):
+        x1 = vert1[0]
+        y1 = vert1[1]
+        z1 = vert1[2]
+        x2 = vert2[0]
+        y2 = vert2[1]
+        z2 = vert2[2]
+        y2_min_y1 = y2-y1
+        x2_min_x1 = x2-x1
+        z2_min_z1 = z2-z1
+
+        if is_border_vertical:
+            x = border_value
+            y = ((border_value-x1)*y2_min_y1/x2_min_x1)+y1
+            z = z1+(z2_min_z1*y/y2_min_y1)
+        else:
+            x = ((border_value-y1)*x2_min_x1/y2_min_y1)+x1
+            y = border_value
+            z = z1 + (z2_min_z1*x/x2_min_x1)
+
+        return np.array([x,y,z,1])
 
 
-obj = Object(150, 150, 150, 150, 60, 100, 6)
-obj.printa_tudo()
+obejeto = "quadradao"
 
+if obejeto == "quina":
+    poliedro_teste = Object(0, 0, 0, 10, 10, 10, 10)
+    VRP,n = VRP_and_n(0, 20, 100, 2, 1, 3)
+    poliedro_teste.normalVisualizationTest(n)
+    SRC_matrix, jp_proj_matrix = first_pipeline(VRP, n, 0, 1, 0, False, 50, -40, -15, -40, 15, 300, 1000, 200, 600)
+    poliedro_teste.pipeline_me(SRC_matrix, jp_proj_matrix, 10, 1000)
+elif obejeto=="quadradao":
+    poliedro_teste = Object(0, 0, 0, 15, 15, 110, 4)
+    VRP,n = VRP_and_n(0, 0, 1000, 2, 1, 3)
+    poliedro_teste.normalVisualizationTest(n)
+    SRC_matrix, jp_proj_matrix = first_pipeline(VRP, n, 0, 1, 0, False, 50, -50, 40, -40, 30, 300, 1000, 200, 600)
+    poliedro_teste.pipeline_me(SRC_matrix, jp_proj_matrix, 10, 1000)
+
+print(poliedro_teste.prism_in_SRT)
+poliedro_teste.crop_to_screen(300, 1000, 200, 600)
