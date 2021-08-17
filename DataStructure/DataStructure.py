@@ -1,10 +1,10 @@
 from normal_test import normal_test
 from Matrices.prism import create_prism
 from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
-from DataStructure.normal_test import normal_test
-from DataStructure.Matrices.prism import create_prism
-from DataStructure.Matrices.pipeline import SRC_matrix, pipeline_steps
-from DataStructure.Matrices.transforms import translation, scaleAlongAxis, rotXAlongAxis, rotYAlongAxis, rotZAlongAxis
+#from DataStructure.normal_test import normal_test
+#from DataStructure.Matrices.prism import create_prism
+#from DataStructure.Matrices.pipeline import SRC_matrix, pipeline_steps
+#from DataStructure.Matrices.transforms import translation, scaleAlongAxis, rotXAlongAxis, rotYAlongAxis, rotZAlongAxis
 #from normal_test import normal_test
 import numpy as np
 import copy
@@ -73,13 +73,11 @@ class Object():
         self.prism_in_SRU = rotZAlongAxis(self.prism_in_SRU, rotationValue)
         
 
-    def getCoordinates(self, face_SRU):
+    def getCoordinates(self, viewport_face_idx):
         list = []
-        for i in range(len(self.faces[face_SRU])):
-            vertex_in_SRU = self.faces[face_SRU][i]
-            vertex_in_SRT = np.arange(self.sides * 2)[self.draw_vertex].tolist().index(vertex_in_SRU)
-            list.append(int(self.prism_in_SRT[0][vertex_in_SRT]))
-            list.append(int(self.prism_in_SRT[1][vertex_in_SRT]))     
+        for i in range(len(self.viewport_faces[viewport_face_idx])):
+            list.append(int(self.viewport_faces[viewport_face_idx][0,i]))
+            list.append(int(self.viewport_faces[viewport_face_idx][1,i]))     
         return list
 
     def normalVisualizationTest(self, n):
@@ -110,7 +108,6 @@ class Object():
 
         for i in range(self.numberFaces):
             if self.draw_faces[i]:
-                print(f"i:{i}")
                 face = self.faces[i]
                 len_face = len(face)
                 #l1 = self.create_l1(face, len_face, boolean_mask, u_min, u_max, v_min, v_max)
@@ -242,3 +239,4 @@ elif obejeto=="quadradao":
 
 print(poliedro_teste.prism_in_SRT)
 poliedro_teste.crop_to_screen(300, 1000, 200, 600)
+print(poliedro_teste.viewport_faces)

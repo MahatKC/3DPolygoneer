@@ -204,9 +204,8 @@ class Screen():
         self.objects.append(new_obj) 
         self.objectsInCanvas.append([])
         
-        for i in range(new_obj.numberFaces):
-            if(new_obj.draw_faces[i]):
-                self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(i), outline='blue', fill='light blue', width = 2, tags = "objeto"))
+        for viewport_face_idx in range(new_obj.viewport_faces):
+            self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(viewport_face_idx), outline='blue', fill='light blue', width = 2, tags = "objeto"))
         
         self.numberObjects += 1
     
