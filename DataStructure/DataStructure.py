@@ -75,9 +75,9 @@ class Object():
 
     def getCoordinates(self, viewport_face_idx):
         list = []
-        for i in range(len(self.viewport_faces[viewport_face_idx])):
-            list.append(int(self.viewport_faces[viewport_face_idx][0,i]))
-            list.append(int(self.viewport_faces[viewport_face_idx][1,i]))     
+        for i in range(np.shape(self.viewport_faces[viewport_face_idx])[1]):
+            list.append(round(self.viewport_faces[viewport_face_idx][0,i]))
+            list.append(round(self.viewport_faces[viewport_face_idx][1,i]))     
         return list
 
     def normalVisualizationTest(self, n):
@@ -136,7 +136,7 @@ class Object():
                             face_vertices[:,v2_idx] = self.get_intersection_coordinate(face_vertices[:,v2_idx], face_vertices[:,v1_idx], viewport_edge<2, borders[viewport_edge])
                             boolean_mask[viewport_edge,v2_idx]=0
 
-        return face_vertices
+        return face_vertices[:,face]
 
     def create_l1(self, face, len_face, boolean_mask, u_min, u_max, v_min, v_max):
         l1=[]
@@ -240,3 +240,6 @@ elif obejeto=="quadradao":
 print(poliedro_teste.prism_in_SRT)
 poliedro_teste.crop_to_screen(300, 1000, 200, 600)
 print(poliedro_teste.viewport_faces)
+for viewport_face_idx in range(len(poliedro_teste.viewport_faces)):
+    print(poliedro_teste.getCoordinates(viewport_face_idx))
+        
