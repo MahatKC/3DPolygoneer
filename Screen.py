@@ -141,6 +141,7 @@ class Screen():
         for object in range(self.numberObjects):
             self.objects[object].normalVisualizationTest(self.n)
             self.objects[object].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+            self.objects[object].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
         
         self.Draw()
 
@@ -157,6 +158,8 @@ class Screen():
         self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='black', width = 2, tags = "objeto")
         for objects in range(self.numberObjects): # gerar uma lista com a ordem de todos os objetos em Z
             self.objectsInCanvas.append([])
+            print("ola")
+            print(len(self.objects[objects].viewport_faces))
             for viewport_face_idx in range(len(self.objects[objects].viewport_faces)):
                 self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline='blue', fill='light blue', width = 2, tags = "objeto"))
 
@@ -165,6 +168,7 @@ class Screen():
             self.objects[self.objectSelected].translation(valueX, valueY, valueZ)
             self.objects[self.objectSelected].normalVisualizationTest(self.n)
             self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+            self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
             self.Draw()
     
     def scaleObject(self, Sx, Sy, Sz):
@@ -172,6 +176,7 @@ class Screen():
             self.objects[self.objectSelected].scale(Sx, Sy, Sz)
             self.objects[self.objectSelected].normalVisualizationTest(self.n)
             self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+            self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
             self.Draw()
 
     def rotObjectX(self, rotationValue):
@@ -179,6 +184,7 @@ class Screen():
             self.objects[self.objectSelected].rotationX(rotationValue)
             self.objects[self.objectSelected].normalVisualizationTest(self.n)
             self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+            self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
             self.Draw()
 
     def rotObjectY(self, rotationValue):
@@ -186,6 +192,7 @@ class Screen():
             self.objects[self.objectSelected].rotationY(rotationValue)
             self.objects[self.objectSelected].normalVisualizationTest(self.n)
             self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+            self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
             self.Draw()
 
     def rotObjectZ(self, rotationValue):
@@ -193,6 +200,7 @@ class Screen():
             self.objects[self.objectSelected].rotationZ(rotationValue)
             self.objects[self.objectSelected].normalVisualizationTest(self.n)
             self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+            self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
             self.Draw()
 
     def AddObjects(self, r_bottom, r_top, sides, h):
@@ -212,5 +220,6 @@ class Screen():
         new_obj = Object(0, 0, 0, h, r_bottom, r_top, sides) # alterar o X, Y e Z para pegar o do objeto atual
         new_obj.normalVisualizationTest(self.n)
         new_obj.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+        new_obj.crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
         self.objects[self.objectSelected] = new_obj 
         self.Draw()

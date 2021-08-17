@@ -127,7 +127,6 @@ def ClearScreen():
     drawing.ClearAll()
 
 def SendUI(values): # PEGAR VALORES DO PIPELINE E ATUALIZAR NAS INFORMAÇÕES DO OBJETO
-    print(values)
     txtNumLados.delete(0, tk.END)
     txtNumLados.insert(0, str(values[0]))
     txtRaioBase.delete(0, tk.END)

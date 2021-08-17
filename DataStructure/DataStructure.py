@@ -221,7 +221,7 @@ class Object():
         return np.array([x,y,z,1])
 
 
-obejeto = "quadradao"
+"""obejeto = "quadradao"
 
 if obejeto == "quina":
     poliedro_teste = Object(0, 0, 0, 10, 10, 10, 10)
@@ -240,5 +240,5 @@ print(poliedro_teste.prism_in_SRT)
 poliedro_teste.crop_to_screen(300, 1000, 200, 600)
 print(poliedro_teste.viewport_faces)
 for viewport_face_idx in range(len(poliedro_teste.viewport_faces)):
-    print(poliedro_teste.getCoordinates(viewport_face_idx))
+    print(poliedro_teste.getCoordinates(viewport_face_idx))"""
         
