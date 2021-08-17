@@ -97,6 +97,7 @@ class Object():
     def crop_to_screen(self, u_min, u_max, v_min, v_max):
         self.zeroed_SRT = np.zeros((4,self.sides*2))+np.array([[u_min],[v_min],[0],[0]])
         self.zeroed_SRT[:,self.draw_vertex] = self.prism_in_SRT[:,:]
+        self.viewport_faces = []
         
         v0 = self.zeroed_SRT[0,:]<u_min
         v1 = self.zeroed_SRT[0,:]>u_max
