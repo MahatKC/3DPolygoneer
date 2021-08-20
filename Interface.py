@@ -2,7 +2,7 @@
 from DataStructure.Matrices.transforms import translation
 from shutil import disk_usage
 #from _pytest.store import D
-from tkscrolledframe import ScrolledFrame
+from tkscrolledframe import ScrolledFrame, widget
 from Screen import Screen
 import tkinter as tk
 from tkinter import Canvas, Frame, Scrollbar, ttk
@@ -214,11 +214,12 @@ def rot_y_down(event):
     SendUI(drawing.GetAttributes())
 
 def SelectingObject(event):
-    if event.widget.find_withtag("current"):
+    print
+    if event.widget.gettags("current")[0] == "objeto":
         object = drawing.ObjectSelection(drawing.canvas.find_withtag("current")[0])
         SendUI(drawing.GetAttributes())
         for i in object:
-            drawing.canvas.itemconfig(i, fill='red')
+            drawing.canvas.itemconfig(i, outline='red')
             #drawing.canvas.coords(i, [30, 30, 50, 80, 100, 100, 200, 200, 420, 100]) #readapta as coordenadas de cada face do objeto
     else:
         drawing.objectSelected = None

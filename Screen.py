@@ -6,9 +6,11 @@ import numpy as np
 np.set_printoptions(precision=6)
 np.set_printoptions(suppress=True)
 from tkinter import *
+import random
 # apagar também das listas quando trabalhar com os objetos
 class Screen():
     def __init__(self, frame, width, height):
+        self.polygonsColors = ['#F54C99', '#FF4FF8', '#C354E8', '#A34FFF', '#6E4CF5']
         self.isPerspective = False
 
         self.maxXviewPort = int(width)
@@ -47,7 +49,7 @@ class Screen():
         self.numberObjects = 0
         self.canvas = Canvas(frame, width = self.maxXviewPort, height = self.maxYviewPort, bg = "white")
         self.objectSelected = None 
-        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='black', width = 3, tags = "objeto")
+        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline= "#CCCCCC", fill= "#CCCCCC", width = 3)
      
         self.DefineAxis()
 
@@ -57,15 +59,12 @@ class Screen():
         axis.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
         #axis.translation(-25, -25, 0)
         #axis.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
-        x = int(axis.axisSRT[0][0] - int(self.maxXviewPort * 0.07))
-        y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.93))
-        print(x)
-        print(y)
-        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][1] - x, axis.axisSRT[1][1] - y, fill='#FF0000', width = 5)
-        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][2] - x, axis.axisSRT[1][2] - y, fill='#00FF00', width = 5)
-        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][3] - x, axis.axisSRT[1][3] - y, fill='#0000FF', width = 5)
+        #x = int(axis.axisSRT[0][0] - int(self.maxXviewPort * 0.07))
+        #y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.93))
+        self.canvas.create_line(axis.axisSRT[0][0], axis.axisSRT[1][0], axis.axisSRT[0][1], axis.axisSRT[1][1], fill='#FF0000', width = 5)
+        self.canvas.create_line(axis.axisSRT[0][0], axis.axisSRT[1][0], axis.axisSRT[0][2], axis.axisSRT[1][2], fill='#00FF00', width = 5)
+        self.canvas.create_line(axis.axisSRT[0][0], axis.axisSRT[1][0], axis.axisSRT[0][3], axis.axisSRT[1][3], fill='#0000FF', width = 5)
         
-
     def deleteObject(self, face):
         for i in range(0, self.numberObjects):
             if face in self.objects[i]:
@@ -165,7 +164,7 @@ class Screen():
         self.canvas.delete(ALL)
         self.objects.clear()
         self.objectsInCanvas.clear()
-        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='black', width = 2, tags = "objeto")
+        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline= "#CCCCCC", fill="#CCCCCC", width = 2)
         self.numberObjects = 0
         
         self.DefineAxis()
@@ -173,11 +172,11 @@ class Screen():
     def Draw(self):
         self.canvas.delete(ALL)
         self.objectsInCanvas.clear()
-        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='black', width = 2, tags = "objeto")
+        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline="#CCCCCC", fill="#CCCCCC", width = 2)
         for objects in range(self.numberObjects): # gerar uma lista com a ordem de todos os objetos em Z
             self.objectsInCanvas.append([])
             for viewport_face_idx in range(len(self.objects[objects].viewport_faces)):
-                self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline='blue', fill='light blue', width = 2, tags = "objeto"))
+                self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= random.choice(self.polygonsColors), fill=random.choice(self.polygonsColors), width = 2, tags = "objeto"))
         
         self.DefineAxis()
 
@@ -230,7 +229,7 @@ class Screen():
         self.objectsInCanvas.append([])
         
         for viewport_face_idx in range(len(new_obj.viewport_faces)):
-            self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(viewport_face_idx), outline='blue', fill='light blue', width = 2, tags = "objeto"))
+            self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(viewport_face_idx), outline= random.choice(self.polygonsColors), fill= random.choice(self.polygonsColors), width = 2, tags = "objeto"))
  
         self.numberObjects += 1
     
