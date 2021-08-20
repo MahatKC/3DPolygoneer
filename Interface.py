@@ -18,11 +18,11 @@ class VerticalScrolledFrame:
         self.vsb = tk.Scrollbar(self.outer, orient=tk.VERTICAL)
         self.vsb.pack(fill=tk.Y, side=tk.RIGHT) 
         if(janela == 0):
-            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width = width, height = int(height * 0.13) , bg=bg)
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width = width, height = int(height * 0.172) , bg=bg)
         if(janela == 1):
-            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width = width, height = int(height * 0.41), bg=bg)
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width = width, height = int(height * 0.38), bg=bg)
         if(janela == 2):
-            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width= width, height= int(height * 0.36), bg=bg)
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width= width, height= int(height * 0.34), bg=bg)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.canvas['yscrollcommand'] = self.vsb.set
 
@@ -334,11 +334,14 @@ def criarIluminacao(sombreamento, ka, kd, ks, n):
 if __name__ == "__main__":
     window = tk.Tk()
     window.title('The Marvelous Polygoneer')
-    width = window.winfo_screenwidth()  
-    height = window.winfo_screenheight()
-    #window.geometry("1280x720") 
-    #window.resizable(0, 0)
-    window.state('zoomed')
+    #widthTela = window.winfo_screenwidth()  
+    #heightTela = window.winfo_screenheight()
+    width = 1280
+    height = 750
+    #window.geometry("1280x690") 
+    window.geometry('{}x{}+{}+{}'.format(1280, 690, 0, 0))
+    window.resizable(0, 0)
+    #window.state('normal')
     # Fazendo Frame
     frameDrawingInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = int(width*0.7), height = int(height*0.88))
     frameDrawingInterface.place(x = int(width*0.01), y = int(height * 0.01)) 
