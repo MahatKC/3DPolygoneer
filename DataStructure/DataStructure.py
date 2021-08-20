@@ -36,7 +36,6 @@ class Object():
         self.vertexFaces = []
         self.draw_vertex = [False]*sides*2
         self.numberFaces = sides + 2
-
         sides_minus_one = sides*2-1
         for f in range(0, sides):
             complement_of_next = (f+1)%sides

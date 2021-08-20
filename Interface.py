@@ -336,6 +336,8 @@ if __name__ == "__main__":
     window.title('The Marvelous Polygoneer')
     width = window.winfo_screenwidth()  
     height = window.winfo_screenheight()
+    #window.geometry("1280x720") 
+    #window.resizable(0, 0)
     window.state('zoomed')
     # Fazendo Frame
     frameDrawingInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = int(width*0.7), height = int(height*0.88))

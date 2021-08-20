@@ -1,5 +1,6 @@
 #from exemplo_prova import exemplo_prova
 from DataStructure.DataStructure import Object
+from DataStructure.Axis import Axis
 from DataStructure.Matrices.pipeline import first_pipeline, VRP_and_n, pipeline_steps
 import numpy as np 
 np.set_printoptions(precision=6)
@@ -47,8 +48,23 @@ class Screen():
         self.canvas = Canvas(frame, width = self.maxXviewPort, height = self.maxYviewPort, bg = "white")
         self.objectSelected = None 
         self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='black', width = 3, tags = "objeto")
-    
-        #self.x = self.canvas.create_line(50, 500, 100, 50, fill="red")
+     
+        self.DefineAxis()
+
+    def DefineAxis(self):
+        axis = Axis()
+        
+        axis.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+        #axis.translation(-25, -25, 0)
+        #axis.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+        x = int(axis.axisSRT[0][0] - int(self.maxXviewPort * 0.07))
+        y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.93))
+        print(x)
+        print(y)
+        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][1] - x, axis.axisSRT[1][1] - y, fill='#FF0000', width = 5)
+        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][2] - x, axis.axisSRT[1][2] - y, fill='#00FF00', width = 5)
+        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][3] - x, axis.axisSRT[1][3] - y, fill='#0000FF', width = 5)
+        
 
     def deleteObject(self, face):
         for i in range(0, self.numberObjects):
@@ -151,6 +167,8 @@ class Screen():
         self.objectsInCanvas.clear()
         self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='black', width = 2, tags = "objeto")
         self.numberObjects = 0
+        
+        self.DefineAxis()
 
     def Draw(self):
         self.canvas.delete(ALL)
@@ -158,10 +176,10 @@ class Screen():
         self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='black', width = 2, tags = "objeto")
         for objects in range(self.numberObjects): # gerar uma lista com a ordem de todos os objetos em Z
             self.objectsInCanvas.append([])
-            print("ola")
-            print(len(self.objects[objects].viewport_faces))
             for viewport_face_idx in range(len(self.objects[objects].viewport_faces)):
                 self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline='blue', fill='light blue', width = 2, tags = "objeto"))
+        
+        self.DefineAxis()
 
     def moveObject(self, valueX, valueY, valueZ):
         if(self.objectSelected is not None):
