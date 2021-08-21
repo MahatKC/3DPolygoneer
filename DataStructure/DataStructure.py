@@ -1,10 +1,10 @@
-#from normal_test import normal_test
-#from Matrices.prism import create_prism
-#from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
-from DataStructure.normal_test import normal_test
-from DataStructure.Matrices.prism import create_prism
-from DataStructure.Matrices.pipeline import  VRP_and_n, first_pipeline, SRC_matrix, pipeline_steps
-from DataStructure.Matrices.transforms import translation, scaleAlongAxis, rotXAlongAxis, rotYAlongAxis, rotZAlongAxis
+from normal_test import normal_test
+from Matrices.prism import create_prism
+from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
+#from DataStructure.normal_test import normal_test
+#from DataStructure.Matrices.prism import create_prism
+#from DataStructure.Matrices.pipeline import  VRP_and_n, first_pipeline, SRC_matrix, pipeline_steps
+#from DataStructure.Matrices.transforms import translation, scaleAlongAxis, rotXAlongAxis, rotYAlongAxis, rotZAlongAxis
 import numpy as np
 import copy
 np.set_printoptions(precision=6)
@@ -95,109 +95,92 @@ class Object():
         self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
     
     def crop_to_screen(self, u_min, u_max, v_min, v_max):
-        self.zeroed_SRT = np.zeros((4,self.sides*2))+np.array([[u_min],[v_min],[0],[0]])
-        self.zeroed_SRT[:,self.draw_vertex] = self.prism_in_SRT[:,:]
+        #self.zeroed_SRT = np.zeros((4,self.sides*2))+np.array([[u_min],[v_min],[0],[0]])
+        #self.zeroed_SRT[:,self.draw_vertex] = self.prism_in_SRT[:,:]
         self.viewport_faces = []
         
-        v0 = self.zeroed_SRT[0,:]<u_min
-        v1 = self.zeroed_SRT[0,:]>u_max
-        v2 = self.zeroed_SRT[1,:]>v_max
-        v3 = self.zeroed_SRT[1,:]<v_min
+        v0 = self.prism_in_SRT[0,:]<u_min
+        v1 = self.prism_in_SRT[0,:]>u_max
+        v2 = self.prism_in_SRT[1,:]>v_max
+        v3 = self.prism_in_SRT[1,:]<v_min
         vfinal = np.any((v0,v1,v2,v3),axis=0)
         boolean_mask = np.stack((v0,v1,v2,v3,vfinal),axis=0)
 
         for i in range(self.numberFaces):
             if self.draw_faces[i]:
                 face = self.faces[i]
-                len_face = len(face)
                 #l1 = self.create_l1(face, len_face, boolean_mask, u_min, u_max, v_min, v_max)
-                self.viewport_faces.append(self.sutherland_hodgeman(face, len_face, boolean_mask, u_min, u_max, v_min, v_max))
+                self.viewport_faces.append(self.sutherland_hodgeman(face, u_min, u_max, v_min, v_max))
                 
         pass
 
-    def sutherland_hodgeman(self, face, len_face, boolean_mask, u_min, u_max, v_min, v_max):
-        face_vertices = copy.deepcopy(self.zeroed_SRT)
+    def get_boolean_line(self, vertex, borders):
+        v0 = vertex[0,0]<borders[0]
+        v1 = vertex[0,0]>borders[1]
+        v3 = vertex[1,0]>borders[2]
+        v2 = vertex[1,0]<borders[3]
+        vfinal = np.any((v0,v1,v2,v3),axis=0)
+        boolean_mask = np.stack((v0,v1,v2,v3,vfinal),axis=0)
+
+        return boolean_mask[:,np.newaxis]
+    
+    def sutherland_hodgeman(self, face, u_min, u_max, v_min, v_max):
+        v0 = self.prism_in_SRT[0,face]<u_min
+        v1 = self.prism_in_SRT[0,face]>u_max
+        v2 = self.prism_in_SRT[1,face]>v_max
+        v3 = self.prism_in_SRT[1,face]<v_min
+        vfinal = np.any((v0,v1,v2,v3),axis=0)
+        boolean_mask = np.stack((v0,v1,v2,v3,vfinal),axis=0)
+        
+        face_vertices = copy.deepcopy(self.prism_in_SRT[face])
+
         borders = [u_min, u_max, v_max, v_min]
+        len_face = len(face)
         for viewport_edge in range(4):
             if np.any(boolean_mask[viewport_edge,:]):
+                new_face_vertices = np.empty((4,0))
+                new_boolean_mask = np.empty((5,0))
                 for i in range(len_face):
                     j=(i+1)%len_face
-                    v1_idx = face[i]
-                    v2_idx = face[j]
+                    v1_idx = i
+                    v2_idx = j
+                    v1_out = boolean_mask[viewport_edge,i]
+                    v2_out = boolean_mask[viewport_edge,j]
 
-                    v1_out = boolean_mask[viewport_edge,v1_idx]
-                    v2_out = boolean_mask[viewport_edge,v2_idx]
+                    #print(f"i,j {i,j}")
 
                     if v1_out!=v2_out:
+                        #print("diff")
                         if v1_out:
-                            face_vertices[:,v1_idx] = self.get_intersection_coordinate(face_vertices[:,v1_idx], face_vertices[:,v2_idx], viewport_edge<2, borders[viewport_edge])
-                            boolean_mask[viewport_edge,v1_idx]=0
+                            new_vertex=self.get_intersection_coordinate(face_vertices[:,v1_idx], face_vertices[:,v2_idx], viewport_edge<2, borders[viewport_edge])
+                            new_face_vertices=np.append(new_face_vertices,new_vertex,axis=1)
+                            new_face_vertices=np.append(new_face_vertices,face_vertices[:,v2_idx][:,np.newaxis],axis=1)
+                            new_boolean_mask=np.concatenate((new_boolean_mask,self.get_boolean_line(new_vertex,borders)),axis=1)
+                            new_boolean_mask=np.concatenate((new_boolean_mask,boolean_mask[:,j][:,np.newaxis]),axis=1)
                         else:
-                            face_vertices[:,v2_idx] = self.get_intersection_coordinate(face_vertices[:,v2_idx], face_vertices[:,v1_idx], viewport_edge<2, borders[viewport_edge])
-                            boolean_mask[viewport_edge,v2_idx]=0
+                            new_vertex=self.get_intersection_coordinate(face_vertices[:,v2_idx], face_vertices[:,v1_idx], viewport_edge<2, borders[viewport_edge])
+                            new_face_vertices=np.append(new_face_vertices,new_vertex,axis=1)
+                            new_boolean_mask=np.concatenate((new_boolean_mask,self.get_boolean_line(new_vertex,borders)),axis=1)
+                        
+                        #print("---")
+                        #print(new_vertex)
+                        #print("---")
+                            
+                        
+                    else:
+                        new_face_vertices=np.append(new_face_vertices,face_vertices[:,v2_idx][:,np.newaxis],axis=1)
+                        new_boolean_mask=np.concatenate((new_boolean_mask,boolean_mask[:,j][:,np.newaxis]),axis=1)
+                        
+                    
+                    #print(np.shape(new_face_vertices))
 
-        return face_vertices[:,face]
+                face_vertices=new_face_vertices
+                len_face = np.shape(new_face_vertices)[1]
+                boolean_mask=new_boolean_mask
+            #else:
 
-    def create_l1(self, face, len_face, boolean_mask, u_min, u_max, v_min, v_max):
-        l1=[]
-        for i in range(len_face):
-            if i==len_face-1:
-                j=0
-            else:
-                j=i+1
 
-            v1_idx = face[i]
-            v2_idx = face[j]
-            
-            l1.append(self.zeroed_SRT[:,v1_idx])
-            #não estão na mesma região nem estão de um mesmo lado de fora
-
-            if not np.array_equal(boolean_mask[:,v1_idx],boolean_mask[:,v2_idx]) and (not np.any(np.logical_and(boolean_mask[:4,v1_idx],boolean_mask[:4,v2_idx]))):
-                print("entrou if")
-                #um dentro, outro fora (iguais ja verificado acima)
-                if boolean_mask[3,v1_idx]==0 or boolean_mask[3,v2_idx]==0:
-                    point = self.get_intersection_point(boolean_mask, v1_idx, v2_idx, u_min, u_max, v_min, v_max)
-                    if np.shape(point)[0]>1:
-                        l1.append(point)
-                #um de cada lado, fora
-                else:
-                    point = self.get_intersection_point(boolean_mask, v1_idx, v2_idx, u_min, u_max, v_min, v_max)
-                    if np.shape(point)[0]>1:
-                        l1.append(point)
-                        l1.append(self.get_intersection_point(boolean_mask, v2_idx, v1_idx, u_min, u_max, v_min, v_max))
-
-        return l1
-
-    def get_intersection_point(self, boolean_mask, v1, v2, u_min, u_max, v_min, v_max):
-        found_it = False
-        if boolean_mask[0,v1]:
-            intersect_point, z_value = self.get_intersection_coordinate(self.zeroed_SRT[:,v1], self.zeroed_SRT[:,v2], True, u_min)
-            if intersect_point > v_min and intersect_point < v_max:
-                found_it = True
-                return np.array([[u_min-1],[intersect_point],[z_value],[1]])
-        elif boolean_mask[1,v1] and not found_it:
-            intersect_point, z_value = self.get_intersection_coordinate(self.zeroed_SRT[:,v1], self.zeroed_SRT[:,v2], True, u_max)
-            print("1")
-            print(intersect_point, z_value)
-            if intersect_point > v_min and intersect_point < v_max:
-                found_it = True
-                return np.array([[u_max+1],[intersect_point],[z_value],[1]])
-        elif boolean_mask[2,v1] and not found_it:
-            intersect_point, z_value = self.get_intersection_coordinate(self.zeroed_SRT[:,v1], self.zeroed_SRT[:,v2], False, v_min)
-            print("2")
-            print(intersect_point, z_value)
-            if intersect_point > u_min and intersect_point < u_max:
-                found_it = True
-                return np.array([[intersect_point],[v_max+1],[z_value],[1]])
-        elif boolean_mask[3,v1] and not found_it:
-            intersect_point, z_value = self.get_intersection_coordinate(self.zeroed_SRT[:,v1], self.zeroed_SRT[:,v2], False, v_max)
-            print("3")
-            print(intersect_point, z_value)
-            if intersect_point > u_min and intersect_point < u_max:
-                found_it = True
-                return np.array([[intersect_point],[v_min-1],[z_value],[1]])
-        else:
-            return np.array([0])
+        return new_face_vertices
 
     def get_intersection_coordinate(self, vert1, vert2, is_border_vertical, border_value):
         x1 = vert1[0]
@@ -219,9 +202,9 @@ class Object():
             y = border_value
             z = z1 + (z2_min_z1*x/x2_min_x1)
 
-        return np.array([x,y,z,1])
+        return np.array([[x],[y],[z],[1]])
 
-
+"""
 obejeto = "quadradao"
 
 if obejeto == "quina":
@@ -231,15 +214,18 @@ if obejeto == "quina":
     SRC_matrix, jp_proj_matrix = first_pipeline(VRP, n, 0, 1, 0, False, 50, -40, -15, -40, 15, 300, 1000, 200, 600)
     poliedro_teste.pipeline_me(SRC_matrix, jp_proj_matrix, 10, 1000)
 elif obejeto=="quadradao":
-    poliedro_teste = Object(0, 0, 0, 15, 15, 110, 4)
+    poliedro_teste = Object(0, 0, 0, 15, 15, 60, 4)
     VRP,n = VRP_and_n(0, 0, 1000, 2, 1, 3)
     poliedro_teste.normalVisualizationTest(n)
-    SRC_matrix, jp_proj_matrix = first_pipeline(VRP, n, 0, 1, 0, False, 50, -50, 40, -40, 30, 300, 1000, 200, 600)
+    #SRC_matrix, jp_proj_matrix = first_pipeline(VRP, n, 0, 1, 0, False, 50, -50, 40, -40, 30, 300, 1000, 200, 600)
+    SRC_matrix, jp_proj_matrix = first_pipeline(VRP, n, 0, 1, 0, False, 50, -50, 40, -40, 30, 150, 1250, 0, 850)
     poliedro_teste.pipeline_me(SRC_matrix, jp_proj_matrix, 10, 1000)
 
 print(poliedro_teste.prism_in_SRT)
-poliedro_teste.crop_to_screen(300, 1000, 200, 600)
+#poliedro_teste.crop_to_screen(300, 1000, 200, 600) -> all outside, no intersection
+poliedro_teste.crop_to_screen(150, 1250, 0, 850) #all outside, all intersections
 print(poliedro_teste.viewport_faces)
-for viewport_face_idx in range(len(poliedro_teste.viewport_faces)):
-    print(poliedro_teste.getCoordinates(viewport_face_idx))
-        
+
+#for viewport_face_idx in range(len(poliedro_teste.viewport_faces)):
+#    print(poliedro_teste.getCoordinates(viewport_face_idx))
+"""
