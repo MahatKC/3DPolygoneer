@@ -1,13 +1,16 @@
 #from exemplo_prova import exemplo_prova
 from DataStructure.DataStructure import Object
+from DataStructure.Axis import Axis
 from DataStructure.Matrices.pipeline import first_pipeline, VRP_and_n, pipeline_steps
 import numpy as np 
 np.set_printoptions(precision=6)
 np.set_printoptions(suppress=True)
 from tkinter import *
+import random
 # apagar também das listas quando trabalhar com os objetos
 class Screen():
     def __init__(self, frame, width, height):
+        self.polygonsColors = ['#F54C99', '#FF4FF8', '#C354E8', '#A34FFF', '#6E4CF5']
         self.isPerspective = False
 
         self.maxXviewPort = int(width)
@@ -46,10 +49,22 @@ class Screen():
         self.numberObjects = 0
         self.canvas = Canvas(frame, width = self.maxXviewPort, height = self.maxYviewPort, bg = "white")
         self.objectSelected = None 
-        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='black', width = 3, tags = "objeto")
-    
-        #self.x = self.canvas.create_line(50, 500, 100, 50, fill="red")
+        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline= "#CCCCCC", fill= "#CCCCCC", width = 3)
+     
+        self.DefineAxis()
 
+    def DefineAxis(self):
+        axis = Axis()
+        
+        axis.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+        #axis.translation(-25, -25, 0)
+        #axis.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+        #x = int(axis.axisSRT[0][0] - int(self.maxXviewPort * 0.07))
+        #y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.93))
+        self.canvas.create_line(axis.axisSRT[0][0], axis.axisSRT[1][0], axis.axisSRT[0][1], axis.axisSRT[1][1], fill='#FF0000', width = 5)
+        self.canvas.create_line(axis.axisSRT[0][0], axis.axisSRT[1][0], axis.axisSRT[0][2], axis.axisSRT[1][2], fill='#00FF00', width = 5)
+        self.canvas.create_line(axis.axisSRT[0][0], axis.axisSRT[1][0], axis.axisSRT[0][3], axis.axisSRT[1][3], fill='#0000FF', width = 5)
+        
     def deleteObject(self, face):
         for i in range(0, self.numberObjects):
             if face in self.objects[i]:
@@ -141,6 +156,7 @@ class Screen():
         for object in range(self.numberObjects):
             self.objects[object].normalVisualizationTest(self.n)
             self.objects[object].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+            self.objects[object].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
         
         self.Draw()
 
@@ -148,23 +164,28 @@ class Screen():
         self.canvas.delete(ALL)
         self.objects.clear()
         self.objectsInCanvas.clear()
-        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='black', width = 2, tags = "objeto")
+        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline= "#CCCCCC", fill="#CCCCCC", width = 2)
         self.numberObjects = 0
+        
+        self.DefineAxis()
 
     def Draw(self):
         self.canvas.delete(ALL)
         self.objectsInCanvas.clear()
-        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline='black', fill='black', width = 2, tags = "objeto")
+        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline="#CCCCCC", fill="#CCCCCC", width = 2)
         for objects in range(self.numberObjects): # gerar uma lista com a ordem de todos os objetos em Z
             self.objectsInCanvas.append([])
             for viewport_face_idx in range(len(self.objects[objects].viewport_faces)):
-                self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline='blue', fill='light blue', width = 2, tags = "objeto"))
+                self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= random.choice(self.polygonsColors), fill=random.choice(self.polygonsColors), width = 2, tags = "objeto"))
+        
+        self.DefineAxis()
 
     def moveObject(self, valueX, valueY, valueZ):
         if(self.objectSelected is not None):
             self.objects[self.objectSelected].translation(valueX, valueY, valueZ)
             self.objects[self.objectSelected].normalVisualizationTest(self.n)
             self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+            self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
             self.Draw()
     
     def scaleObject(self, Sx, Sy, Sz):
@@ -172,6 +193,7 @@ class Screen():
             self.objects[self.objectSelected].scale(Sx, Sy, Sz)
             self.objects[self.objectSelected].normalVisualizationTest(self.n)
             self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+            self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
             self.Draw()
 
     def rotObjectX(self, rotationValue):
@@ -179,6 +201,7 @@ class Screen():
             self.objects[self.objectSelected].rotationX(rotationValue)
             self.objects[self.objectSelected].normalVisualizationTest(self.n)
             self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+            self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
             self.Draw()
 
     def rotObjectY(self, rotationValue):
@@ -186,6 +209,7 @@ class Screen():
             self.objects[self.objectSelected].rotationY(rotationValue)
             self.objects[self.objectSelected].normalVisualizationTest(self.n)
             self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+            self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
             self.Draw()
 
     def rotObjectZ(self, rotationValue):
@@ -193,6 +217,7 @@ class Screen():
             self.objects[self.objectSelected].rotationZ(rotationValue)
             self.objects[self.objectSelected].normalVisualizationTest(self.n)
             self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+            self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
             self.Draw()
 
     def AddObjects(self, r_bottom, r_top, sides, h):
@@ -204,7 +229,7 @@ class Screen():
         self.objectsInCanvas.append([])
         
         for viewport_face_idx in range(len(new_obj.viewport_faces)):
-            self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(viewport_face_idx), outline='blue', fill='light blue', width = 2, tags = "objeto"))
+            self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(viewport_face_idx), outline= random.choice(self.polygonsColors), fill= random.choice(self.polygonsColors), width = 2, tags = "objeto"))
  
         self.numberObjects += 1
     
@@ -212,5 +237,6 @@ class Screen():
         new_obj = Object(0, 0, 0, h, r_bottom, r_top, sides) # alterar o X, Y e Z para pegar o do objeto atual
         new_obj.normalVisualizationTest(self.n)
         new_obj.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+        new_obj.crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
         self.objects[self.objectSelected] = new_obj 
         self.Draw()

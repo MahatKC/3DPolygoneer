@@ -2,7 +2,7 @@
 from DataStructure.Matrices.transforms import translation
 from shutil import disk_usage
 #from _pytest.store import D
-from tkscrolledframe import ScrolledFrame
+from tkscrolledframe import ScrolledFrame, widget
 from Screen import Screen
 import tkinter as tk
 from tkinter import Canvas, Frame, Scrollbar, ttk
@@ -18,11 +18,11 @@ class VerticalScrolledFrame:
         self.vsb = tk.Scrollbar(self.outer, orient=tk.VERTICAL)
         self.vsb.pack(fill=tk.Y, side=tk.RIGHT) 
         if(janela == 0):
-            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width = width, height = int(height * 0.13) , bg=bg)
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width = width, height = int(height * 0.172) , bg=bg)
         if(janela == 1):
-            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width = width, height = int(height * 0.41), bg=bg)
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width = width, height = int(height * 0.38), bg=bg)
         if(janela == 2):
-            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width= width, height= int(height * 0.36), bg=bg)
+            self.canvas = tk.Canvas(self.outer, highlightthickness=0, width= width, height= int(height * 0.34), bg=bg)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.canvas['yscrollcommand'] = self.vsb.set
 
@@ -127,7 +127,6 @@ def ClearScreen():
     drawing.ClearAll()
 
 def SendUI(values): # PEGAR VALORES DO PIPELINE E ATUALIZAR NAS INFORMAÇÕES DO OBJETO
-    print(values)
     txtNumLados.delete(0, tk.END)
     txtNumLados.insert(0, str(values[0]))
     txtRaioBase.delete(0, tk.END)
@@ -215,11 +214,12 @@ def rot_y_down(event):
     SendUI(drawing.GetAttributes())
 
 def SelectingObject(event):
-    if event.widget.find_withtag("current"):
+    print
+    if event.widget.gettags("current")[0] == "objeto":
         object = drawing.ObjectSelection(drawing.canvas.find_withtag("current")[0])
         SendUI(drawing.GetAttributes())
         for i in object:
-            drawing.canvas.itemconfig(i, fill='red')
+            drawing.canvas.itemconfig(i, outline='red')
             #drawing.canvas.coords(i, [30, 30, 50, 80, 100, 100, 200, 200, 420, 100]) #readapta as coordenadas de cada face do objeto
     else:
         drawing.objectSelected = None
@@ -335,9 +335,14 @@ def criarIluminacao(sombreamento, ka, kd, ks, n):
 if __name__ == "__main__":
     window = tk.Tk()
     window.title('The Marvelous Polygoneer')
-    width = window.winfo_screenwidth()  
-    height = window.winfo_screenheight()
-    window.state('zoomed')
+    #widthTela = window.winfo_screenwidth()  
+    #heightTela = window.winfo_screenheight()
+    width = 1280
+    height = 750
+    #window.geometry("1280x690") 
+    window.geometry('{}x{}+{}+{}'.format(1280, 690, 0, 0))
+    window.resizable(0, 0)
+    #window.state('normal')
     # Fazendo Frame
     frameDrawingInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = int(width*0.7), height = int(height*0.88))
     frameDrawingInterface.place(x = int(width*0.01), y = int(height * 0.01)) 
