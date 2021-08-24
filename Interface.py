@@ -143,87 +143,107 @@ rotationValue = 5
 
 def move_x_left(event):
     drawing.moveObject(-translationValue, 0, 0)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def move_x_right(event):
     drawing.moveObject(translationValue, 0, 0)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def move_z_front(event):
     drawing.moveObject(0, 0, translationValue)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+       SendUI(drawing.GetAttributes())
 
 def move_z_back(event):
     drawing.moveObject(0, 0, -translationValue)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def move_y_up(event):
     drawing.moveObject(0, translationValue, 0)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def move_y_down(event):
     drawing.moveObject(0, -translationValue, 0)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def scale_x_less(event):
     drawing.scaleObject(scaleLessValue, 1, 1)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def scale_x_more(event):
     drawing.scaleObject(scaleMoreValue, 1, 1)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def scale_z_less(event):
     drawing.scaleObject(1, 1, scaleLessValue)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def scale_z_more(event):
     drawing.scaleObject(1, 1, scaleMoreValue)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def scale_y_less(event):
     drawing.scaleObject(1, scaleLessValue, 1)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def scale_y_more(event):
     drawing.scaleObject(1, scaleMoreValue, 1)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def rot_x_left(event):
     drawing.rotObjectX(-rotationValue)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def rot_x_right(event):
     drawing.rotObjectX(rotationValue)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def rot_z_front(event):
     drawing.rotObjectZ(rotationValue)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def rot_z_back(event):
     drawing.rotObjectZ(-rotationValue)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def rot_y_up(event):
     drawing.rotObjectY(rotationValue)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def rot_y_down(event):
     drawing.rotObjectY(-rotationValue)
-    SendUI(drawing.GetAttributes())
+    if drawing.canvas.find_withtag("current"):
+        SendUI(drawing.GetAttributes())
 
 def SelectingObject(event):
-    print
-    if event.widget.gettags("current")[0] == "objeto":
-        object = drawing.ObjectSelection(drawing.canvas.find_withtag("current")[0])
-        SendUI(drawing.GetAttributes())
-        for i in object:
-            drawing.canvas.itemconfig(i, outline='red')
-            #drawing.canvas.coords(i, [30, 30, 50, 80, 100, 100, 200, 200, 420, 100]) #readapta as coordenadas de cada face do objeto
+    if drawing.canvas.find_withtag("current"):
+        if event.widget.gettags("current")[0] == "objeto":
+            object = drawing.ObjectSelection(drawing.canvas.find_withtag("current")[0])
+            SendUI(drawing.GetAttributes())
+            for i in object:
+                drawing.canvas.itemconfig(i, outline='red')
+                #drawing.canvas.coords(i, [30, 30, 50, 80, 100, 100, 200, 200, 420, 100]) #readapta as coordenadas de cada face do objeto
+        else:
+            drawing.objectSelected = None
     else:
         drawing.objectSelected = None
-    botaoObjeto(1, 2, 3)
+        botaoObjeto(1, 2, 3)
     
 def atualizarObjeto():
     numLados = int(isVazio(txtNumLados.get()))
