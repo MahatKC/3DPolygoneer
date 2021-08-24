@@ -97,23 +97,14 @@ class Object():
         self.zeroed_SRT = np.zeros((4,self.sides*2))+np.array([[u_min],[v_min],[0],[0]])
         self.zeroed_SRT[:,self.draw_vertex] = self.prism_in_SRT[:,:]
         self.viewport_faces = []
-        #print(self.prism_in_SRT)
-        #print(self.zeroed_SRT)
-        #print(self.numberFaces)
-        
-        #v0 = self.prism_in_SRT[0,:]<u_min
-        #v1 = self.prism_in_SRT[0,:]>u_max
-        #v2 = self.prism_in_SRT[1,:]>v_max
-        #v3 = self.prism_in_SRT[1,:]<v_min
-        #vfinal = np.any((v0,v1,v2,v3),axis=0)
-        #boolean_mask = np.stack((v0,v1,v2,v3,vfinal),axis=0)
 
+        print("\n"+"-"*10+"\n")
         for i in range(self.numberFaces):
             if self.draw_faces[i]:
                 face = self.faces[i]
                 #l1 = self.create_l1(face, len_face, boolean_mask, u_min, u_max, v_min, v_max)
                 
-                #print(str(i)+"huu")
+                print(f"Face {i}")
                 self.viewport_faces.append(self.sutherland_hodgeman(face, u_min, u_max, v_min, v_max))
         #print(self.viewport_faces)
         pass
@@ -141,10 +132,12 @@ class Object():
 
         borders = [u_min, u_max, v_max, v_min]
         len_face = len(face)
-        has_intersection = False
+        #has_intersection = False
+        new_face_vertices=self.zeroed_SRT[:,face] 
         for viewport_edge in range(4):
+            print(f"Viewport edge: {viewport_edge}")
             if np.any(boolean_mask[viewport_edge,:]):
-                has_intersection = True
+                #has_intersection = True
                 new_face_vertices = np.empty((4,0))
                 new_boolean_mask = np.empty((5,0))
                 for i in range(len_face):
@@ -175,8 +168,9 @@ class Object():
                             
                         
                     else:
-                        new_face_vertices=np.append(new_face_vertices,face_vertices[:,v2_idx][:,np.newaxis],axis=1)
-                        new_boolean_mask=np.concatenate((new_boolean_mask,boolean_mask[:,j][:,np.newaxis]),axis=1)
+                        if v1_out==0:
+                            new_face_vertices=np.append(new_face_vertices,face_vertices[:,v2_idx][:,np.newaxis],axis=1)
+                            new_boolean_mask=np.concatenate((new_boolean_mask,boolean_mask[:,j][:,np.newaxis]),axis=1)
                         
                     
                     #print(np.shape(new_face_vertices))
@@ -184,9 +178,9 @@ class Object():
                 face_vertices=new_face_vertices
                 len_face = np.shape(new_face_vertices)[1]
                 boolean_mask=new_boolean_mask
-            else:
-                if not has_intersection:
-                    new_face_vertices=self.zeroed_SRT[:,face] 
+            #else:
+            #    if not has_intersection:
+            #        new_face_vertices=self.zeroed_SRT[:,face] 
 
 
         return new_face_vertices
