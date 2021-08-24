@@ -120,6 +120,16 @@ class Object():
 
         return boolean_mask[:,np.newaxis]
     
+    def get_boolean_mask(self, face_vertices, borders):
+        v0 = self.face_vertices[0,:]<borders[0]
+        v1 = self.face_vertices[0,:]>borders[1]
+        v2 = self.face_vertices[1,:]>borders[2]
+        v3 = self.face_vertices[1,:]<borders[3]
+        vfinal = np.any((v0,v1,v2,v3),axis=0)
+        boolean_mask = np.stack((v0,v1,v2,v3,vfinal),axis=0)
+
+        return boolean_mask
+    
     def sutherland_hodgeman(self, face, u_min, u_max, v_min, v_max):
         v0 = self.zeroed_SRT[0,face]<u_min
         v1 = self.zeroed_SRT[0,face]>u_max
@@ -155,26 +165,26 @@ class Object():
                             new_vertex=self.get_intersection_coordinate(face_vertices[:,v1_idx], face_vertices[:,v2_idx], viewport_edge<2, borders[viewport_edge])
                             new_face_vertices=np.append(new_face_vertices,new_vertex,axis=1)
                             new_face_vertices=np.append(new_face_vertices,face_vertices[:,v2_idx][:,np.newaxis],axis=1)
-                            new_boolean_mask=np.concatenate((new_boolean_mask,self.get_boolean_line(new_vertex,borders)),axis=1)
-                            new_boolean_mask=np.concatenate((new_boolean_mask,boolean_mask[:,j][:,np.newaxis]),axis=1)
+                            #new_boolean_mask=np.concatenate((new_boolean_mask,self.get_boolean_line(new_vertex,borders)),axis=1)
+                            #new_boolean_mask=np.concatenate((new_boolean_mask,boolean_mask[:,j][:,np.newaxis]),axis=1)
                         else:
                             print(f"v2_out, iteracao {i}")
                             new_vertex=self.get_intersection_coordinate(face_vertices[:,v2_idx], face_vertices[:,v1_idx], viewport_edge<2, borders[viewport_edge])
                             new_face_vertices=np.append(new_face_vertices,new_vertex,axis=1)
-                            new_boolean_mask=np.concatenate((new_boolean_mask,self.get_boolean_line(new_vertex,borders)),axis=1)
+                            #new_boolean_mask=np.concatenate((new_boolean_mask,self.get_boolean_line(new_vertex,borders)),axis=1)
             
                     else:
                         
                         if v1_out==0:
                             print(f"ambos dentro, iteracao {i}")
                             new_face_vertices=np.append(new_face_vertices,face_vertices[:,v2_idx][:,np.newaxis],axis=1)
-                            new_boolean_mask=np.concatenate((new_boolean_mask,boolean_mask[:,j][:,np.newaxis]),axis=1)
+                            #new_boolean_mask=np.concatenate((new_boolean_mask,boolean_mask[:,j][:,np.newaxis]),axis=1)
                         else:
                             print(f"ambos fora, iteracao {i}")
 
                 face_vertices=new_face_vertices
                 len_face = np.shape(new_face_vertices)[1]
-                boolean_mask=new_boolean_mask
+                boolean_mask=self.get_boolean_mask(face_vertices, borders)
 
             print("face_vertices:")
             print(face_vertices)
@@ -196,12 +206,15 @@ class Object():
 
         if is_border_vertical:
             x = border_value
-            y = ((border_value-x1)*y2_min_y1/x2_min_x1)+y1
-            z = z1+(z2_min_z1*y/y2_min_y1)
+            u = (border_value-x1)/x2_min_x1
+            y = u*y2_min_y1+y1
+
         else:
-            x = ((border_value-y1)*x2_min_x1/y2_min_y1)+x1
             y = border_value
-            z = z1 + (z2_min_z1*x/x2_min_x1)
+            u = (border_value-y1)/y2_min_y1
+            x = u*x2_min_x1+x1
+        
+        z = z1+u*z2_min_z1
 
         return np.array([[x],[y],[z],[1]])
 
