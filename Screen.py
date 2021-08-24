@@ -49,7 +49,7 @@ class Screen():
         self.numberObjects = 0
         self.canvas = Canvas(frame, width = self.maxXviewPort, height = self.maxYviewPort, bg = "white")
         self.objectSelected = None 
-        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline= "#FFFFFF", fill= "#CCCCCC", width = 5)
+        self.viewPort = self.canvas.create_polygon([self.projecaoXmin - 1,self.projecaoYmin - 1, self.projecaoXmin - 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmin - 1], outline= "#000000", fill= "#CCCCCC", width = 2)
      
         self.DefineAxis()
 
@@ -167,7 +167,7 @@ class Screen():
         self.canvas.delete(ALL)
         self.objects.clear()
         self.objectsInCanvas.clear()
-        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline= "#FFFFFF", fill="#CCCCCC", width = 5)
+        self.viewPort = self.canvas.create_polygon([self.projecaoXmin - 1,self.projecaoYmin - 1, self.projecaoXmin - 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmin - 1], outline= "#000000", fill= "#CCCCCC", width = 2)
         self.numberObjects = 0
         
         self.DefineAxis()
@@ -175,8 +175,8 @@ class Screen():
     def Draw(self):
         self.canvas.delete(ALL)
         self.objectsInCanvas.clear()
-        self.viewPort = self.canvas.create_polygon([self.projecaoXmin,self.projecaoYmin, self.projecaoXmin, self.projecaoYmax, self.projecaoXmax, self.projecaoYmax, self.projecaoXmax, self.projecaoYmin], outline="#FFFFFF", fill="#CCCCCC", width = 5)
-
+        self.viewPort = self.canvas.create_polygon([self.projecaoXmin - 1,self.projecaoYmin - 1, self.projecaoXmin - 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmin - 1], outline= "#000000", fill= "#CCCCCC", width = 2)
+     
         for objects in range(self.numberObjects): # gerar uma lista com a ordem de todos os objetos em Z
             self.objectsInCanvas.append([])
             print(self.objects[objects].viewport_faces)

@@ -142,93 +142,93 @@ scaleMoreValue = 1.111111
 rotationValue = 5
 
 def move_x_left(event):
-    drawing.moveObject(-translationValue, 0, 0)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.moveObject(-translationValue, 0, 0)
         SendUI(drawing.GetAttributes())
 
 def move_x_right(event):
-    drawing.moveObject(translationValue, 0, 0)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.moveObject(translationValue, 0, 0)
         SendUI(drawing.GetAttributes())
 
 def move_z_front(event):
-    drawing.moveObject(0, 0, translationValue)
-    if drawing.canvas.find_withtag("current"):
-       SendUI(drawing.GetAttributes())
+    if drawing.objectSelected is not None:
+        drawing.moveObject(0, 0, translationValue)
+        SendUI(drawing.GetAttributes())
 
 def move_z_back(event):
-    drawing.moveObject(0, 0, -translationValue)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.moveObject(0, 0, -translationValue)
         SendUI(drawing.GetAttributes())
 
 def move_y_up(event):
-    drawing.moveObject(0, translationValue, 0)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.moveObject(0, translationValue, 0)
         SendUI(drawing.GetAttributes())
 
 def move_y_down(event):
-    drawing.moveObject(0, -translationValue, 0)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.moveObject(0, -translationValue, 0)
         SendUI(drawing.GetAttributes())
 
 def scale_x_less(event):
-    drawing.scaleObject(scaleLessValue, 1, 1)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.scaleObject(scaleLessValue, 1, 1)
         SendUI(drawing.GetAttributes())
 
 def scale_x_more(event):
-    drawing.scaleObject(scaleMoreValue, 1, 1)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.scaleObject(scaleMoreValue, 1, 1)
         SendUI(drawing.GetAttributes())
 
 def scale_z_less(event):
-    drawing.scaleObject(1, 1, scaleLessValue)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.scaleObject(1, 1, scaleLessValue)
         SendUI(drawing.GetAttributes())
 
 def scale_z_more(event):
-    drawing.scaleObject(1, 1, scaleMoreValue)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.scaleObject(1, 1, scaleMoreValue)
         SendUI(drawing.GetAttributes())
 
 def scale_y_less(event):
-    drawing.scaleObject(1, scaleLessValue, 1)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.scaleObject(1, scaleLessValue, 1)
         SendUI(drawing.GetAttributes())
 
 def scale_y_more(event):
-    drawing.scaleObject(1, scaleMoreValue, 1)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.scaleObject(1, scaleMoreValue, 1)
         SendUI(drawing.GetAttributes())
 
 def rot_x_left(event):
-    drawing.rotObjectX(-rotationValue)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.rotObjectX(-rotationValue)
         SendUI(drawing.GetAttributes())
 
 def rot_x_right(event):
-    drawing.rotObjectX(rotationValue)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.rotObjectX(rotationValue)
         SendUI(drawing.GetAttributes())
 
 def rot_z_front(event):
-    drawing.rotObjectZ(rotationValue)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.rotObjectZ(rotationValue)
         SendUI(drawing.GetAttributes())
 
 def rot_z_back(event):
-    drawing.rotObjectZ(-rotationValue)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.rotObjectZ(-rotationValue)
         SendUI(drawing.GetAttributes())
 
 def rot_y_up(event):
-    drawing.rotObjectY(rotationValue)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.rotObjectY(rotationValue)
         SendUI(drawing.GetAttributes())
 
 def rot_y_down(event):
-    drawing.rotObjectY(-rotationValue)
-    if drawing.canvas.find_withtag("current"):
+    if drawing.objectSelected is not None:
+        drawing.rotObjectY(-rotationValue)
         SendUI(drawing.GetAttributes())
 
 def SelectingObject(event):

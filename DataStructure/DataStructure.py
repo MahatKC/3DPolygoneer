@@ -121,10 +121,10 @@ class Object():
         return boolean_mask[:,np.newaxis]
     
     def get_boolean_mask(self, face_vertices, borders):
-        v0 = self.face_vertices[0,:]<borders[0]
-        v1 = self.face_vertices[0,:]>borders[1]
-        v2 = self.face_vertices[1,:]>borders[2]
-        v3 = self.face_vertices[1,:]<borders[3]
+        v0 = face_vertices[0,:]<borders[0]
+        v1 = face_vertices[0,:]>borders[1]
+        v2 = face_vertices[1,:]>borders[2]
+        v3 = face_vertices[1,:]<borders[3]
         vfinal = np.any((v0,v1,v2,v3),axis=0)
         boolean_mask = np.stack((v0,v1,v2,v3,vfinal),axis=0)
 
