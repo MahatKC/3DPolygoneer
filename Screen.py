@@ -179,8 +179,10 @@ class Screen():
 
         for objects in range(self.numberObjects): # gerar uma lista com a ordem de todos os objetos em Z
             self.objectsInCanvas.append([])
+            print(self.objects[objects].viewport_faces)
             for viewport_face_idx in range(len(self.objects[objects].viewport_faces)):
-                self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= random.choice(self.polygonsColors), fill=random.choice(self.polygonsColors), width = 2, tags = "objeto"))
+                if np.shape(self.objects[objects].viewport_faces[viewport_face_idx])[1] != 0:
+                    self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= random.choice(self.polygonsColors), fill=random.choice(self.polygonsColors), width = 2, tags = "objeto"))
         
         self.DefineAxis()
 
