@@ -55,11 +55,13 @@ class Screen():
 
     def DefineAxis(self):
         axis = Axis()
-        #axisSRC, axisjp_times_proj = first_pipeline(self.VRP, self.n, self.ViewUpX, self.ViewUpY, self.ViewUpZ, self.isPerspective, self.distanciaProjecao, self.mundoXmin, self.mundoXmax, self.mundoYmin, self.mundoYmax, self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
+        axisSRC, axisjp_times_proj = first_pipeline(self.VRP, self.n, self.ViewUpX, self.ViewUpY, self.ViewUpZ, self.isPerspective, self.distanciaProjecao, self.mundoXmin, self.mundoXmax, self.mundoYmin, self.mundoYmax, 0, self.maxXviewPort, 0, self.maxYviewPort)
         
-        axis.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+        axis.pipeline_me(axisSRC, axisjp_times_proj, self.nearValue, self.farValue)
+        
         #axis.translation(-25, -25, 0)
         #axis.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
+        
         x = int(axis.axisSRT[0][0] - int(self.maxXviewPort * 0.07))
         y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.95))
         self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][1] - x, axis.axisSRT[1][1] - y, fill='#FF0000', width = 5)
@@ -70,7 +72,7 @@ class Screen():
         for i in range(0, self.numberObjects):
             if face in self.objects[i]:
                 self.objectSelected = i
-                return self.objects[i] 
+                return self.objects[i]
 
     def ObjectSelection(self, face):
         for object in range(self.numberObjects):

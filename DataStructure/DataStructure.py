@@ -113,7 +113,7 @@ class Object():
                 face = self.faces[i]
                 #l1 = self.create_l1(face, len_face, boolean_mask, u_min, u_max, v_min, v_max)
                 
-                print(str(i)+"huu")
+                #print(str(i)+"huu")
                 self.viewport_faces.append(self.sutherland_hodgeman(face, u_min, u_max, v_min, v_max))
         #print(self.viewport_faces)
         pass
@@ -135,7 +135,7 @@ class Object():
         v3 = self.zeroed_SRT[1,face]<v_min
         vfinal = np.any((v0,v1,v2,v3),axis=0)
         boolean_mask = np.stack((v0,v1,v2,v3,vfinal),axis=0)
-        print(boolean_mask)
+        #print(boolean_mask)
         
         face_vertices = copy.deepcopy(self.zeroed_SRT[:,face])
 
