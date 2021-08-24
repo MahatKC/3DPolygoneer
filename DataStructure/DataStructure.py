@@ -98,28 +98,12 @@ class Object():
         self.zeroed_SRT[:,self.draw_vertex] = self.prism_in_SRT[:,:]
         self.viewport_faces = []
 
-
-        print("\n"+"-"*10+"\n"+"-"*10+"\n")
         for i in range(self.numberFaces):
             if self.draw_faces[i]:
                 face = self.faces[i]
-                #l1 = self.create_l1(face, len_face, boolean_mask, u_min, u_max, v_min, v_max)
-                
-                print(f"Face {i}")
                 self.viewport_faces.append(self.sutherland_hodgeman(face, u_min, u_max, v_min, v_max))
-        #print(self.viewport_faces)
         pass
-
-    def get_boolean_line(self, vertex, borders):
-        v0 = vertex[0,0]<borders[0]
-        v1 = vertex[0,0]>borders[1]
-        v3 = vertex[1,0]>borders[2]
-        v2 = vertex[1,0]<borders[3]
-        vfinal = np.any((v0,v1,v2,v3),axis=0)
-        boolean_mask = np.stack((v0,v1,v2,v3,vfinal),axis=0)
-
-        return boolean_mask[:,np.newaxis]
-    
+ 
     def get_boolean_mask(self, face_vertices, borders):
         v0 = face_vertices[0,:]<borders[0]
         v1 = face_vertices[0,:]>borders[1]
@@ -137,20 +121,15 @@ class Object():
         v3 = self.zeroed_SRT[1,face]<v_min
         vfinal = np.any((v0,v1,v2,v3),axis=0)
         boolean_mask = np.stack((v0,v1,v2,v3,vfinal),axis=0)
-        if np.any(boolean_mask[1,:]) and np.any(boolean_mask[3,:]):
-            print("AQUI!!!!")
-        
+   
         face_vertices = copy.deepcopy(self.zeroed_SRT[:,face])
 
         borders = [u_min, u_max, v_max, v_min]
         len_face = len(face)
 
-        for viewport_edge in range(4):
-            print(f"Viewport edge: {viewport_edge}")
-            
+        for viewport_edge in range(4):            
             if np.any(boolean_mask[viewport_edge,:]):
                 new_face_vertices = np.empty((4,0))
-                new_boolean_mask = np.empty((5,0))
 
                 for i in range(len_face):
                     j=(i+1)%len_face
@@ -161,35 +140,20 @@ class Object():
 
                     if v1_out!=v2_out:
                         if v1_out:
-                            print(f"v1_out, iteracao {i}")
                             new_vertex=self.get_intersection_coordinate(face_vertices[:,v1_idx], face_vertices[:,v2_idx], viewport_edge<2, borders[viewport_edge])
                             new_face_vertices=np.append(new_face_vertices,new_vertex,axis=1)
                             new_face_vertices=np.append(new_face_vertices,face_vertices[:,v2_idx][:,np.newaxis],axis=1)
-                            #new_boolean_mask=np.concatenate((new_boolean_mask,self.get_boolean_line(new_vertex,borders)),axis=1)
-                            #new_boolean_mask=np.concatenate((new_boolean_mask,boolean_mask[:,j][:,np.newaxis]),axis=1)
                         else:
-                            print(f"v2_out, iteracao {i}")
                             new_vertex=self.get_intersection_coordinate(face_vertices[:,v2_idx], face_vertices[:,v1_idx], viewport_edge<2, borders[viewport_edge])
                             new_face_vertices=np.append(new_face_vertices,new_vertex,axis=1)
-                            #new_boolean_mask=np.concatenate((new_boolean_mask,self.get_boolean_line(new_vertex,borders)),axis=1)
-            
+                            
                     else:
-                        
                         if v1_out==0:
-                            print(f"ambos dentro, iteracao {i}")
                             new_face_vertices=np.append(new_face_vertices,face_vertices[:,v2_idx][:,np.newaxis],axis=1)
-                            #new_boolean_mask=np.concatenate((new_boolean_mask,boolean_mask[:,j][:,np.newaxis]),axis=1)
-                        else:
-                            print(f"ambos fora, iteracao {i}")
 
                 face_vertices=new_face_vertices
                 len_face = np.shape(new_face_vertices)[1]
                 boolean_mask=self.get_boolean_mask(face_vertices, borders)
-
-            print("face_vertices:")
-            print(face_vertices)
-            print("boolean mask:")
-            print(boolean_mask)
 
         return face_vertices
 
