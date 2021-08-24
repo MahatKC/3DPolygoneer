@@ -1,10 +1,10 @@
-from normal_test import normal_test
-from Matrices.prism import create_prism
-from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
-#from DataStructure.normal_test import normal_test
-#from DataStructure.Matrices.prism import create_prism
-#from DataStructure.Matrices.pipeline import  VRP_and_n, first_pipeline, SRC_matrix, pipeline_steps
-#from DataStructure.Matrices.transforms import translation, scaleAlongAxis, rotXAlongAxis, rotYAlongAxis, rotZAlongAxis
+#from normal_test import normal_test
+#from Matrices.prism import create_prism
+#from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
+from DataStructure.normal_test import normal_test
+from DataStructure.Matrices.prism import create_prism
+from DataStructure.Matrices.pipeline import  VRP_and_n, first_pipeline, SRC_matrix, pipeline_steps
+from DataStructure.Matrices.transforms import translation, scaleAlongAxis, rotXAlongAxis, rotYAlongAxis, rotZAlongAxis
 import numpy as np
 import copy
 np.set_printoptions(precision=6)
@@ -94,23 +94,28 @@ class Object():
         self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
     
     def crop_to_screen(self, u_min, u_max, v_min, v_max):
-        #self.zeroed_SRT = np.zeros((4,self.sides*2))+np.array([[u_min],[v_min],[0],[0]])
-        #self.zeroed_SRT[:,self.draw_vertex] = self.prism_in_SRT[:,:]
+        self.zeroed_SRT = np.zeros((4,self.sides*2))+np.array([[u_min],[v_min],[0],[0]])
+        self.zeroed_SRT[:,self.draw_vertex] = self.prism_in_SRT[:,:]
         self.viewport_faces = []
+        #print(self.prism_in_SRT)
+        #print(self.zeroed_SRT)
+        #print(self.numberFaces)
         
-        v0 = self.prism_in_SRT[0,:]<u_min
-        v1 = self.prism_in_SRT[0,:]>u_max
-        v2 = self.prism_in_SRT[1,:]>v_max
-        v3 = self.prism_in_SRT[1,:]<v_min
-        vfinal = np.any((v0,v1,v2,v3),axis=0)
-        boolean_mask = np.stack((v0,v1,v2,v3,vfinal),axis=0)
+        #v0 = self.prism_in_SRT[0,:]<u_min
+        #v1 = self.prism_in_SRT[0,:]>u_max
+        #v2 = self.prism_in_SRT[1,:]>v_max
+        #v3 = self.prism_in_SRT[1,:]<v_min
+        #vfinal = np.any((v0,v1,v2,v3),axis=0)
+        #boolean_mask = np.stack((v0,v1,v2,v3,vfinal),axis=0)
 
         for i in range(self.numberFaces):
             if self.draw_faces[i]:
                 face = self.faces[i]
                 #l1 = self.create_l1(face, len_face, boolean_mask, u_min, u_max, v_min, v_max)
-                self.viewport_faces.append(self.sutherland_hodgeman(face, u_min, u_max, v_min, v_max))
                 
+                print(str(i)+"huu")
+                self.viewport_faces.append(self.sutherland_hodgeman(face, u_min, u_max, v_min, v_max))
+        #print(self.viewport_faces)
         pass
 
     def get_boolean_line(self, vertex, borders):
@@ -124,19 +129,22 @@ class Object():
         return boolean_mask[:,np.newaxis]
     
     def sutherland_hodgeman(self, face, u_min, u_max, v_min, v_max):
-        v0 = self.prism_in_SRT[0,face]<u_min
-        v1 = self.prism_in_SRT[0,face]>u_max
-        v2 = self.prism_in_SRT[1,face]>v_max
-        v3 = self.prism_in_SRT[1,face]<v_min
+        v0 = self.zeroed_SRT[0,face]<u_min
+        v1 = self.zeroed_SRT[0,face]>u_max
+        v2 = self.zeroed_SRT[1,face]>v_max
+        v3 = self.zeroed_SRT[1,face]<v_min
         vfinal = np.any((v0,v1,v2,v3),axis=0)
         boolean_mask = np.stack((v0,v1,v2,v3,vfinal),axis=0)
+        print(boolean_mask)
         
-        face_vertices = copy.deepcopy(self.prism_in_SRT[face])
+        face_vertices = copy.deepcopy(self.zeroed_SRT[:,face])
 
         borders = [u_min, u_max, v_max, v_min]
         len_face = len(face)
+        has_intersection = False
         for viewport_edge in range(4):
             if np.any(boolean_mask[viewport_edge,:]):
+                has_intersection = True
                 new_face_vertices = np.empty((4,0))
                 new_boolean_mask = np.empty((5,0))
                 for i in range(len_face):
@@ -176,7 +184,9 @@ class Object():
                 face_vertices=new_face_vertices
                 len_face = np.shape(new_face_vertices)[1]
                 boolean_mask=new_boolean_mask
-            #else:
+            else:
+                if not has_intersection:
+                    new_face_vertices=self.zeroed_SRT[:,face] 
 
 
         return new_face_vertices
