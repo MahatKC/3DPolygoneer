@@ -126,20 +126,20 @@ class Object():
         v3 = self.zeroed_SRT[1,face]<v_min
         vfinal = np.any((v0,v1,v2,v3),axis=0)
         boolean_mask = np.stack((v0,v1,v2,v3,vfinal),axis=0)
-        #print(boolean_mask)
         
         face_vertices = copy.deepcopy(self.zeroed_SRT[:,face])
 
         borders = [u_min, u_max, v_max, v_min]
         len_face = len(face)
-        #has_intersection = False
         new_face_vertices=self.zeroed_SRT[:,face] 
+        has_intersection = False
         for viewport_edge in range(4):
             print(f"Viewport edge: {viewport_edge}")
             if np.any(boolean_mask[viewport_edge,:]):
-                #has_intersection = True
                 new_face_vertices = np.empty((4,0))
-                new_boolean_mask = np.empty((5,0))
+                if not has_intersection:
+                    new_boolean_mask = np.empty((5,0))
+                    has_intersection = True
                 for i in range(len_face):
                     j=(i+1)%len_face
                     v1_idx = i
@@ -147,10 +147,7 @@ class Object():
                     v1_out = boolean_mask[viewport_edge,i]
                     v2_out = boolean_mask[viewport_edge,j]
 
-                    #print(f"i,j {i,j}")
-
                     if v1_out!=v2_out:
-                        #print("diff")
                         if v1_out:
                             new_vertex=self.get_intersection_coordinate(face_vertices[:,v1_idx], face_vertices[:,v2_idx], viewport_edge<2, borders[viewport_edge])
                             new_face_vertices=np.append(new_face_vertices,new_vertex,axis=1)
@@ -161,27 +158,15 @@ class Object():
                             new_vertex=self.get_intersection_coordinate(face_vertices[:,v2_idx], face_vertices[:,v1_idx], viewport_edge<2, borders[viewport_edge])
                             new_face_vertices=np.append(new_face_vertices,new_vertex,axis=1)
                             new_boolean_mask=np.concatenate((new_boolean_mask,self.get_boolean_line(new_vertex,borders)),axis=1)
-                        
-                        #print("---")
-                        #print(new_vertex)
-                        #print("---")
-                            
-                        
+            
                     else:
                         if v1_out==0:
                             new_face_vertices=np.append(new_face_vertices,face_vertices[:,v2_idx][:,np.newaxis],axis=1)
                             new_boolean_mask=np.concatenate((new_boolean_mask,boolean_mask[:,j][:,np.newaxis]),axis=1)
-                        
-                    
-                    #print(np.shape(new_face_vertices))
 
                 face_vertices=new_face_vertices
                 len_face = np.shape(new_face_vertices)[1]
                 boolean_mask=new_boolean_mask
-            #else:
-            #    if not has_intersection:
-            #        new_face_vertices=self.zeroed_SRT[:,face] 
-
 
         return new_face_vertices
 
