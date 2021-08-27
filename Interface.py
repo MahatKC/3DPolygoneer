@@ -1,4 +1,5 @@
 #from typing_extensions import IntVar
+from tkinter import font
 from DataStructure.Matrices.transforms import translation
 from shutil import disk_usage
 #from _pytest.store import D
@@ -380,7 +381,7 @@ if __name__ == "__main__":
     #window.state('normal')
     # Fazendo Frame
     frameDrawingInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = int(width*0.7), height = int(height*0.88))
-    frameDrawingInterface.place(x = int(width*0.01), y = int(height * 0.01)) 
+    frameDrawingInterface.place(x = int(width*0.01), y = int(height * 0.01))
 
     # Fazendo janela com as informações do usuário
     #width variavel = int(width*0.27)
@@ -694,5 +695,12 @@ if __name__ == "__main__":
     txtPx['state'] = tk.DISABLED
     txtPy['state'] = tk.DISABLED
     txtPz['state'] = tk.DISABLED
+    
+    axisX = ttk.Label(frameDrawingInterface, text="X", foreground="#FF0000")
+    axisY = ttk.Label(frameDrawingInterface, text="Y", foreground="#00FF00")
+    axisZ = ttk.Label(frameDrawingInterface, text="Z", foreground="#0000FF")
+    axisX.pack(x = 800, y = 100)
+    axisY.place(x = 800, y = 150)
+    axisZ.place(x = 800, y = 200)
 
     window.mainloop()
