@@ -7,7 +7,7 @@ from tkscrolledframe import ScrolledFrame, widget
 from Screen import Screen
 import tkinter as tk
 from tkinter import Canvas, Frame, Scrollbar, ttk
-from tkinter.constants import ALL, E, N, NS, RIGHT, S, VERTICAL, W, Y 
+from tkinter.constants import ALL, E, N, NS, RIGHT, S, VERTICAL, W, Y
 
 """def motion(event):
     x, y = event.x, event.y
@@ -700,5 +700,7 @@ if __name__ == "__main__":
     axisX.place(x = 800, y = 100)
     axisY.place(x = 800, y = 150)
     axisZ.place(x = 800, y = 200)
-
+    
+    drawing.AddObjects(5, 5, 5, 5, 
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     window.mainloop()

@@ -183,6 +183,24 @@ class Object():
         z = z1+u*z2_min_z1
 
         return np.array([[x],[y],[z],[1]])
+    
+    def FacesOrder(self):
+        self.ZValue = np.zeros((len(self.viewport_faces),np.shape(self.viewport_faces[face])[1]))
+        for face in range(len(self.viewport_faces)):
+            for vertex in range(np.shape(self.viewport_faces[face])[1]):
+                self.ZValue[face, vertex, 0] = self.viewport_faces[face][2]
+        print(self.ZValue)
+        
+        # anda por todas as faces
+            # Verifica os vértices que compõe a face
+            # Calcula a média do Z dos vertices da face
+        # Cria uma lista com a face e o valor de Z dela, da mais distante para a mais proxima
+        pass
+    
+    def FaceZ(self):
+        # Retorna o valor de Z da face mais distante para a mais próxima (Z da primeira posição da lista de faces)
+        # return min(self.Zvalue[0][1])
+        pass
 
 """
 obejeto = "quadradao"

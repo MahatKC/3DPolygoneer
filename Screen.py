@@ -179,7 +179,6 @@ class Screen():
      
         for objects in range(self.numberObjects): # gerar uma lista com a ordem de todos os objetos em Z
             self.objectsInCanvas.append([])
-            print(self.objects[objects].viewport_faces)
             for viewport_face_idx in range(len(self.objects[objects].viewport_faces)):
                 if np.shape(self.objects[objects].viewport_faces[viewport_face_idx])[1] != 0:
                     self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= random.choice(self.polygonsColors), fill=random.choice(self.polygonsColors), width = 2, tags = "objeto"))
@@ -233,7 +232,7 @@ class Screen():
         new_obj.crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
         self.objects.append(new_obj) 
         self.objectsInCanvas.append([])
-        
+        new_obj.FacesOrder()
         for viewport_face_idx in range(len(new_obj.viewport_faces)):
             self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(viewport_face_idx), outline= random.choice(self.polygonsColors), fill= random.choice(self.polygonsColors), width = 2, tags = "objeto"))
  
@@ -246,3 +245,15 @@ class Screen():
         new_obj.crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
         self.objects[self.objectSelected] = new_obj 
         self.Draw()
+
+    def PolygonsOrder(self):
+        # para cada poligono
+            # pega o valor de Z dele
+        # cria uma lista dos valores de Z e do polígono que o valor pertence, do mais distante para o mais próximo
+        pass
+    def PainterAlgorithm(self):
+        # Pega e começa a andar pela lista de poligonos ordenada
+        # Para cada poligono
+        #   Seleciona a lista de faces ordenada dele
+        #       para cada face, desenha ela :)
+        pass
