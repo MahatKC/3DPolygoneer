@@ -226,7 +226,7 @@ class Screen():
             self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
             self.Draw()
 
-    def AddObjects(self, r_bottom, r_top, sides, h):
+    def AddObjects(self, r_bottom, r_top, sides, h, kaR, kaG, kaB, kdR, kdG, kdB, ksR, ksG, ksB, n):
         new_obj = Object(0, 0, 0, h, r_bottom, r_top, sides) 
         new_obj.normalVisualizationTest(self.n)
         new_obj.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)

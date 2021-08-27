@@ -251,7 +251,6 @@ def atualizarObjeto():
     altura = isVazio(txtAltura.get())
     raioBase = isVazio(txtRaioBase.get())
     raioTopo = isVazio(txtRaioTopo.get()) 
-
     drawing.UpdateObject(raioBase, raioTopo, numLados, altura)
 
 def objetoClick():
@@ -271,7 +270,7 @@ def objetoClick():
     n = isVazio(txtN.get())
     #drawing.AddObjects(raioBase, raioTopo, numLados, altura)
     drawing.AddObjects(raioBase, raioTopo, numLados, altura, 
-    kaR, kaG, kaB, kdR, kdG, kdB, ksR, ksG, ksB, n)
+                        kaR, kaG, kaB, kdR, kdG, kdB, ksR, ksG, ksB, n)
 
 def projecaoSet(values):
     txtVRPx.delete(0, tk.END)
@@ -314,7 +313,6 @@ def projecaoSet(values):
     txtLimPlanoProjyMin.insert(0, str(values[18]))
     txtLimPlanoProjyMax.delete(0, tk.END)
     txtLimPlanoProjyMax.insert(0, str(values[19]))
-
 
 def projecaoClick():
     #rbProjeção = 0 -> perspectiva; rbProjeção = 1 -> axonometrica
@@ -365,7 +363,7 @@ def isVazio(string):
         return 0.0
     return float(string)
 
-def criarIluminacao(sombreamento, ka, kd, ks, n):
+def criarIluminacao(sombreamento, iaR, iaG, iaB, iR, iG, iB, iX, iY, iZ):
     print(sombreamento*2)
 
 if __name__ == "__main__":
