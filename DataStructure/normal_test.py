@@ -5,4 +5,4 @@ def normal_test(faces, n):
     face_normal = np.cross(faces[2]-v1, faces[0]-v1)
     N_normalized = face_normal/(np.linalg.norm(face_normal))
     
-    return np.dot(N_normalized,n) > 0
+    return (np.dot(N_normalized,n) > 0),N_normalized
