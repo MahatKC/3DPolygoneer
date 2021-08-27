@@ -1,5 +1,7 @@
 #from typing_extensions import IntVar
 from tkinter import font
+
+import numpy as np
 from DataStructure.Matrices.transforms import translation
 from shutil import disk_usage
 #from _pytest.store import D
@@ -268,9 +270,12 @@ def objetoClick():
     ksG = isVazio(txtKsG.get())
     ksB = isVazio(txtKsB.get())
     n = isVazio(txtN.get())
-    #drawing.AddObjects(raioBase, raioTopo, numLados, altura)
+
+    ka = [kaR, kaG, kaB]
+    kd = [kdR, kdG, kdB]
+    ks = [ksR, ksG, ksB]
     drawing.AddObjects(raioBase, raioTopo, numLados, altura, 
-                        kaR, kaG, kaB, kdR, kdG, kdB, ksR, ksG, ksB, n)
+                        ka, kd, ks, n)
 
 def projecaoSet(values):
     txtVRPx.delete(0, tk.END)
@@ -316,7 +321,7 @@ def projecaoSet(values):
 
 def projecaoClick():
     #rbProjeção = 0 -> perspectiva; rbProjeção = 1 -> axonometrica
-    projecao = bool(int(rbProjecao.get())) # mudar pra true ou false
+    projecao = bool(int(rbProjecao.get())) 
     vrpX = isVazio(txtVRPx.get())
     vrpY = isVazio(txtVRPy.get())
     vrpZ = isVazio(txtVRPz.get())
@@ -355,8 +360,12 @@ def iluminacaoClick():
     iX = isVazio(txtIx.get())
     iY = isVazio(txtIy.get())
     iZ = isVazio(txtIz.get())
-    #criarIluminacao(sombreamento, ka, kd, ks, n)
-    criarIluminacao(sombreamento, iaR, iaG, iaB, iR, iG, iB, iX, iY, iZ)
+
+    ila = [iaR, iaG, iaB]
+    il = [iR, iG, iB]
+    fonteLuz = np.array([iX, iY, iZ])
+
+    criarIluminacao(sombreamento, ila, il, fonteLuz)
 
 def isVazio(string):
     if(string == ""):

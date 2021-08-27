@@ -1,6 +1,8 @@
 #from normal_test import normal_test
 #from Matrices.prism import create_prism
 #from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
+from tkinter.constants import N
+from DataStructure.Matrices.sombreamento_constante import sombreamento_constante
 from DataStructure.normal_test import normal_test
 from DataStructure.Matrices.prism import create_prism
 from DataStructure.Matrices.pipeline import  VRP_and_n, first_pipeline, SRC_matrix, pipeline_steps
@@ -29,6 +31,7 @@ class Object():
         self.prism_in_SRU = create_prism(x, y, z, h, r_bottom, r_top, sides)
         self.prism_in_SRT = None
         self.normal_of_faces = []
+        self.color_of_faces = []
         self.zeroed_SRT = None
         self.viewport_faces = []
         self.draw_me = None
@@ -37,6 +40,10 @@ class Object():
         self.vertexFaces = []
         self.draw_vertex = [False]*sides*2
         self.numberFaces = sides + 2
+        self.ka = None 
+        self.kd = None 
+        self.ks = None 
+        self.n = None
         sides_minus_one = sides*2-1
         for f in range(0, sides):
             complement_of_next = (f+1)%sides
@@ -95,6 +102,9 @@ class Object():
     def pipeline_me(self, SRC_matrix, jp_proj_matrix, dist_near, dist_far):
         self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
     
+    def sombreamento_constante(self, VRP, ka, kd, ks, n, il, ila, fonte_luz):
+        self.color_of_faces = sombreamento_constante(self.viewport_faces, self.normals_list, VRP, ka, kd, ks, n, il, ila, fonte_luz)
+
     def crop_to_screen(self, u_min, u_max, v_min, v_max):
         self.zeroed_SRT = np.zeros((4,self.sides*2))+np.array([[u_min],[v_min],[0],[0]])
         self.zeroed_SRT[:,self.draw_vertex] = self.prism_in_SRT[:,:]
