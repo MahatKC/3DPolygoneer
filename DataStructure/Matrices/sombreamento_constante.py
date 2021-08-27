@@ -15,7 +15,7 @@ import numpy as np
 # x,y,z -> fonte_luz = np.array([x,y,z])              => fonte_luz
 
 def sombreamento_constante(face_list, normals_list, VRP, ka, kd, ks, n, il, ila, fonte_luz):
-    avg_list = [np.average(face, axis=1) for face in face_list]
+    avg_list = [np.average(face, axis=1)[:2] for face in face_list]
     Ia = [ila[i]*ka[i] for i in range(3)]
     color_list = [sombreamento_single_face(avg_list[face_idx], normals_list[face_idx], Ia, kd, ks, n, il, fonte_luz, VRP) for face_idx in range(len(face_list))]
 
@@ -32,6 +32,7 @@ def sombreamento_single_face(centroid, N, Ia, kd, ks, n, il, fonte_luz, VRP):
     S_normalized = S/(np.linalg.norm(S))
     R_dot_S = np.dot(R,S_normalized)
     has_specular = R_dot_S>0
+    
     if has_specular:
         R_dot_S_pow_n = R_dot_S**n
 
@@ -52,7 +53,7 @@ def sombreamento_single_face(centroid, N, Ia, kd, ks, n, il, fonte_luz, VRP):
         if It>255:
             It = 255
         It_int = np.round(It)
-        
+
         if It_int<16:
             face_color = face_color+"0"+hex(It_int)
         else:
