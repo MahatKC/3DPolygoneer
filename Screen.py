@@ -71,8 +71,8 @@ class Screen():
         #axis.translation(-25, -25, 0)
         #axis.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
         
-        x = int(axis.axisSRT[0][0] - int(self.maxXviewPort * 0.07))
-        y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.90))
+        x = int(axis.axisSRT[0][0] - int(self.maxXviewPort * 0.1))
+        y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.9))
 
         self.endLineX = [axis.axisSRT[0][1] - x, axis.axisSRT[1][1] - y]
         self.endLineY = [axis.axisSRT[0][2] - x, axis.axisSRT[1][2] - y]
@@ -215,14 +215,16 @@ class Screen():
         self.viewPort = self.canvas.create_polygon([self.projecaoXmin - 1,self.projecaoYmin - 1, self.projecaoXmin - 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmin - 1], outline= "#000000", fill= "#CCCCCC", width = 2)
         self.PolygonsOrder()
         for objects in self.objects_Z_order: # gerar uma lista com a ordem de todos os objetos em Z
-            self.objects[objects].sombreamento_constante(self.VRP, self.il, self.ila, self.fonteLuz)
-            self.objectsInCanvas[objects] = []
-            if(objects == self.objectSelected): # fazer o outline ser da cor negativada do objects
-                for viewport_face_idx in self.objects[objects].faces_order:
-                    self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= "#000000", fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
-            else:
-                for viewport_face_idx in self.objects[objects].faces_order:
-                    self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= self.objects[objects].color_of_faces[viewport_face_idx], fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
+            if self.objects[objects].draw_me:
+                self.objects[objects].sombreamento_constante(self.VRP, self.il, self.ila, self.fonteLuz)
+                self.objectsInCanvas[objects] = []
+                if(objects == self.objectSelected): # fazer o outline ser da cor negativada do objects
+                    for viewport_face_idx in self.objects[objects].faces_order:
+                        print(viewport_face_idx)
+                        self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= "#000000", fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
+                else:
+                    for viewport_face_idx in self.objects[objects].faces_order:
+                        self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= self.objects[objects].color_of_faces[viewport_face_idx], fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
 
         self.DefineAxis()
 

@@ -330,7 +330,7 @@ def objetoClick():
     ka = [kaR, kaG, kaB]
     kd = [kdR, kdG, kdB]
     ks = [ksR, ksG, ksB]
-    if(numLados < 3):
+    if(numLados < 3): # colocar um if se tiver um campo vazio dizer que não esta completo ele
         numLados = 3
     drawing.AddObjects(raioBase, raioTopo, numLados, altura, ka, kd, ks, n)
     clearObjectInfo()

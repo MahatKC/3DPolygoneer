@@ -57,7 +57,7 @@ def sombreamento_single_face(centroid, N, Ia, kd, ks, n, il, fonte_luz, VRP):
 
         if It_int < 16:
             face_color = face_color+"00"+hex(It_int)[2:]
-        elif It_int < 255:
+        elif It_int < 256:
             face_color = face_color+"0"+hex(It_int)[2:]
         else:
             face_color += hex(It_int)[2:]

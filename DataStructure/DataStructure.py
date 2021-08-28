@@ -81,6 +81,7 @@ class Object():
         return list
 
     def normalVisualizationTest(self, n):
+        self.draw_vertex = [False]*self.sides*2
         self.draw_faces.clear()
         self.normal_of_faces.clear()
         for face in self.faces:
