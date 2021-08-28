@@ -485,7 +485,7 @@ if __name__ == "__main__":
     drawing = Screen(frameDrawingInterface, width-(330+width*0.01), height-20) 
     drawing.canvas.pack()
 
-    btnLimpar = ttk.Button(window,text="Limpar", width=15, command = ClearScreen) 
+    btnLimpar = ttk.Button(window,text="Limpar", width=15, command = ClearScreen, cursor="hand2") 
     #btnLimpar.place(x=int(width*0.01), y = int(height * 0.88))
     btnLimpar.place(x=width-(410+width*0.01), y = int(height * 0.88))
 
