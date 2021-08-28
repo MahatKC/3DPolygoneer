@@ -426,6 +426,7 @@ def projecaoClick():
                 mundoxMin, mundoxMax, mundoyMin, mundoyMax, planoProjxMin, planoProjxMax, planoProjyMin, planoProjyMax)
                 
     projecaoSet(drawing.GetProjecao())
+    alterarEixos()
 
 def iluminacaoClick():
     #sombreamento = 0 -> constante; sombreamento = 1 -> gourad; sombreamento = 2 -> phong
@@ -450,6 +451,16 @@ def isVazio(string):
     if(string == ""):
         return 0.0
     return float(string)
+
+def alterarEixos():
+    posicaoEixos = drawing.PosEixos()  
+    eixoX = posicaoEixos[0]
+    eixoY = posicaoEixos[1]
+    eixoZ = posicaoEixos[2]
+    print(eixoX, eixoY, eixoZ)
+    axisX.place(x=eixoX[0], y=eixoX[1]-20)
+    axisY.place(x=eixoY[0], y=eixoY[1]-20)
+    axisZ.place(x=eixoZ[0], y=eixoZ[1]-20)
 
 if __name__ == "__main__":
     window = tk.Tk()
@@ -793,13 +804,10 @@ if __name__ == "__main__":
     txtPy['state'] = tk.DISABLED
     txtPz['state'] = tk.DISABLED
     
-    axisX = ttk.Label(frameDrawingInterface, text="X", foreground="#FF0000")
-    axisY = ttk.Label(frameDrawingInterface, text="Y", foreground="#00FF00")
-    axisZ = ttk.Label(frameDrawingInterface, text="Z", foreground="#0000FF")
+    axisX = ttk.Label(frameDrawingInterface, text="X", foreground="#FF0000", background="#CCCCCC")
+    axisY = ttk.Label(frameDrawingInterface, text="Y", foreground="#00FF00", background="#CCCCCC")
+    axisZ = ttk.Label(frameDrawingInterface, text="Z", foreground="#0000FF", background="#CCCCCC")
 
-    posicaoEixos = drawing.PosEixos()    
-    axisX.place(posicaoEixos[0][0], posicaoEixos[0][1])
-    axisY.place(posicaoEixos[1][0], posicaoEixos[1][1])
-    axisZ.place(posicaoEixos[2][0],posicaoEixos[2][1])
-    
+    alterarEixos()
+
     window.mainloop()

@@ -57,9 +57,9 @@ class Screen():
         self.viewPort = self.canvas.create_polygon([self.projecaoXmin - 1,self.projecaoYmin - 1, self.projecaoXmin - 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmin - 1], outline= "#000000", fill= "#CCCCCC", width = 2)
 
 
-        self.endLineX = None
-        self.endLineY = None
-        self.endLineZ = None
+        self.endLineX = [2]
+        self.endLineY = [2]
+        self.endLineZ = [2]
         self.DefineAxis()
 
     def DefineAxis(self):
@@ -74,14 +74,15 @@ class Screen():
         x = int(axis.axisSRT[0][0] - int(self.maxXviewPort * 0.07))
         y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.95))
 
-        endLineX = [axis.axisSRT[0][1] - x, axis.axisSRT[1][1] - y]
-        endLineY = [axis.axisSRT[0][2] - x, axis.axisSRT[1][2] - y]
-        endLineZ = [axis.axisSRT[0][3] - x, axis.axisSRT[1][3] - y]
-        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, endLineX[0], endLineX[1], fill='#FFF000000', width = 5)
-        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, endLineY[0], endLineY[1], fill='#000FFF000', width = 5)
-        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, endLineZ[0], endLineZ[1], fill='#000000FFF', width = 5)
+        self.endLineX = [axis.axisSRT[0][1] - x, axis.axisSRT[1][1] - y]
+        self.endLineY = [axis.axisSRT[0][2] - x, axis.axisSRT[1][2] - y]
+        self.endLineZ = [axis.axisSRT[0][3] - x, axis.axisSRT[1][3] - y]
+        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, self.endLineX[0], self.endLineX[1], fill='#FFF000000', width = 5)
+        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, self.endLineY[0], self.endLineY[1], fill='#000FFF000', width = 5)
+        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, self.endLineZ[0], self.endLineZ[1], fill='#000000FFF', width = 5)
 
     def PosEixos(self):
+        print(self.endLineX)
         return [self.endLineX, self.endLineY, self.endLineZ]
 
     def deleteObject(self, face):
