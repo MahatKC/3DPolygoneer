@@ -79,6 +79,9 @@ class Screen():
         self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, endLineY[0], endLineY[1], fill='#000FFF000', width = 5)
         self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, endLineZ[0], endLineZ[1], fill='#000000FFF', width = 5)
 
+    def PosEixos(self):
+        return [self.endLineX, self.endLineY, self.endLineZ]
+
     def deleteObject(self, face):
         for i in range(0, self.numberObjects):
             if face in self.objects[i]:

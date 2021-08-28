@@ -796,8 +796,10 @@ if __name__ == "__main__":
     axisX = ttk.Label(frameDrawingInterface, text="X", foreground="#FF0000")
     axisY = ttk.Label(frameDrawingInterface, text="Y", foreground="#00FF00")
     axisZ = ttk.Label(frameDrawingInterface, text="Z", foreground="#0000FF")
-    axisX.place(x = 800, y = 100)
-    axisY.place(x = 800, y = 150)
-    axisZ.place(x = 800, y = 200)
+
+    posicaoEixos = drawing.PosEixos()    
+    axisX.place(posicaoEixos[0][0], posicaoEixos[0][1])
+    axisY.place(posicaoEixos[1][0], posicaoEixos[1][1])
+    axisZ.place(posicaoEixos[2][0],posicaoEixos[2][1])
     
     window.mainloop()
