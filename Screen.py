@@ -45,6 +45,8 @@ class Screen():
         self.farValue = 1000
         self.distanciaProjecao = 50
 
+        self.objects_Z_order = []
+
         self.VRP, self.n = VRP_and_n(self.VRPx, self.VRPy, self.VRPz, self.Px, self.Py, self.Pz)  
         self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, self.ViewUpX, self.ViewUpY, self.ViewUpZ, self.isPerspective, self.distanciaProjecao, self.mundoXmin, self.mundoXmax, self.mundoYmin, self.mundoYmax, self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
         self.objects = []
@@ -179,8 +181,6 @@ class Screen():
         self.farValue = far
         self.distanciaProjecao = distanciaProjecao
         self.objectSelected = None
-
-        self.objects_Z_order = []
         
         self.VRP, self.n = VRP_and_n(VRPx, VRPy, VRPz, Px, Py, Pz)  
         self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, ViewUpX, ViewUpY, ViewUpZ, isPerspective, distanciaProjecao, mundoXmin, mundoXmax, mundoYmin, mundoYmax, projecaoXmin, projecaoXmax, projecaoYmin, projecaoYmax)
@@ -189,7 +189,15 @@ class Screen():
             self.objects[object].normalVisualizationTest(self.n)
             self.objects[object].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
             self.objects[object].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
+            self.objects[object].FacesOrder()
+            self.objects[object].sombreamento_constante(self.VRP, self.il, self.ila, self.fonteLuz)
         
+        self.Draw()
+
+    def ChangeIlumination(self, sombreamento, ila, il, fonteLuz):
+        self.il = il
+        self.ila = ila
+        self.fonteLuz = fonteLuz
         self.Draw()
 
     def ClearAll(self):
@@ -203,23 +211,28 @@ class Screen():
 
     def Draw(self):
         self.canvas.delete(ALL)
-        self.objectsInCanvas.clear()
+        self.objectsInCanvas = [None] * self.numberObjects 
         self.viewPort = self.canvas.create_polygon([self.projecaoXmin - 1,self.projecaoYmin - 1, self.projecaoXmin - 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmin - 1], outline= "#000000", fill= "#CCCCCC", width = 2)
         self.PolygonsOrder()
-
+        print("Poligonos")
+        print(self.objects_Z_order)
         for objects in self.objects_Z_order: # gerar uma lista com a ordem de todos os objetos em Z
-            self.objectsInCanvas.append([])
             self.objects[objects].sombreamento_constante(self.VRP, self.il, self.ila, self.fonteLuz)
-            print(self.objects[objects].color_of_faces)
+            self.objectsInCanvas[objects] = []
+            #print(self.objects[objects].color_of_faces)
+            print("Faces")
+            print(self.objects[objects].faces_order)
             if(objects == self.objectSelected): # fazer o outline ser da cor negativada do objects
+                print("objeto Selecionado")
                 for viewport_face_idx in self.objects[objects].faces_order:
                     if np.shape(self.objects[objects].viewport_faces[viewport_face_idx])[1] != 0:
                         self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= "#000000", fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
             else:
+                print("objeto nao Selecionado")
                 for viewport_face_idx in self.objects[objects].faces_order:
                     if np.shape(self.objects[objects].viewport_faces[viewport_face_idx])[1] != 0:
                         self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= self.objects[objects].color_of_faces[viewport_face_idx], fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
-        
+
         self.DefineAxis()
 
     def moveObject(self, valueX, valueY, valueZ):
@@ -228,6 +241,7 @@ class Screen():
             self.objects[self.objectSelected].normalVisualizationTest(self.n)
             self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
             self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
+            self.objects[self.objectSelected].FacesOrder()
             self.Draw()
     
     def scaleObject(self, Sx, Sy, Sz):
@@ -236,6 +250,7 @@ class Screen():
             self.objects[self.objectSelected].normalVisualizationTest(self.n)
             self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
             self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
+            self.objects[self.objectSelected].FacesOrder()
             self.Draw()
 
     def rotObjectX(self, rotationValue):
@@ -244,6 +259,7 @@ class Screen():
             self.objects[self.objectSelected].normalVisualizationTest(self.n)
             self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
             self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
+            self.objects[self.objectSelected].FacesOrder()
             self.Draw()
 
     def rotObjectY(self, rotationValue):
@@ -252,6 +268,7 @@ class Screen():
             self.objects[self.objectSelected].normalVisualizationTest(self.n)
             self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
             self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
+            self.objects[self.objectSelected].FacesOrder()
             self.Draw()
 
     def rotObjectZ(self, rotationValue):
@@ -260,6 +277,7 @@ class Screen():
             self.objects[self.objectSelected].normalVisualizationTest(self.n)
             self.objects[self.objectSelected].pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
             self.objects[self.objectSelected].crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
+            self.objects[self.objectSelected].FacesOrder()
             self.Draw()
 
     def AddObjects(self, r_bottom, r_top, sides, h, ka, kd, ks, n):
@@ -267,6 +285,7 @@ class Screen():
         new_obj.normalVisualizationTest(self.n)
         new_obj.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
         new_obj.crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
+        new_obj.FacesOrder()
         new_obj.sombreamento_constante(self.VRP, self.il, self.ila, self.fonteLuz)
         self.objects.append(new_obj) 
         self.objectsInCanvas.append([])
@@ -287,6 +306,6 @@ class Screen():
     def PolygonsOrder(self):
         self.objects_Z_order.clear()
         objects_z_list = [self.objects[i].object_min_z for i in range(self.numberObjects)]
-        self.objects_Z_order = np.argsort(objects_z_list)
+        self.objects_Z_order = np.argsort(objects_z_list).tolist()
         
         pass
