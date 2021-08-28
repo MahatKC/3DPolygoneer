@@ -11,6 +11,7 @@ from Screen import Screen
 import tkinter as tk
 from tkinter import Canvas, Frame, Scrollbar, ttk
 from tkinter.constants import ALL, E, N, NS, RIGHT, S, VERTICAL, W, Y
+from tkinter import messagebox
 
 """def motion(event):
     x, y = event.x, event.y
@@ -327,6 +328,17 @@ def objetoClick():
     ksB = isVazio(txtKsB.get())
     n = isVazio(txtN.get())
 
+    print(numLados)
+    print(altura)
+    if(numLados == -1):
+        messagebox.showerror("Erro", "Preencha todos os campos!")
+        return 0
+
+    if(int(altura) == -1 | int(raioBase) == -1 | int(raioTopo) == -1 | int(kaR) == -1 | int(kaG) == -1 |
+    int(kaB) == -1 | int(kdR) == -1 | int(kdG) == -1 | int(kdB) == -1 | int(ksR) == -1 | int(ksG) == -1 | int(ksB) == -1 | int(n) == -1):
+        messagebox.showerror("Erro", "Preencha todos os campos!")
+        return 0
+
     ka = [kaR, kaG, kaB]
     kd = [kdR, kdG, kdB]
     ks = [ksR, ksG, ksB]
@@ -448,7 +460,7 @@ def iluminacaoClick():
 
 def isVazio(string):
     if(string == ""):
-        return 0.0
+        return -1
     return float(string)
 
 def alterarEixos():
