@@ -330,7 +330,7 @@ def objetoClick():
     ka = [kaR, kaG, kaB]
     kd = [kdR, kdG, kdB]
     ks = [ksR, ksG, ksB]
-
+    print(ka)
     if(numLados < 3):
         numLados = 3
     drawing.AddObjects(raioBase, raioTopo, numLados, altura, ka, kd, ks, n)

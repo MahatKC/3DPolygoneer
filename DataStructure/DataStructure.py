@@ -109,7 +109,9 @@ class Object():
             if self.draw_faces[i]:
                 self.normal_of_viewPort_faces.append(self.normal_of_faces[i])
                 face = self.faces[i]
-                self.viewport_faces.append(self.sutherland_hodgeman(face, u_min, u_max, v_min, v_max))
+                new_viewport_face = self.sutherland_hodgeman(face, u_min, u_max, v_min, v_max) 
+                if np.shape(new_viewport_face)[1] != 0:
+                    self.viewport_faces.append(new_viewport_face)
         pass
  
     def get_boolean_mask(self, face_vertices, borders):
@@ -191,9 +193,12 @@ class Object():
         return np.array([[x],[y],[z],[1]])
     
     def FacesOrder(self):
-        z_values = [np.min(face[2,:]) for face in self.viewport_faces if np.shape(face)[1]!=0]
-        self.faces_order = np.argsort(z_values)
-        self.object_min_z = np.min(z_values)
+        if len(self.viewport_faces) > 0:
+            z_values = [np.min(face[2,:]) for face in self.viewport_faces]
+            self.faces_order = np.argsort(z_values)
+            self.object_min_z = np.min(z_values)
+        else:
+            self.faces_order = []
 """
 
 obejeto = "quina"

@@ -211,24 +211,16 @@ class Screen():
         self.objectsInCanvas = [None] * self.numberObjects 
         self.viewPort = self.canvas.create_polygon([self.projecaoXmin - 1,self.projecaoYmin - 1, self.projecaoXmin - 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmin - 1], outline= "#000000", fill= "#CCCCCC", width = 2)
         self.PolygonsOrder()
-        print("Poligonos")
-        print(self.objects_Z_order)
         for objects in self.objects_Z_order: # gerar uma lista com a ordem de todos os objetos em Z
             self.objects[objects].sombreamento_constante(self.VRP, self.il, self.ila, self.fonteLuz)
             self.objectsInCanvas[objects] = []
             #print(self.objects[objects].color_of_faces)
-            print("Faces")
-            print(self.objects[objects].faces_order)
             if(objects == self.objectSelected): # fazer o outline ser da cor negativada do objects
-                print("objeto Selecionado")
                 for viewport_face_idx in self.objects[objects].faces_order:
-                    if np.shape(self.objects[objects].viewport_faces[viewport_face_idx])[1] != 0:
-                        self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= "#000000", fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
+                    self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= "#000000", fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
             else:
-                print("objeto nao Selecionado")
                 for viewport_face_idx in self.objects[objects].faces_order:
-                    if np.shape(self.objects[objects].viewport_faces[viewport_face_idx])[1] != 0:
-                        self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= self.objects[objects].color_of_faces[viewport_face_idx], fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
+                    self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= self.objects[objects].color_of_faces[viewport_face_idx], fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
 
         self.DefineAxis()
 
@@ -286,11 +278,8 @@ class Screen():
         new_obj.sombreamento_constante(self.VRP, self.il, self.ila, self.fonteLuz)
         self.objects.append(new_obj) 
         self.objectsInCanvas.append([])
-
-        for viewport_face_idx in range(len(new_obj.viewport_faces)):
-            self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(viewport_face_idx), outline= new_obj.color_of_faces[viewport_face_idx], fill= new_obj.color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
- 
         self.numberObjects += 1
+        self.Draw()
     
     def UpdateObject(self, ka, kd, ks, n):
         self.objects[self.objectSelected].ka = ka 
