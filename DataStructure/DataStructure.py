@@ -22,7 +22,7 @@ np.set_printoptions(suppress=True)
 #Desselecionar o objeto ao apertar no branco da tela
 #enviar o objeto pra fazer TG
 class Object():
-    def __init__(self, x, y, z, h, r_bottom, r_top, sides):
+    def __init__(self, x, y, z, h, r_bottom, r_top, sides, ka, kd, ks, n):
         self.r_bottom = r_bottom
         self.r_top = r_top
         self.height = h
@@ -40,10 +40,10 @@ class Object():
         self.vertexFaces = []
         self.draw_vertex = [False]*sides*2
         self.numberFaces = sides + 2
-        self.ka = None 
-        self.kd = None 
-        self.ks = None 
-        self.n = None
+        self.ka = ka 
+        self.kd = kd 
+        self.ks = ks 
+        self.n = n
         sides_minus_one = sides*2-1
         for f in range(0, sides):
             complement_of_next = (f+1)%sides
@@ -102,8 +102,8 @@ class Object():
     def pipeline_me(self, SRC_matrix, jp_proj_matrix, dist_near, dist_far):
         self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
     
-    def sombreamento_constante(self, VRP, ka, kd, ks, n, il, ila, fonte_luz):
-        self.color_of_faces = sombreamento_constante(self.viewport_faces, self.normals_list, VRP, ka, kd, ks, n, il, ila, fonte_luz)
+    def sombreamento_constante(self, VRP, il, ila, fonte_luz):
+        self.color_of_faces = sombreamento_constante(self.viewport_faces, self.normal_of_faces, VRP, self.ka, self.kd, self.ks, self.n, il, ila, fonte_luz)
 
     def crop_to_screen(self, u_min, u_max, v_min, v_max):
         self.zeroed_SRT = np.zeros((4,self.sides*2))+np.array([[u_min],[v_min],[0],[0]])
