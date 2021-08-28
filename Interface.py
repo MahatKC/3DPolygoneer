@@ -501,6 +501,9 @@ if __name__ == "__main__":
     #btnLimpar.place(x=int(width*0.01), y = int(height * 0.88))
     btnLimpar.place(x=width-(410+width*0.01), y = int(height * 0.88))
 
+    txtIntegrantes = ttk.Label(window, text='Desenvolvido por: Lucas Veit, Mateus Karvat e Roberta Alcantara')
+    txtIntegrantes.place(x=10,  y = int(height * 0.89))
+
     drawing.canvas.bind('<Button-1>', SelectingObject)
 
     drawing.canvas.bind_all('<q>', move_x_left)
