@@ -9,7 +9,7 @@ from tkscrolledframe import ScrolledFrame, widget
 from Screen import Screen
 import tkinter as tk
 from tkinter import Canvas, Frame, Scrollbar, ttk
-from tkinter.constants import ALL, E, N, NS, RIGHT, S, VERTICAL, W, Y 
+from tkinter.constants import ALL, E, N, NS, RIGHT, S, VERTICAL, W, Y
 
 """def motion(event):
     x, y = event.x, event.y
@@ -320,6 +320,27 @@ def projecaoSet(values):
     txtLimPlanoProjyMin.insert(0, str(values[18]))
     txtLimPlanoProjyMax.delete(0, tk.END)
     txtLimPlanoProjyMax.insert(0, str(values[19]))
+    txtIAR.delete(0, tk.END)
+    txtIAR.insert(0, str(values[20][0]))
+    txtIAG.delete(0, tk.END)
+    txtIAG.insert(0, str(values[20][1]))
+    txtIAB.delete(0, tk.END)
+    txtIAB.insert(0, str(values[20][2]))
+    txtIR.delete(0, tk.END)
+    txtIR.insert(0, str(values[21][0]))
+    txtIG.delete(0, tk.END)
+    txtIG.insert(0, str(values[21][1]))
+    txtIB.delete(0, tk.END)
+    txtIB.insert(0, str(values[21][2]))
+    txtIx.delete(0, tk.END)
+    txtIx.insert(0, str(values[22][0]))
+    txtIy.delete(0, tk.END)
+    txtIy.insert(0, str(values[22][1]))
+    txtIz.delete(0, tk.END)
+    txtIz.insert(0, str(values[22][2]))
+    
+    # Menu inferior
+    
 
 def projecaoClick():
     #rbProjeção = 0 -> perspectiva; rbProjeção = 1 -> axonometrica
@@ -367,15 +388,13 @@ def iluminacaoClick():
     il = [iR, iG, iB]
     fonteLuz = np.array([iX, iY, iZ])
 
-    drawing.criarIluminacao(sombreamento, ila, il, fonteLuz)
+    drawing.ChangeIlumination(sombreamento, ila, il, fonteLuz)
 
 def isVazio(string):
     if(string == ""):
         return 0.0
     return float(string)
 
-def criarIluminacao(sombreamento, iaR, iaG, iaB, iR, iG, iB, iX, iY, iZ):
-    print(sombreamento*2)
 
 if __name__ == "__main__":
     window = tk.Tk()
@@ -711,5 +730,5 @@ if __name__ == "__main__":
     axisX.place(x = 800, y = 100)
     axisY.place(x = 800, y = 150)
     axisZ.place(x = 800, y = 200)
-
+    
     window.mainloop()

@@ -1,6 +1,8 @@
 #from normal_test import normal_test
 #from Matrices.prism import create_prism
 #from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
+from tkinter.constants import N
+from DataStructure.Matrices.sombreamento_constante import sombreamento_constante
 from DataStructure.normal_test import normal_test
 from DataStructure.Matrices.prism import create_prism
 from DataStructure.Matrices.pipeline import  VRP_and_n, first_pipeline, SRC_matrix, pipeline_steps
@@ -20,7 +22,7 @@ np.set_printoptions(suppress=True)
 #Desselecionar o objeto ao apertar no branco da tela
 #enviar o objeto pra fazer TG
 class Object():
-    def __init__(self, x, y, z, h, r_bottom, r_top, sides):
+    def __init__(self, x, y, z, h, r_bottom, r_top, sides, ka, kd, ks, n):
         self.r_bottom = r_bottom
         self.r_top = r_top
         self.height = h
@@ -29,6 +31,7 @@ class Object():
         self.prism_in_SRU = create_prism(x, y, z, h, r_bottom, r_top, sides)
         self.prism_in_SRT = None
         self.normal_of_faces = []
+        self.color_of_faces = []
         self.zeroed_SRT = None
         self.viewport_faces = []
         self.draw_me = None
@@ -37,6 +40,10 @@ class Object():
         self.vertexFaces = []
         self.draw_vertex = [False]*sides*2
         self.numberFaces = sides + 2
+        self.ka = ka 
+        self.kd = kd 
+        self.ks = ks 
+        self.n = n
         sides_minus_one = sides*2-1
         for f in range(0, sides):
             complement_of_next = (f+1)%sides
@@ -95,6 +102,9 @@ class Object():
     def pipeline_me(self, SRC_matrix, jp_proj_matrix, dist_near, dist_far):
         self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
     
+    def sombreamento_constante(self, VRP, il, ila, fonte_luz):
+        self.color_of_faces = sombreamento_constante(self.viewport_faces, self.normal_of_faces, VRP, self.ka, self.kd, self.ks, self.n, il, ila, fonte_luz)
+
     def crop_to_screen(self, u_min, u_max, v_min, v_max):
         self.zeroed_SRT = np.zeros((4,self.sides*2))+np.array([[u_min],[v_min],[0],[0]])
         self.zeroed_SRT[:,self.draw_vertex] = self.prism_in_SRT[:,:]
@@ -183,6 +193,24 @@ class Object():
         z = z1+u*z2_min_z1
 
         return np.array([[x],[y],[z],[1]])
+    
+    def FacesOrder(self):
+        self.ZValue = np.zeros((len(self.viewport_faces),np.shape(self.viewport_faces[face])[1]))
+        for face in range(len(self.viewport_faces)):
+            for vertex in range(np.shape(self.viewport_faces[face])[1]):
+                self.ZValue[face, vertex, 0] = self.viewport_faces[face][2]
+        print(self.ZValue)
+        
+        # anda por todas as faces
+            # Verifica os vértices que compõe a face
+            # Calcula a média do Z dos vertices da face
+        # Cria uma lista com a face e o valor de Z dela, da mais distante para a mais proxima
+        pass
+    
+    def FaceZ(self):
+        # Retorna o valor de Z da face mais distante para a mais próxima (Z da primeira posição da lista de faces)
+        # return min(self.Zvalue[0][1])
+        pass
 
 """
 obejeto = "quadradao"

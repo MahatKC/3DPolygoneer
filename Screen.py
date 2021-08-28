@@ -37,6 +37,10 @@ class Screen():
         self.ViewUpX = 0
         self.ViewUpY = 1
         self.ViewUpZ = 0
+
+        self.il = [255, 255, 255]
+        self.ila = [255, 255, 255]
+        self.fonteLuz = [0, 1000, 0]
         
         self.nearValue = 10
         self.farValue = 1000
@@ -73,8 +77,6 @@ class Screen():
         self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, endLineZ[0], endLineZ[1], fill='#0000FF', width = 5)
 
         return [endLineX, endLineY, endLineZ]
-
-    def eixosFim 
 
     def deleteObject(self, face):
         for i in range(0, self.numberObjects):
@@ -118,6 +120,9 @@ class Screen():
         list.append(self.projecaoXmax)
         list.append(self.projecaoYmin)
         list.append(self.projecaoYmax)
+        list.append(self.il)
+        list.append(self.ila)
+        list.append(self.fonteLuz)
         return list
 
     def RedoPipeline(self, isPerspective, VRPx, VRPy, VRPz, Px, Py, Pz, ViewUpX, ViewUpY, ViewUpZ, near, far, distanciaProjecao,
@@ -187,10 +192,11 @@ class Screen():
      
         for objects in range(self.numberObjects): # gerar uma lista com a ordem de todos os objetos em Z
             self.objectsInCanvas.append([])
-            print(self.objects[objects].viewport_faces)
+            self.objects[objects].sombreamento_constante(self.VRP, self.il, self.ila, self.fonteLuz)
+            print(self.objects[objects].color_of_faces)
             for viewport_face_idx in range(len(self.objects[objects].viewport_faces)):
                 if np.shape(self.objects[objects].viewport_faces[viewport_face_idx])[1] != 0:
-                    self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= random.choice(self.polygonsColors), fill=random.choice(self.polygonsColors), width = 2, tags = "objeto"))
+                    self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= self.objects[objects].color_of_faces[viewport_face_idx], fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
         
         self.DefineAxis()
 
@@ -235,15 +241,16 @@ class Screen():
             self.Draw()
 
     def AddObjects(self, r_bottom, r_top, sides, h, ka, kd, ks, n):
-        new_obj = Object(0, 0, 0, h, r_bottom, r_top, sides) 
+        new_obj = Object(0, 0, 0, h, r_bottom, r_top, sides, ka, kd, ks, n) 
         new_obj.normalVisualizationTest(self.n)
         new_obj.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
         new_obj.crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
+        new_obj.sombreamento_constante(self.VRP, self.il, self.ila, self.fonteLuz)
         self.objects.append(new_obj) 
         self.objectsInCanvas.append([])
-        
+
         for viewport_face_idx in range(len(new_obj.viewport_faces)):
-            self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(viewport_face_idx), outline= random.choice(self.polygonsColors), fill= random.choice(self.polygonsColors), width = 2, tags = "objeto"))
+            self.objectsInCanvas[self.numberObjects].append(self.canvas.create_polygon(new_obj.getCoordinates(viewport_face_idx), outline= new_obj.color_of_faces[viewport_face_idx], fill= new_obj.color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
  
         self.numberObjects += 1
     
@@ -254,3 +261,15 @@ class Screen():
         new_obj.crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
         self.objects[self.objectSelected] = new_obj 
         self.Draw()
+
+    def PolygonsOrder(self):
+        # para cada poligono
+            # pega o valor de Z dele
+        # cria uma lista dos valores de Z e do polígono que o valor pertence, do mais distante para o mais próximo
+        pass
+    def PainterAlgorithm(self):
+        # Pega e começa a andar pela lista de poligonos ordenada
+        # Para cada poligono
+        #   Seleciona a lista de faces ordenada dele
+        #       para cada face, desenha ela :)
+        pass
