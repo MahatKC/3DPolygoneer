@@ -328,8 +328,6 @@ def objetoClick():
     ksB = isVazio(txtKsB.get())
     n = isVazio(txtN.get())
 
-    print(numLados)
-    print(altura)
     if(numLados == -1):
         messagebox.showerror("Erro", "Preencha todos os campos!")
         return 0
@@ -339,11 +337,13 @@ def objetoClick():
         messagebox.showerror("Erro", "Preencha todos os campos!")
         return 0
 
+    if(numLados < 3):
+        numLados = 3
+
     ka = [kaR, kaG, kaB]
     kd = [kdR, kdG, kdB]
     ks = [ksR, ksG, ksB]
-    if(numLados < 3):
-        numLados = 3
+
     drawing.AddObjects(raioBase, raioTopo, numLados, altura, ka, kd, ks, n)
     clearObjectInfo()
 
