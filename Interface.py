@@ -330,7 +330,6 @@ def objetoClick():
     ka = [kaR, kaG, kaB]
     kd = [kdR, kdG, kdB]
     ks = [ksR, ksG, ksB]
-    print(ka)
     if(numLados < 3):
         numLados = 3
     drawing.AddObjects(raioBase, raioTopo, numLados, altura, ka, kd, ks, n)
@@ -457,7 +456,6 @@ def alterarEixos():
     eixoX = posicaoEixos[0]
     eixoY = posicaoEixos[1]
     eixoZ = posicaoEixos[2]
-    print(eixoX, eixoY, eixoZ)
     axisX.place(x=eixoX[0], y=eixoX[1]-20)
     axisY.place(x=eixoY[0], y=eixoY[1]-20)
     axisZ.place(x=eixoZ[0], y=eixoZ[1]-20)
