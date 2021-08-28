@@ -165,6 +165,8 @@ class Screen():
         self.farValue = far
         self.distanciaProjecao = distanciaProjecao
         self.objectSelected = None
+
+        self.objects_Z_order = []
         
         self.VRP, self.n = VRP_and_n(VRPx, VRPy, VRPz, Px, Py, Pz)  
         self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, ViewUpX, ViewUpY, ViewUpZ, isPerspective, distanciaProjecao, mundoXmin, mundoXmax, mundoYmin, mundoYmax, projecaoXmin, projecaoXmax, projecaoYmin, projecaoYmax)
@@ -189,12 +191,13 @@ class Screen():
         self.canvas.delete(ALL)
         self.objectsInCanvas.clear()
         self.viewPort = self.canvas.create_polygon([self.projecaoXmin - 1,self.projecaoYmin - 1, self.projecaoXmin - 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmin - 1], outline= "#000000", fill= "#CCCCCC", width = 2)
-     
-        for objects in range(self.numberObjects): # gerar uma lista com a ordem de todos os objetos em Z
+        self.PolygonsOrder()
+
+        for objects in self.objects_Z_order: # gerar uma lista com a ordem de todos os objetos em Z
             self.objectsInCanvas.append([])
             self.objects[objects].sombreamento_constante(self.VRP, self.il, self.ila, self.fonteLuz)
             print(self.objects[objects].color_of_faces)
-            for viewport_face_idx in range(len(self.objects[objects].viewport_faces)):
+            for viewport_face_idx in self.objects[objects].faces_order:
                 if np.shape(self.objects[objects].viewport_faces[viewport_face_idx])[1] != 0:
                     self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= self.objects[objects].color_of_faces[viewport_face_idx], fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
         
@@ -263,13 +266,8 @@ class Screen():
         self.Draw()
 
     def PolygonsOrder(self):
-        # para cada poligono
-            # pega o valor de Z dele
-        # cria uma lista dos valores de Z e do polígono que o valor pertence, do mais distante para o mais próximo
-        pass
-    def PainterAlgorithm(self):
-        # Pega e começa a andar pela lista de poligonos ordenada
-        # Para cada poligono
-        #   Seleciona a lista de faces ordenada dele
-        #       para cada face, desenha ela :)
+        self.objects_Z_order.clear()
+        objects_z_list = [self.objects[i].object_min_z for i in range(self.numberObjects)]
+        self.objects_Z_order = np.argsort(objects_z_list)
+        
         pass
