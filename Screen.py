@@ -54,7 +54,11 @@ class Screen():
         self.canvas = Canvas(frame, width = self.maxXviewPort, height = self.maxYviewPort, bg = "white")
         self.objectSelected = None 
         self.viewPort = self.canvas.create_polygon([self.projecaoXmin - 1,self.projecaoYmin - 1, self.projecaoXmin - 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmin - 1], outline= "#000000", fill= "#CCCCCC", width = 2)
-     
+
+
+        self.endLineX = None
+        self.endLineY = None
+        self.endLineZ = None
         self.DefineAxis()
 
     def DefineAxis(self):
@@ -75,8 +79,6 @@ class Screen():
         self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, endLineX[0], endLineX[1], fill='#FF0000', width = 5)
         self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, endLineY[0], endLineY[1], fill='#00FF00', width = 5)
         self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, endLineZ[0], endLineZ[1], fill='#0000FF', width = 5)
-
-        return [endLineX, endLineY, endLineZ]
 
     def deleteObject(self, face):
         for i in range(0, self.numberObjects):
