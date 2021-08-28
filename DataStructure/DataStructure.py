@@ -1,12 +1,13 @@
-#from normal_test import normal_test
-#from Matrices.prism import create_prism
-#from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
+from normal_test import normal_test
+from Matrices.prism import create_prism
+from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
+from Matrices.sombreamento_constante import sombreamento_constante
 from tkinter.constants import N
-from DataStructure.Matrices.sombreamento_constante import sombreamento_constante
-from DataStructure.normal_test import normal_test
-from DataStructure.Matrices.prism import create_prism
-from DataStructure.Matrices.pipeline import  VRP_and_n, first_pipeline, SRC_matrix, pipeline_steps
-from DataStructure.Matrices.transforms import translation, scaleAlongAxis, rotXAlongAxis, rotYAlongAxis, rotZAlongAxis
+#from DataStructure.Matrices.sombreamento_constante import sombreamento_constante
+#from DataStructure.normal_test import normal_test
+#from DataStructure.Matrices.prism import create_prism
+#from DataStructure.Matrices.pipeline import  VRP_and_n, first_pipeline, SRC_matrix, pipeline_steps
+#from DataStructure.Matrices.transforms import translation, scaleAlongAxis, rotXAlongAxis, rotYAlongAxis, rotZAlongAxis
 import numpy as np
 import copy
 np.set_printoptions(precision=6)
@@ -201,45 +202,31 @@ class Object():
         return np.array([[x],[y],[z],[1]])
     
     def FacesOrder(self):
-        self.ZValue = np.zeros((len(self.viewport_faces),np.shape(self.viewport_faces[face])[1]))
-        for face in range(len(self.viewport_faces)):
-            for vertex in range(np.shape(self.viewport_faces[face])[1]):
-                self.ZValue[face, vertex, 0] = self.viewport_faces[face][2]
-        print(self.ZValue)
-        
-        # anda por todas as faces
-            # Verifica os vértices que compõe a face
-            # Calcula a média do Z dos vertices da face
-        # Cria uma lista com a face e o valor de Z dela, da mais distante para a mais proxima
-        pass
-    
-    def FaceZ(self):
-        # Retorna o valor de Z da face mais distante para a mais próxima (Z da primeira posição da lista de faces)
-        # return min(self.Zvalue[0][1])
-        pass
+        z_values = [np.min(face[2,:]) for face in self.viewport_faces if np.shape(face)[1]!=0]
+        self.faces_order = np.argsort(z_values)
+        self.object_min_z = np.min(z_values)
 
-"""
-obejeto = "quadradao"
+
+obejeto = "quina"
 
 if obejeto == "quina":
-    poliedro_teste = Object(0, 0, 0, 10, 10, 10, 10)
+    poliedro_teste = Object(0, 0, 0, 10, 10, 10, 10, [1,1,1],[1,1,1],[1,1,1],1)
     VRP,n = VRP_and_n(0, 20, 100, 2, 1, 3)
     poliedro_teste.normalVisualizationTest(n)
     SRC_matrix, jp_proj_matrix = first_pipeline(VRP, n, 0, 1, 0, False, 50, -40, -15, -40, 15, 300, 1000, 200, 600)
     poliedro_teste.pipeline_me(SRC_matrix, jp_proj_matrix, 10, 1000)
 elif obejeto=="quadradao":
-    poliedro_teste = Object(0, 0, 0, 15, 15, 60, 4)
+    poliedro_teste = Object(0, 0, 0, 15, 15, 60, 4, [1,1,1],[1,1,1],[1,1,1],1)
     VRP,n = VRP_and_n(0, 0, 1000, 2, 1, 3)
     poliedro_teste.normalVisualizationTest(n)
     #SRC_matrix, jp_proj_matrix = first_pipeline(VRP, n, 0, 1, 0, False, 50, -50, 40, -40, 30, 300, 1000, 200, 600)
     SRC_matrix, jp_proj_matrix = first_pipeline(VRP, n, 0, 1, 0, False, 50, -50, 40, -40, 30, 150, 1250, 0, 850)
     poliedro_teste.pipeline_me(SRC_matrix, jp_proj_matrix, 10, 1000)
 
-print(poliedro_teste.prism_in_SRT)
 #poliedro_teste.crop_to_screen(300, 1000, 200, 600) -> all outside, no intersection
 poliedro_teste.crop_to_screen(150, 1250, 0, 850) #all outside, all intersections
 print(poliedro_teste.viewport_faces)
-
+poliedro_teste.FacesOrder()
+print(poliedro_teste.face_Z_values)
 #for viewport_face_idx in range(len(poliedro_teste.viewport_faces)):
 #    print(poliedro_teste.getCoordinates(viewport_face_idx))
-"""

@@ -67,15 +67,15 @@ class Screen():
         
         x = int(axis.axisSRT[0][0] - int(self.maxXviewPort * 0.07))
         y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.95))
-        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][1] - x, axis.axisSRT[1][1] - y, fill='#FFF000000', width = 5)
-        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][2] - x, axis.axisSRT[1][2] - y, fill='#000FFF000', width = 5)
-        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][3] - x, axis.axisSRT[1][3] - y, fill='#000000FFF', width = 5)
 
-    def ChangeIlumination(self, sombreamento, ila, il, fonteLuz):
-        self.il = il
-        self.ila = ila
-        self.fonteLuz = fonteLuz
-        self.Draw()
+        endLineX = [axis.axisSRT[0][1] - x, axis.axisSRT[1][1] - y]
+        endLineY = [axis.axisSRT[0][2] - x, axis.axisSRT[1][2] - y]
+        endLineZ = [axis.axisSRT[0][3] - x, axis.axisSRT[1][3] - y]
+        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, endLineX[0], endLineX[1], fill='#FFF000000', width = 5)
+        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, endLineY[0], endLineY[1], fill='#000FFF000', width = 5)
+        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, endLineZ[0], endLineZ[1], fill='#000000FFF', width = 5)
+
+        return [endLineX, endLineY, endLineZ]
 
     def deleteObject(self, face):
         for i in range(0, self.numberObjects):
@@ -174,6 +174,8 @@ class Screen():
         self.farValue = far
         self.distanciaProjecao = distanciaProjecao
         self.objectSelected = None
+
+        self.objects_Z_order = []
         
         self.VRP, self.n = VRP_and_n(VRPx, VRPy, VRPz, Px, Py, Pz)  
         self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, ViewUpX, ViewUpY, ViewUpZ, isPerspective, distanciaProjecao, mundoXmin, mundoXmax, mundoYmin, mundoYmax, projecaoXmin, projecaoXmax, projecaoYmin, projecaoYmax)
@@ -198,17 +200,18 @@ class Screen():
         self.canvas.delete(ALL)
         self.objectsInCanvas.clear()
         self.viewPort = self.canvas.create_polygon([self.projecaoXmin - 1,self.projecaoYmin - 1, self.projecaoXmin - 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmin - 1], outline= "#000000", fill= "#CCCCCC", width = 2)
-     
-        for objects in range(self.numberObjects): # gerar uma lista com a ordem de todos os objetos em Z
+        self.PolygonsOrder()
+
+        for objects in self.objects_Z_order: # gerar uma lista com a ordem de todos os objetos em Z
             self.objectsInCanvas.append([])
             self.objects[objects].sombreamento_constante(self.VRP, self.il, self.ila, self.fonteLuz)
             print(self.objects[objects].color_of_faces)
             if(objects == self.objectSelected): # fazer o outline ser da cor negativada do objects
-                for viewport_face_idx in range(len(self.objects[objects].viewport_faces)):
+                for viewport_face_idx in self.objects[objects].faces_order:
                     if np.shape(self.objects[objects].viewport_faces[viewport_face_idx])[1] != 0:
                         self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= "#000000", fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
             else:
-                for viewport_face_idx in range(len(self.objects[objects].viewport_faces)):
+                for viewport_face_idx in self.objects[objects].faces_order:
                     if np.shape(self.objects[objects].viewport_faces[viewport_face_idx])[1] != 0:
                         self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= self.objects[objects].color_of_faces[viewport_face_idx], fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
         
@@ -277,14 +280,8 @@ class Screen():
         self.Draw()
 
     def PolygonsOrder(self):
-        # para cada poligono
-            # pega o valor de Z dele
-        # cria uma lista dos valores de Z e do polígono que o valor pertence, do mais distante para o mais próximo
-        pass
-    
-    def PainterAlgorithm(self):
-        # Pega e começa a andar pela lista de poligonos ordenada
-        # Para cada poligono
-        #   Seleciona a lista de faces ordenada dele
-        #       para cada face, desenha ela :)
+        self.objects_Z_order.clear()
+        objects_z_list = [self.objects[i].object_min_z for i in range(self.numberObjects)]
+        self.objects_Z_order = np.argsort(objects_z_list)
+        
         pass
