@@ -138,6 +138,27 @@ def SendUI(values):
     txtRaioTopo.insert(0, str(values[2]))
     txtAltura.delete(0, tk.END)
     txtAltura.insert(0, str(values[3]))
+    
+    txtN.delete(0, tk.END)   
+    txtN.insert(0, str(values[4]))  
+    txtKaR.delete(0, tk.END)
+    txtKaR.insert(0, str(values[5]))
+    txtKaG.delete(0, tk.END)
+    txtKaG.insert(0, str(values[6]))
+    txtKaB.delete(0, tk.END)
+    txtKaB.insert(0, str(values[7]))
+    txtKdR.delete(0, tk.END)
+    txtKdR.insert(0, str(values[8]))
+    txtKdG.delete(0, tk.END)
+    txtKdG.insert(0, str(values[9]))
+    txtKdB.delete(0, tk.END)
+    txtKdB.insert(0, str(values[10]))
+    txtKsR.delete(0, tk.END)
+    txtKsR.insert(0, str(values[11]))
+    txtKsG.delete(0, tk.END)
+    txtKsG.insert(0, str(values[12]))
+    txtKsB.delete(0, tk.END)
+    txtKsB.insert(0, str(values[13]))
 
 translationValue = 5
 scaleLessValue = 0.9
@@ -234,26 +255,56 @@ def rot_y_down(event):
         drawing.rotObjectY(-rotationValue)
         SendUI(drawing.GetAttributes())
 
+def clearObjectInfo():
+    txtNumLados.delete(0, tk.END)
+    txtAltura.delete(0, tk.END)
+    txtRaioBase.delete(0, tk.END)
+    txtRaioTopo.delete(0, tk.END)
+    txtKaR.delete(0, tk.END)
+    txtKaG.delete(0, tk.END)
+    txtKaB.delete(0, tk.END)
+    txtKdR.delete(0, tk.END)
+    txtKdG.delete(0, tk.END)
+    txtKdB.delete(0, tk.END)
+    txtKsR.delete(0, tk.END)
+    txtKsG.delete(0, tk.END)
+    txtKsB.delete(0, tk.END)
+    txtN.delete(0, tk.END)
+
 def SelectingObject(event):
-    if drawing.canvas.find_withtag("current"):
-        if event.widget.gettags("current")[0] == "objeto":
-            object = drawing.ObjectSelection(drawing.canvas.find_withtag("current")[0])
-            SendUI(drawing.GetAttributes())
-            for i in object:
-                drawing.canvas.itemconfig(i, outline='red')
-                #drawing.canvas.coords(i, [30, 30, 50, 80, 100, 100, 200, 200, 420, 100]) #readapta as coordenadas de cada face do objeto
-        else:
-            drawing.objectSelected = None
+    if drawing.canvas.find_withtag("current") and event.widget.gettags("current")[0] == "objeto":
+        object = drawing.ObjectSelection(drawing.canvas.find_withtag("current")[0])
+        SendUI(drawing.GetAttributes())
+        txtNumLados['state'] = tk.DISABLED
+        txtAltura['state'] = tk.DISABLED
+        txtRaioBase['state'] = tk.DISABLED
+        txtRaioTopo['state'] = tk.DISABLED
     else:
         drawing.objectSelected = None
-        botaoObjeto(1, 2, 3)
+        txtNumLados['state'] = tk.WRITABLE
+        txtAltura['state'] = tk.WRITABLE
+        txtRaioBase['state'] = tk.WRITABLE
+        txtRaioTopo['state'] = tk.WRITABLE
+        clearObjectInfo()
+    drawing.Draw()
+    botaoObjeto(0, 0, 0)
     
 def atualizarObjeto():
-    numLados = int(isVazio(txtNumLados.get()))
-    altura = isVazio(txtAltura.get())
-    raioBase = isVazio(txtRaioBase.get())
-    raioTopo = isVazio(txtRaioTopo.get()) 
-    drawing.UpdateObject(raioBase, raioTopo, numLados, altura)
+    kaR = isVazio(txtKaR.get())
+    kaG = isVazio(txtKaG.get())
+    kaB = isVazio(txtKaB.get())
+    kdR = isVazio(txtKdR.get())
+    kdG = isVazio(txtKdG.get())
+    kdB = isVazio(txtKdB.get())
+    ksR = isVazio(txtKsR.get())
+    ksG = isVazio(txtKsG.get())
+    ksB = isVazio(txtKsB.get())
+    n = isVazio(txtN.get())
+
+    ka = [kaR, kaG, kaB]
+    kd = [kdR, kdG, kdB]
+    ks = [ksR, ksG, ksB] 
+    drawing.UpdateObject(ka, kd, ks, n)
 
 def objetoClick():
     numLados = int(isVazio(txtNumLados.get()))
@@ -276,6 +327,7 @@ def objetoClick():
     ks = [ksR, ksG, ksB]
     drawing.AddObjects(raioBase, raioTopo, numLados, altura, 
                         ka, kd, ks, n)
+    clearObjectInfo()
 
 def projecaoSet(values):
     txtVRPx.delete(0, tk.END)
@@ -342,7 +394,7 @@ def projecaoSet(values):
 
 def projecaoClick():
     #rbProjeção = 0 -> perspectiva; rbProjeção = 1 -> axonometrica
-    projecao = bool(int(rbProjecao.get())) 
+    projecao = bool(int(rbProjecao.get()))
     vrpX = isVazio(txtVRPx.get())
     vrpY = isVazio(txtVRPy.get())
     vrpZ = isVazio(txtVRPz.get())

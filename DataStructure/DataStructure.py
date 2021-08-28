@@ -31,6 +31,7 @@ class Object():
         self.prism_in_SRU = create_prism(x, y, z, h, r_bottom, r_top, sides)
         self.prism_in_SRT = None
         self.normal_of_faces = []
+        self.normal_of_viewPort_faces = []
         self.color_of_faces = []
         self.zeroed_SRT = None
         self.viewport_faces = []
@@ -88,6 +89,7 @@ class Object():
 
     def normalVisualizationTest(self, n):
         self.draw_faces.clear()
+        self.normal_of_faces.clear()
         for face in self.faces:
             face_vertices = []
             for i in range(3):
@@ -103,15 +105,19 @@ class Object():
         self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
     
     def sombreamento_constante(self, VRP, il, ila, fonte_luz):
-        self.color_of_faces = sombreamento_constante(self.viewport_faces, self.normal_of_faces, VRP, self.ka, self.kd, self.ks, self.n, il, ila, fonte_luz)
+        print(self.normal_of_faces)
+        print(self.viewport_faces)
+        print(self.normal_of_viewPort_faces)
+        self.color_of_faces = sombreamento_constante(self.viewport_faces, self.normal_of_viewPort_faces, VRP, self.ka, self.kd, self.ks, self.n, il, ila, fonte_luz)
 
     def crop_to_screen(self, u_min, u_max, v_min, v_max):
         self.zeroed_SRT = np.zeros((4,self.sides*2))+np.array([[u_min],[v_min],[0],[0]])
         self.zeroed_SRT[:,self.draw_vertex] = self.prism_in_SRT[:,:]
         self.viewport_faces = []
-
+        self.normal_of_viewPort_faces.clear()
         for i in range(self.numberFaces):
             if self.draw_faces[i]:
+                self.normal_of_viewPort_faces.append(self.normal_of_faces[i])
                 face = self.faces[i]
                 self.viewport_faces.append(self.sutherland_hodgeman(face, u_min, u_max, v_min, v_max))
         pass

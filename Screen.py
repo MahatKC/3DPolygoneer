@@ -10,7 +10,6 @@ import random
 # apagar também das listas quando trabalhar com os objetos
 class Screen():
     def __init__(self, frame, width, height):
-        self.polygonsColors = ['#F54C99', '#FF4FF8', '#C354E8', '#A34FFF', '#6E4CF5', '#F0332B', '#FA2D78', '#E334CC', '#D12DFA', '#932BF0']
         self.isPerspective = False
 
         self.maxXviewPort = int(width)
@@ -68,9 +67,9 @@ class Screen():
         
         x = int(axis.axisSRT[0][0] - int(self.maxXviewPort * 0.07))
         y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.95))
-        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][1] - x, axis.axisSRT[1][1] - y, fill='#FF0000', width = 5)
-        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][2] - x, axis.axisSRT[1][2] - y, fill='#00FF00', width = 5)
-        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][3] - x, axis.axisSRT[1][3] - y, fill='#0000FF', width = 5)
+        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][1] - x, axis.axisSRT[1][1] - y, fill='#FFF000000', width = 5)
+        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][2] - x, axis.axisSRT[1][2] - y, fill='#000FFF000', width = 5)
+        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][3] - x, axis.axisSRT[1][3] - y, fill='#000000FFF', width = 5)
 
     def ChangeIlumination(self, sombreamento, ila, il, fonteLuz):
         self.il = il
@@ -96,6 +95,16 @@ class Screen():
         list.append(self.objects[self.objectSelected].r_bottom)
         list.append(self.objects[self.objectSelected].r_top)
         list.append(self.objects[self.objectSelected].height)
+        list.append(self.objects[self.objectSelected].n)
+        list.append(self.objects[self.objectSelected].ka[0])
+        list.append(self.objects[self.objectSelected].ka[1])
+        list.append(self.objects[self.objectSelected].ka[2])
+        list.append(self.objects[self.objectSelected].kd[0])
+        list.append(self.objects[self.objectSelected].kd[1])
+        list.append(self.objects[self.objectSelected].kd[2])
+        list.append(self.objects[self.objectSelected].ks[0])
+        list.append(self.objects[self.objectSelected].ks[1])
+        list.append(self.objects[self.objectSelected].ks[2])
         return list
         
     def GetProjecao(self):
@@ -194,9 +203,14 @@ class Screen():
             self.objectsInCanvas.append([])
             self.objects[objects].sombreamento_constante(self.VRP, self.il, self.ila, self.fonteLuz)
             print(self.objects[objects].color_of_faces)
-            for viewport_face_idx in range(len(self.objects[objects].viewport_faces)):
-                if np.shape(self.objects[objects].viewport_faces[viewport_face_idx])[1] != 0:
-                    self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= self.objects[objects].color_of_faces[viewport_face_idx], fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
+            if(objects == self.objectSelected): # fazer o outline ser da cor negativada do objects
+                for viewport_face_idx in range(len(self.objects[objects].viewport_faces)):
+                    if np.shape(self.objects[objects].viewport_faces[viewport_face_idx])[1] != 0:
+                        self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= "#000000", fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
+            else:
+                for viewport_face_idx in range(len(self.objects[objects].viewport_faces)):
+                    if np.shape(self.objects[objects].viewport_faces[viewport_face_idx])[1] != 0:
+                        self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= self.objects[objects].color_of_faces[viewport_face_idx], fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
         
         self.DefineAxis()
 
@@ -254,12 +268,12 @@ class Screen():
  
         self.numberObjects += 1
     
-    def UpdateObject(self, r_bottom, r_top, sides, h):
-        new_obj = Object(0, 0, 0, h, r_bottom, r_top, sides) # alterar o X, Y e Z para pegar o do objeto atual
-        new_obj.normalVisualizationTest(self.n)
-        new_obj.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
-        new_obj.crop_to_screen(self.projecaoXmin, self.projecaoXmax, self.projecaoYmin, self.projecaoYmax)
-        self.objects[self.objectSelected] = new_obj 
+    def UpdateObject(self, ka, kd, ks, n):
+        self.objects[self.objectSelected].ka = ka 
+        self.objects[self.objectSelected].kd = kd 
+        self.objects[self.objectSelected].ks = ks 
+        self.objects[self.objectSelected].n = n
+        self.objects[self.objectSelected].sombreamento_constante(self.VRP, self.il, self.ila, self.fonteLuz)
         self.Draw()
 
     def PolygonsOrder(self):
@@ -267,6 +281,7 @@ class Screen():
             # pega o valor de Z dele
         # cria uma lista dos valores de Z e do polígono que o valor pertence, do mais distante para o mais próximo
         pass
+    
     def PainterAlgorithm(self):
         # Pega e começa a andar pela lista de poligonos ordenada
         # Para cada poligono
