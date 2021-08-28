@@ -1,13 +1,13 @@
-from normal_test import normal_test
-from Matrices.prism import create_prism
-from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
-from Matrices.sombreamento_constante import sombreamento_constante
-from tkinter.constants import N
-#from DataStructure.Matrices.sombreamento_constante import sombreamento_constante
-#from DataStructure.normal_test import normal_test
-#from DataStructure.Matrices.prism import create_prism
-#from DataStructure.Matrices.pipeline import  VRP_and_n, first_pipeline, SRC_matrix, pipeline_steps
-#from DataStructure.Matrices.transforms import translation, scaleAlongAxis, rotXAlongAxis, rotYAlongAxis, rotZAlongAxis
+#from normal_test import normal_test
+#from Matrices.prism import create_prism
+#from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
+#from Matrices.sombreamento_constante import sombreamento_constante
+#from tkinter.constants import N
+from DataStructure.Matrices.sombreamento_constante import sombreamento_constante
+from DataStructure.normal_test import normal_test
+from DataStructure.Matrices.prism import create_prism
+from DataStructure.Matrices.pipeline import  VRP_and_n, first_pipeline, SRC_matrix, pipeline_steps
+from DataStructure.Matrices.transforms import translation, scaleAlongAxis, rotXAlongAxis, rotYAlongAxis, rotZAlongAxis
 import numpy as np
 import copy
 np.set_printoptions(precision=6)
@@ -57,14 +57,6 @@ class Object():
             floor = int(np.floor(v/sides))
             self.vertexFaces.append([v%sides, (sides*(1+floor))-v-1, floor+sides])
     
-    def printa_tudo(self):
-        print("Faces list: ")
-        print(self.faces)
-        print("-"*10)
-        print("Vertices list: ")
-        print(self.vertexFaces)
-        print("-"*10)
-    
     def translation(self, valueX, valueY, valueZ):
         self.prism_in_SRU = translation(self.prism_in_SRU, valueX, valueY, valueZ)
 
@@ -106,9 +98,6 @@ class Object():
         self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
     
     def sombreamento_constante(self, VRP, il, ila, fonte_luz):
-        print(self.normal_of_faces)
-        print(self.viewport_faces)
-        print(self.normal_of_viewPort_faces)
         self.color_of_faces = sombreamento_constante(self.viewport_faces, self.normal_of_viewPort_faces, VRP, self.ka, self.kd, self.ks, self.n, il, ila, fonte_luz)
 
     def crop_to_screen(self, u_min, u_max, v_min, v_max):
@@ -205,7 +194,7 @@ class Object():
         z_values = [np.min(face[2,:]) for face in self.viewport_faces if np.shape(face)[1]!=0]
         self.faces_order = np.argsort(z_values)
         self.object_min_z = np.min(z_values)
-
+"""
 
 obejeto = "quina"
 
@@ -229,4 +218,4 @@ print(poliedro_teste.viewport_faces)
 poliedro_teste.FacesOrder()
 print(poliedro_teste.face_Z_values)
 #for viewport_face_idx in range(len(poliedro_teste.viewport_faces)):
-#    print(poliedro_teste.getCoordinates(viewport_face_idx))
+#    print(poliedro_teste.getCoordinates(viewport_face_idx))"""
