@@ -538,7 +538,7 @@ if __name__ == "__main__":
     labelN = ttk.Label(t.sub_frame, text='n')
     txtN = ttk.Entry(t.sub_frame, name="n", width=15)
 
-    labelKa = ttk.Label(t.sub_frame, text="Ka", font="-weight bold -size 9", cursor="hand2")
+    labelKa = ttk.Label(t.sub_frame, text="Ka*", font="-weight bold -size 9", cursor="hand2")
     labelKaR = ttk.Label(t.sub_frame, text='R')
     txtKaR = ttk.Entry(t.sub_frame, name="kaR", width=15)
     labelKaG = ttk.Label(t.sub_frame, text='G')
@@ -546,7 +546,7 @@ if __name__ == "__main__":
     labelKaB = ttk.Label(t.sub_frame, text='B')
     txtKaB = ttk.Entry(t.sub_frame, name="kaB", width=15)
 
-    labelKd = ttk.Label(t.sub_frame, text="Kd", font="-weight bold -size 9", cursor="hand2")
+    labelKd = ttk.Label(t.sub_frame, text="Kd*", font="-weight bold -size 9", cursor="hand2")
     labelKdR = ttk.Label(t.sub_frame, text='R')
     txtKdR = ttk.Entry(t.sub_frame, name="kdR", width=15)
     labelKdG = ttk.Label(t.sub_frame, text='G')
@@ -554,7 +554,7 @@ if __name__ == "__main__":
     labelKdB = ttk.Label(t.sub_frame, text='B')
     txtKdB = ttk.Entry(t.sub_frame, name="kdB", width=15)
 
-    labelKs = ttk.Label(t.sub_frame, text="Ks", font="-weight bold -size 9", cursor="hand2")
+    labelKs = ttk.Label(t.sub_frame, text="Ks*", font="-weight bold -size 9", cursor="hand2")
     labelKsR = ttk.Label(t.sub_frame, text='R')
     txtKsR = ttk.Entry(t.sub_frame, name="ksR", width=15)
     labelKsG = ttk.Label(t.sub_frame, text='G')
@@ -655,13 +655,13 @@ if __name__ == "__main__":
     txtLimMundoyMax = ttk.Entry(t2.sub_frame, name="txtLimMundoyMax", width=15)
 
     labelLimPlanoProj = ttk.Label(t2.sub_frame, text="Limites da viewport", font="-weight bold -size 9")
-    labelLimPlanoProjxMin = ttk.Label(t2.sub_frame, text="X min", cursor="hand2")
+    labelLimPlanoProjxMin = ttk.Label(t2.sub_frame, text="X min*", cursor="hand2")
     txtLimPlanoProjxMin = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjxMin", width=15)
-    labelLimPlanoProjxMax = ttk.Label(t2.sub_frame, text="X max", cursor="hand2")
+    labelLimPlanoProjxMax = ttk.Label(t2.sub_frame, text="X max*", cursor="hand2")
     txtLimPlanoProjxMax = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjxMax", width=15)
-    labelLimPlanoProjyMin = ttk.Label(t2.sub_frame, text="Y min", cursor="hand2")
+    labelLimPlanoProjyMin = ttk.Label(t2.sub_frame, text="Y min*", cursor="hand2")
     txtLimPlanoProjyMin = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjyMin", width=15)
-    labelLimPlanoProjyMax = ttk.Label(t2.sub_frame, text="Y max", cursor="hand2")
+    labelLimPlanoProjyMax = ttk.Label(t2.sub_frame, text="Y max*", cursor="hand2")
     txtLimPlanoProjyMax = ttk.Entry(t2.sub_frame, name="txtLimPlanoProjyMax", width=15)
     btnAlterarCena = ttk.Button(t2.sub_frame,text="Alterar cena", width=15, command=projecaoClick, cursor="hand2")
 
@@ -734,7 +734,7 @@ if __name__ == "__main__":
 
     labelIluminacao = ttk.Label(t3.sub_frame, text="Iluminação", font="-weight bold -size 9")
 
-    labelLuzAmbiente = ttk.Label(t3.sub_frame, text="Luz Ambiente", font="-weight bold -size 9", cursor="hand2")
+    labelLuzAmbiente = ttk.Label(t3.sub_frame, text="Luz Ambiente*", font="-weight bold -size 9", cursor="hand2")
     labelIAR = ttk.Label(t3.sub_frame, text='R')
     txtIAR = ttk.Entry(t3.sub_frame, name="iaR", width=15)
     labelIAG = ttk.Label(t3.sub_frame, text='G')
@@ -742,7 +742,7 @@ if __name__ == "__main__":
     labelIAB = ttk.Label(t3.sub_frame, text='B')
     txtIAB = ttk.Entry(t3.sub_frame, name="iaB", width=15)
 
-    labelFonteLuminosa = ttk.Label(t3.sub_frame, text="Fonte Luminosa", font="-weight bold -size 9", cursor="hand2")
+    labelFonteLuminosa = ttk.Label(t3.sub_frame, text="Fonte Luminosa*", font="-weight bold -size 9", cursor="hand2")
     labelIR = ttk.Label(t3.sub_frame, text='R')
     txtIR = ttk.Entry(t3.sub_frame, name="iR", width=15)
     labelIG = ttk.Label(t3.sub_frame, text='G')
