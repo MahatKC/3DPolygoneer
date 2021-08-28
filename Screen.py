@@ -64,15 +64,15 @@ class Screen():
 
     def DefineAxis(self):
         axis = Axis()
-        axisSRC, axisjp_times_proj = first_pipeline(self.VRP, self.n, self.ViewUpX, self.ViewUpY, self.ViewUpZ, self.isPerspective, self.distanciaProjecao, self.mundoXmin, self.mundoXmax, self.mundoYmin, self.mundoYmax, 0, self.maxXviewPort, 0, self.maxYviewPort)
+        axisSRC, _ = first_pipeline(self.VRP, self.n, self.ViewUpX, self.ViewUpY, self.ViewUpZ, self.isPerspective, self.distanciaProjecao, self.mundoXmin, self.mundoXmax, self.mundoYmin, self.mundoYmax, 0, self.maxXviewPort, 0, self.maxYviewPort)
         
-        axis.pipeline_me(axisSRC, axisjp_times_proj, self.nearValue, self.farValue)
+        axis.pipeline_me(axisSRC, self.isPerspective, self.distanciaProjecao)
         
         #axis.translation(-25, -25, 0)
         #axis.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
         
         x = int(axis.axisSRT[0][0] - int(self.maxXviewPort * 0.07))
-        y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.95))
+        y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.90))
 
         self.endLineX = [axis.axisSRT[0][1] - x, axis.axisSRT[1][1] - y]
         self.endLineY = [axis.axisSRT[0][2] - x, axis.axisSRT[1][2] - y]
@@ -82,7 +82,6 @@ class Screen():
         self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, self.endLineZ[0], self.endLineZ[1], fill='#000000FFF', width = 5)
 
     def PosEixos(self):
-        print(self.endLineX)
         return [self.endLineX, self.endLineY, self.endLineZ]
 
     def deleteObject(self, face):
@@ -218,7 +217,6 @@ class Screen():
         for objects in self.objects_Z_order: # gerar uma lista com a ordem de todos os objetos em Z
             self.objects[objects].sombreamento_constante(self.VRP, self.il, self.ila, self.fonteLuz)
             self.objectsInCanvas[objects] = []
-            #print(self.objects[objects].color_of_faces)
             if(objects == self.objectSelected): # fazer o outline ser da cor negativada do objects
                 for viewport_face_idx in self.objects[objects].faces_order:
                     self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= "#000000", fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
