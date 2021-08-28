@@ -64,10 +64,18 @@ class Screen():
         
         x = int(axis.axisSRT[0][0] - int(self.maxXviewPort * 0.07))
         y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.95))
-        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][1] - x, axis.axisSRT[1][1] - y, fill='#FF0000', width = 5)
-        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][2] - x, axis.axisSRT[1][2] - y, fill='#00FF00', width = 5)
-        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, axis.axisSRT[0][3] - x, axis.axisSRT[1][3] - y, fill='#0000FF', width = 5)
-        
+
+        endLineX = [axis.axisSRT[0][1] - x, axis.axisSRT[1][1] - y]
+        endLineY = [axis.axisSRT[0][2] - x, axis.axisSRT[1][2] - y]
+        endLineZ = [axis.axisSRT[0][3] - x, axis.axisSRT[1][3] - y]
+        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, endLineX[0], endLineX[1], fill='#FF0000', width = 5)
+        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, endLineY[0], endLineY[1], fill='#00FF00', width = 5)
+        self.canvas.create_line(axis.axisSRT[0][0] - x, axis.axisSRT[1][0] - y, endLineZ[0], endLineZ[1], fill='#0000FF', width = 5)
+
+        return [endLineX, endLineY, endLineZ]
+
+    def eixosFim 
+
     def deleteObject(self, face):
         for i in range(0, self.numberObjects):
             if face in self.objects[i]:

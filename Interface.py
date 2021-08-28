@@ -274,8 +274,10 @@ def objetoClick():
     ka = [kaR, kaG, kaB]
     kd = [kdR, kdG, kdB]
     ks = [ksR, ksG, ksB]
-    drawing.AddObjects(raioBase, raioTopo, numLados, altura, 
-                        ka, kd, ks, n)
+
+    if(numLados < 3):
+        numLados = 3
+    drawing.AddObjects(raioBase, raioTopo, numLados, altura, ka, kd, ks, n)
 
 def projecaoSet(values):
     txtVRPx.delete(0, tk.END)
@@ -365,7 +367,7 @@ def iluminacaoClick():
     il = [iR, iG, iB]
     fonteLuz = np.array([iX, iY, iZ])
 
-    criarIluminacao(sombreamento, ila, il, fonteLuz)
+    drawing.criarIluminacao(sombreamento, ila, il, fonteLuz)
 
 def isVazio(string):
     if(string == ""):
