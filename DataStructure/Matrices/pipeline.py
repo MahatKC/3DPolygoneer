@@ -63,8 +63,8 @@ def pipeline_steps(M, SRC_matrix, jp_proj_matrix, dist_near, dist_far):
     dist_near and dist_fear determine the Z limits of the scene.
     """
     M_in_SRC = np.dot(SRC_matrix, M)
-
-    draw = np.any(np.logical_or(
+    
+    draw = np.all(np.logical_and(
                     np.less(M_in_SRC[2,:],-dist_near),
                     np.greater(M_in_SRC[2,:],-dist_far)
                 ))
