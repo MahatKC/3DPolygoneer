@@ -98,7 +98,12 @@ class Object():
         self.draw_me, self.prism_in_SRT = pipeline_steps(self.prism_in_SRU[:,self.draw_vertex], SRC_matrix, jp_proj_matrix, dist_near, dist_far)
     
     def sombreamento_constante(self, VRP, il, ila, fonte_luz):
-        self.color_of_faces = sombreamento_constante(self.viewport_faces, self.normal_of_viewPort_faces, VRP, self.ka, self.kd, self.ks, self.n, il, ila, fonte_luz)
+        SRT_faces = []
+        for i in range(self.numberFaces):
+            if self.draw_faces[i]:
+                face = self.faces[i]
+                SRT_faces.append(self.zeroed_SRT[:,face])
+        self.color_of_faces = sombreamento_constante(SRT_faces, self.normal_of_viewPort_faces, VRP, self.ka, self.kd, self.ks, self.n, il, ila, fonte_luz)
 
     def crop_to_screen(self, u_min, u_max, v_min, v_max):
         self.zeroed_SRT = np.zeros((4,self.sides*2))+np.array([[u_min],[v_min],[0],[0]])
