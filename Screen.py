@@ -6,8 +6,6 @@ import numpy as np
 np.set_printoptions(precision=6)
 np.set_printoptions(suppress=True)
 from tkinter import *
-import random
-# apagar também das listas quando trabalhar com os objetos
 class Screen():
     def __init__(self, frame, width, height):
         self.isPerspective = False
@@ -71,8 +69,10 @@ class Screen():
         #axis.translation(-25, -25, 0)
         #axis.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
         
-        x = int(axis.axisSRT[0][0] - int(self.maxXviewPort * 0.1))
-        y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.9))
+        #x = int(axis.axisSRT[0][0] - int(self.maxXviewPort * 0.1))
+        #y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.9))
+        x = int(axis.axisSRT[0][0] - 70)
+        y = int(axis.axisSRT[1][0] - 569)
 
         self.endLineX = [axis.axisSRT[0][1] - x, axis.axisSRT[1][1] - y]
         self.endLineY = [axis.axisSRT[0][2] - x, axis.axisSRT[1][2] - y]
@@ -220,7 +220,6 @@ class Screen():
                 self.objectsInCanvas[objects] = []
                 if(objects == self.objectSelected): # fazer o outline ser da cor negativada do objects
                     for viewport_face_idx in self.objects[objects].faces_order:
-                        print(viewport_face_idx)
                         self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= "#000000", fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
                 else:
                     for viewport_face_idx in self.objects[objects].faces_order:
