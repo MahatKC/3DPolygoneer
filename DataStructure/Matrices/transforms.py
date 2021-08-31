@@ -129,4 +129,3 @@ def rotYAlongAxis(M, alpha):
     T[0,3] = (x*(1-cos))-(z*sin)
     T[2,3] = (z*(1-cos))+(x*sin)
     return np.dot(T,M) 
-

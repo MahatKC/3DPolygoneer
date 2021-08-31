@@ -1,7 +1,7 @@
 from DataStructure.Matrices.sombreamento_constante import sombreamento_constante
 from DataStructure.normal_test import normal_test
 from DataStructure.Matrices.prism import create_prism
-from DataStructure.Matrices.pipeline import  VRP_and_n, first_pipeline, SRC_matrix, pipeline_steps
+from DataStructure.Matrices.pipeline import pipeline_steps
 from DataStructure.Matrices.transforms import translation, scaleAlongAxis, rotXAlongAxis, rotYAlongAxis, rotZAlongAxis
 import numpy as np
 import copy
@@ -56,8 +56,7 @@ class Object():
         self.prism_in_SRU = rotYAlongAxis(self.prism_in_SRU, rotationValue)
 
     def rotationZ(self, rotationValue):
-        self.prism_in_SRU = rotZAlongAxis(self.prism_in_SRU, rotationValue)
-        
+        self.prism_in_SRU = rotZAlongAxis(self.prism_in_SRU, rotationValue)    
 
     def getCoordinates(self, viewport_face_idx):
         list = []
@@ -99,7 +98,6 @@ class Object():
                 new_viewport_face = self.sutherland_hodgeman(face, u_min, u_max, v_min, v_max) 
                 if np.shape(new_viewport_face)[1] != 0:
                     self.viewport_faces.append(new_viewport_face)
-        pass
  
     def get_boolean_mask(self, face_vertices, borders):
         v0 = face_vertices[0,:]<borders[0]

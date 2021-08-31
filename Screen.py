@@ -1,6 +1,6 @@
 from DataStructure.DataStructure import Object
 from DataStructure.Axis import Axis
-from DataStructure.Matrices.pipeline import first_pipeline, VRP_and_n, pipeline_steps
+from DataStructure.Matrices.pipeline import first_pipeline, VRP_and_n
 import numpy as np 
 np.set_printoptions(precision=6)
 np.set_printoptions(suppress=True)
@@ -52,7 +52,6 @@ class Screen():
         self.canvas = Canvas(frame, width = self.maxXviewPort, height = self.maxYviewPort, bg = "white")
         self.objectSelected = None 
         self.viewPort = self.canvas.create_polygon([self.projecaoXmin - 1,self.projecaoYmin - 1, self.projecaoXmin - 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmin - 1], outline= "#000000", fill= "#CCCCCC", width = 2)
-
 
         self.endLineX = [2]
         self.endLineY = [2]
@@ -290,5 +289,3 @@ class Screen():
         self.objects_Z_order.clear()
         objects_z_list = [self.objects[i].object_min_z for i in range(self.numberObjects)]
         self.objects_Z_order = np.argsort(objects_z_list).tolist()
-        
-        pass

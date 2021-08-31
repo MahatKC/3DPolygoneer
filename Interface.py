@@ -65,7 +65,6 @@ class VerticalScrolledFrame:
     def __str__(self):
         return str(self.outer)
 
-numberJanela = 0
 class ToggledFrame(tk.Frame):
 
     def __init__(self, parent, width, height, text="", *args, **options):
@@ -88,8 +87,7 @@ class ToggledFrame(tk.Frame):
         if(text == "Projeção"):
             self.sub_frame = VerticalScrolledFrame(self, width, height, borderwidth=1, janela= 1, relief=tk.SUNKEN)
         if(text == "Iluminação e sombreamento"):
-            self.sub_frame = VerticalScrolledFrame(self, width, height, borderwidth=1, janela= 2, relief=tk.SUNKEN)
-        
+            self.sub_frame = VerticalScrolledFrame(self, width, height, borderwidth=1, janela= 2, relief=tk.SUNKEN)        
 
     def toggle(self):
         if bool(self.show.get()):
@@ -395,8 +393,6 @@ def projecaoSet(values):
     txtIy.insert(0, str(values[22][1]))
     txtIz.delete(0, tk.END)
     txtIz.insert(0, str(values[22][2]))
-    
-    # Menu inferior
     
 def projecaoClick():
     #rbProjeção = 0 -> perspectiva; rbProjeção = 1 -> axonometrica
