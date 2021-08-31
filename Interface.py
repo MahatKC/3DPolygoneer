@@ -343,6 +343,7 @@ def objetoClick():
     ka = [kaR, kaG, kaB]
     kd = [kdR, kdG, kdB]
     ks = [ksR, ksG, ksB]
+    
     drawing.AddObjects(raioBase, raioTopo, numLados, altura, ka, kd, ks, n)
     clearObjectInfo()
 

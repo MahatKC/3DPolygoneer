@@ -13,15 +13,6 @@ import copy
 np.set_printoptions(precision=6)
 np.set_printoptions(suppress=True)
 
-#counter clockwise
-#fazer as funções para chamar os métodos do objeto
-#quando clicar em um objeto, selecionar o objeto que esta sendo clicado
-#fazer uma lista de objetos que estão existindo
-#fazer um modo de ao clicar selecionar um dos objetos do tkinter
-#fazer um modo de alterar esse objeto do tkinter e alterar na lista
-#ver se consegue ao clicar pegar por exemplo a cor que esta o pixel na coordenada clicada, além de pegar a posição X e Y
-#Desselecionar o objeto ao apertar no branco da tela
-#enviar o objeto pra fazer TG
 class Object():
     def __init__(self, x, y, z, h, r_bottom, r_top, sides, ka, kd, ks, n):
         self.r_bottom = r_bottom
@@ -200,28 +191,4 @@ class Object():
             self.object_min_z = np.min(z_values)
         else:
             self.faces_order = []
-"""
-
-obejeto = "quina"
-
-if obejeto == "quina":
-    poliedro_teste = Object(0, 0, 0, 10, 10, 10, 10, [1,1,1],[1,1,1],[1,1,1],1)
-    VRP,n = VRP_and_n(0, 20, 100, 2, 1, 3)
-    poliedro_teste.normalVisualizationTest(n)
-    SRC_matrix, jp_proj_matrix = first_pipeline(VRP, n, 0, 1, 0, False, 50, -40, -15, -40, 15, 300, 1000, 200, 600)
-    poliedro_teste.pipeline_me(SRC_matrix, jp_proj_matrix, 10, 1000)
-elif obejeto=="quadradao":
-    poliedro_teste = Object(0, 0, 0, 15, 15, 60, 4, [1,1,1],[1,1,1],[1,1,1],1)
-    VRP,n = VRP_and_n(0, 0, 1000, 2, 1, 3)
-    poliedro_teste.normalVisualizationTest(n)
-    #SRC_matrix, jp_proj_matrix = first_pipeline(VRP, n, 0, 1, 0, False, 50, -50, 40, -40, 30, 300, 1000, 200, 600)
-    SRC_matrix, jp_proj_matrix = first_pipeline(VRP, n, 0, 1, 0, False, 50, -50, 40, -40, 30, 150, 1250, 0, 850)
-    poliedro_teste.pipeline_me(SRC_matrix, jp_proj_matrix, 10, 1000)
-
-#poliedro_teste.crop_to_screen(300, 1000, 200, 600) -> all outside, no intersection
-poliedro_teste.crop_to_screen(150, 1250, 0, 850) #all outside, all intersections
-print(poliedro_teste.viewport_faces)
-poliedro_teste.FacesOrder()
-print(poliedro_teste.face_Z_values)
-#for viewport_face_idx in range(len(poliedro_teste.viewport_faces)):
-#    print(poliedro_teste.getCoordinates(viewport_face_idx))"""
+            self.object_min_z = 0
