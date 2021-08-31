@@ -772,16 +772,19 @@ if __name__ == "__main__":
 
     labelTipoSombreamento = ttk.Label(t3.sub_frame, text="Sombreamento", font="-weight bold -size 9")
     rbConstante = ttk.Radiobutton(t3.sub_frame, text="Constante", variable= rbSombreamento, value=0, cursor="hand2")
-    rbGourad = ttk.Radiobutton(t3.sub_frame, text="Gourad", variable= rbSombreamento, value=1, cursor="hand2")
+    rbGouraud = ttk.Radiobutton(t3.sub_frame, text="Gouraud", variable= rbSombreamento, value=1, cursor="hand2")
     rbPhong = ttk.Radiobutton(t3.sub_frame, text="Phong", variable= rbSombreamento, value=2, cursor="hand2")
     btnAlterarIluminacao = ttk.Button(t3.sub_frame,text="Alterar Ilum/Somb", width=20, command=iluminacaoClick, cursor="hand2")
+
+    rbGouraud['state'] = tk.DISABLED
+    rbPhong['state'] = tk.DISABLED
 
     tipLuzAmbiente = CreateToolTip(labelLuzAmbiente, "Valores entre 0 e 255")
     tipFonteLuminosa = CreateToolTip(labelFonteLuminosa, "Valores entre 0 e 255")
 
     labelTipoSombreamento.grid(row=1, column=1, padx=12, pady=4, sticky=W)
     rbConstante.grid(row=2, column=1, padx=25, pady=1, sticky=W)
-    rbGourad.grid(row=3, column=1, padx=25, pady=1, sticky=W)
+    rbGouraud.grid(row=3, column=1, padx=25, pady=1, sticky=W)
     rbPhong.grid(row=4, column=1, padx=25, pady=1, sticky=W)
 
     labelLuzAmbiente.grid(row=5, column=1,  padx=10, pady=2, sticky=W)
