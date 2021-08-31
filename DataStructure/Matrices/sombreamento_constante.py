@@ -34,7 +34,7 @@ def sombreamento_single_face(centroid, N, Ia, kd, ks, n, il, fonte_luz, VRP):
         else:
             Is = 0
 
-        It = Ia[color]+Id+Is
+        It = Ia[color]+Id+Is    
         It /= 255
         It *= 4095
         if It> 4095:
