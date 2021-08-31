@@ -1,11 +1,9 @@
-#from typing_extensions import IntVar
 from tkinter import font
 from tooltip import CreateToolTip
 
 import numpy as np
 from DataStructure.Matrices.transforms import translation
 from shutil import disk_usage
-#from _pytest.store import D
 from tkscrolledframe import ScrolledFrame, widget
 from Screen import Screen
 import tkinter as tk
@@ -13,9 +11,6 @@ from tkinter import Canvas, Frame, Scrollbar, ttk
 from tkinter.constants import ALL, E, N, NS, RIGHT, S, VERTICAL, W, Y
 from tkinter import messagebox
 
-"""def motion(event):
-    x, y = event.x, event.y
-    print('{}, {}'.format(x, y))"""
 class VerticalScrolledFrame:
     def __init__(self, master, width, height, janela, **kwargs):
         bg = kwargs.pop('bg', kwargs.pop('background', None))
@@ -42,10 +37,8 @@ class VerticalScrolledFrame:
 
     def __getattr__(self, item):
         if item in self.outer_attr:
-            # geometry attributes etc (eg pack, destroy, tkraise) are passed on to self.outer
             return getattr(self.outer, item)
         else:
-            # all other attributes (_w, children, etc) are passed to self.inner
             return getattr(self.inner, item)
 
     def _on_frame_configure(self, event=None):
@@ -64,7 +57,6 @@ class VerticalScrolledFrame:
         self.canvas.unbind_all("<MouseWheel>")
 
     def _on_mousewheel(self, event):
-        """Linux uses event.num; Windows / Mac uses event.delta"""
         if event.num == 4 or event.delta > 0:
             self.canvas.yview_scroll(-1, "units" )
         elif event.num == 5 or event.delta < 0:
@@ -98,12 +90,9 @@ class ToggledFrame(tk.Frame):
         if(text == "Iluminação e sombreamento"):
             self.sub_frame = VerticalScrolledFrame(self, width, height, borderwidth=1, janela= 2, relief=tk.SUNKEN)
         
-        #self.sub_frame = tk.Frame(self, relief="sunken", borderwidth=1)
-        #self.sub_frame = VerticalScrolledFrame(self, width, height, borderwidth=1, janela=numberJanela, relief=tk.SUNKEN)
 
     def toggle(self):
         if bool(self.show.get()):
-            #self.sub_frame.pack(fill="x", expand=1)
             self.sub_frame.pack(fill=tk.BOTH, expand=True) # fill window
             self.toggle_button.configure(text='-')
         else:
@@ -343,7 +332,7 @@ def objetoClick():
     ka = [kaR, kaG, kaB]
     kd = [kdR, kdG, kdB]
     ks = [ksR, ksG, ksB]
-    
+
     drawing.AddObjects(raioBase, raioTopo, numLados, altura, ka, kd, ks, n)
     clearObjectInfo()
 
@@ -475,20 +464,16 @@ def alterarEixos():
 if __name__ == "__main__":
     window = tk.Tk()
     window.title('The Marvelous Polygoneer')
-    #widthTela = window.winfo_screenwidth()  
-    #heightTela = window.winfo_screenheight()
     width = 1280
     height = 750
-    #window.geometry("1280x690") 
     window.geometry('{}x{}+{}+{}'.format(1280, 690, 0, 0))
     window.resizable(0, 0)
-    #window.state('normal')
+    
     # Fazendo Frame
     frameDrawingInterface = Frame(window,  highlightbackground= "black", highlightthickness= 1, width = int(width*0.7), height = int(height*0.88))
     frameDrawingInterface.place(x = int(width*0.01), y = int(height * 0.01))
 
     # Fazendo janela com as informações do usuário
-    #width variavel = int(width*0.27)
     userInterface = Frame(window, highlightbackground= "black", highlightthickness= 1, width = 300, height = int(height*0.9))
     userInterface.place(x = width-310, y = int(height * 0.01))
     userInterface.pack_propagate(0)
@@ -498,7 +483,6 @@ if __name__ == "__main__":
     drawing.canvas.pack()
 
     btnLimpar = ttk.Button(window,text="Limpar", width=15, command = ClearScreen, cursor="hand2") 
-    #btnLimpar.place(x=int(width*0.01), y = int(height * 0.88))
     btnLimpar.place(x=width-(410+width*0.01), y = int(height * 0.88))
 
     txtIntegrantes = ttk.Label(window, text='Desenvolvido por: Lucas Veit, Mateus Karvat e Roberta Alcantara')

@@ -1,4 +1,3 @@
-#from exemplo_prova import exemplo_prova
 from DataStructure.DataStructure import Object
 from DataStructure.Axis import Axis
 from DataStructure.Matrices.pipeline import first_pipeline, VRP_and_n, pipeline_steps
@@ -65,12 +64,7 @@ class Screen():
         axisSRC, _ = first_pipeline(self.VRP, self.n, self.ViewUpX, self.ViewUpY, self.ViewUpZ, self.isPerspective, self.distanciaProjecao, self.mundoXmin, self.mundoXmax, self.mundoYmin, self.mundoYmax, 0, self.maxXviewPort, 0, self.maxYviewPort)
         
         axis.pipeline_me(axisSRC, self.isPerspective, self.distanciaProjecao)
-        
-        #axis.translation(-25, -25, 0)
-        #axis.pipeline_me(self.SRC, self.jp_times_proj, self.nearValue, self.farValue)
-        
-        #x = int(axis.axisSRT[0][0] - int(self.maxXviewPort * 0.1))
-        #y = int(axis.axisSRT[1][0] - int(self.maxYviewPort * 0.9))
+
         x = int(axis.axisSRT[0][0] - 70)
         y = int(axis.axisSRT[1][0] - 569)
 
@@ -214,11 +208,11 @@ class Screen():
         self.objectsInCanvas = [None] * self.numberObjects 
         self.viewPort = self.canvas.create_polygon([self.projecaoXmin - 1,self.projecaoYmin - 1, self.projecaoXmin - 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmax + 1, self.projecaoXmax + 1, self.projecaoYmin - 1], outline= "#000000", fill= "#CCCCCC", width = 2)
         self.PolygonsOrder()
-        for objects in self.objects_Z_order: # gerar uma lista com a ordem de todos os objetos em Z
+        for objects in self.objects_Z_order: # percorrer uma lista com a ordem de todos os objetos em Z
             if self.objects[objects].draw_me:
                 self.objects[objects].sombreamento_constante(self.VRP, self.il, self.ila, self.fonteLuz)
                 self.objectsInCanvas[objects] = []
-                if(objects == self.objectSelected): # fazer o outline ser da cor negativada do objects
+                if(objects == self.objectSelected):
                     for viewport_face_idx in self.objects[objects].faces_order:
                         self.objectsInCanvas[objects].append(self.canvas.create_polygon(self.objects[objects].getCoordinates(viewport_face_idx), outline= "#000000", fill= self.objects[objects].color_of_faces[viewport_face_idx], width = 2, tags = "objeto"))
                 else:

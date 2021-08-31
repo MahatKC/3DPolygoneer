@@ -1,7 +1,0 @@
-poliedro_teste = np.array([[30, 35, 25, 20,   30],
-                           [ 2,  4,  3,  1,   10],
-                           [25, 20, 18, 23, 22.5],
-                           [ 1,  1,  1,  1,    1]])
-
-SRC_matrix, jp_proj_matrix = first_pipeline(50, 15, 30, 20, 6, 15, 0, 1, 0, True, 17, -8, 8, -5, 5, 320, 0, 240, 0)
-draw, R = pipeline_steps(poliedro_teste, SRC_matrix, jp_proj_matrix, 10, 40)

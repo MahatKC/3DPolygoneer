@@ -1,19 +1,5 @@
 import numpy as np
 
-#parametros:
-#lista_normais
-#VRP
-
-#OBJETO:
-# ka  (r,g,b) ->kar, kag, kab -> ka = [kar, kag, kab] => ka
-# kd  (r,g,b)                                         => kd
-# ks  (r,g,b)                                         => ks
-# n                                                   => n
-#CENA:
-# Il  (r,g,b)                                         => Il
-# Ila (r,g,b)                                         => Ila
-# x,y,z -> fonte_luz = np.array([x,y,z])              => fonte_luz
-
 def sombreamento_constante(face_list, normals_list, VRP, ka, kd, ks, n, il, ila, fonte_luz):
     avg_list = [np.average(face, axis=1)[:3] for face in face_list]
     Ia = [ila[i]*ka[i]/255 for i in range(3)]
@@ -60,7 +46,6 @@ def sombreamento_single_face(centroid, N, Ia, kd, ks, n, il, fonte_luz, VRP):
         elif It_int < 256:
             face_color = face_color+"0"+hex(It_int)[2:]
         else:
-            face_color += hex(It_int)[2:]
-            
+            face_color += hex(It_int)[2:]            
 
     return face_color.upper()

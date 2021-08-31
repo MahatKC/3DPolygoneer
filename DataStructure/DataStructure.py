@@ -1,8 +1,3 @@
-#from normal_test import normal_test
-#from Matrices.prism import create_prism
-#from Matrices.pipeline import VRP_and_n, first_pipeline, pipeline_steps
-#from Matrices.sombreamento_constante import sombreamento_constante
-#from tkinter.constants import N
 from DataStructure.Matrices.sombreamento_constante import sombreamento_constante
 from DataStructure.normal_test import normal_test
 from DataStructure.Matrices.prism import create_prism
