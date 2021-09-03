@@ -26,9 +26,14 @@ class Screen():
         self.VRPy = -50
         self.VRPz = 70
 
-        self.Px = 2
-        self.Py = 1
-        self.Pz = 3
+        if self.isPerspective:
+            self.Px = 2
+            self.Py = 1
+            self.Pz = 3
+        else:
+            self.Px = 0
+            self.Py = 0
+            self.Pz = 0
 
         self.ViewUpX = 0
         self.ViewUpY = 1
@@ -162,9 +167,14 @@ class Screen():
         self.VRPy = VRPy
         self.VRPz = VRPz
 
-        self.Px = Px
-        self.Py = Py
-        self.Pz = Pz
+        if isPerspective:
+            self.Px = Px
+            self.Py = Py
+            self.Pz = Pz
+        else:
+            self.Px = 0
+            self.Py = 0
+            self.Pz = 0
 
         self.ViewUpX = ViewUpX
         self.ViewUpY = ViewUpY
@@ -175,7 +185,7 @@ class Screen():
         self.distanciaProjecao = distanciaProjecao
         self.objectSelected = None
         
-        self.VRP, self.n = VRP_and_n(VRPx, VRPy, VRPz, Px, Py, Pz)  
+        self.VRP, self.n = VRP_and_n(self.VRPx, self.VRPy, self.VRPz, self.Px, self.Py, self.Pz)  
         self.SRC, self.jp_times_proj = first_pipeline(self.VRP, self.n, ViewUpX, ViewUpY, ViewUpZ, isPerspective, distanciaProjecao, mundoXmin, mundoXmax, mundoYmin, mundoYmax, projecaoXmin, projecaoXmax, projecaoYmin, projecaoYmax)
         
         for object in range(self.numberObjects):

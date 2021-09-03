@@ -85,7 +85,7 @@ def first_pipeline(VRP, n, Yx, Yy, Yz,
     Xmin, Xmax, Ymin, Ymax, Umin, Umax, Vmin, Vmax):
     """Returns matrices that shall be used in the pipeline based on all the parameters necessary
     for the SRU to SRT conversion, except the 3D cut step."""
-
+        
     SRC = SRC_matrix(VRP, n, Yx, Yy, Yz)
     jp_times_proj = jp_times_proj_matrix(is_perspectiva, dist_projecao, 
     Xmin, Xmax, Ymin, Ymax, Umax, Umin, Vmax, Vmin)
