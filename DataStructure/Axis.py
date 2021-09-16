@@ -16,3 +16,4 @@ class Axis():
             proj = np.eye(4)
             proj[3, 2] = -1/distanciaProjecao
             self.axisSRT = np.dot(proj, self.axisSRT)
+        self.axisSRT[1, :] *= -1
